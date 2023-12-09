@@ -7,7 +7,7 @@ package Business.Roles;
 import Business.Business;
 import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
-import Business.enterprise.Enterprise;
+import Business.Enterprise.Enterprise;
 import javax.swing.JPanel;
 
 /**
