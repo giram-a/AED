@@ -17,18 +17,17 @@ import javax.swing.JPanel;
 public abstract class Role {
     
     public enum RoleType{
+        
         Admin("Admin"),
-        Volunteer("Volunteer"),
-        Supervisor("Supervisor"),
-        HelpSeeker("Help Seeker"),
+        Volunteer("Volunteer Organization"),
+        HelpSeeker("HelpSeeker Organization"),
+        Supervisor("Supervisor Organization"),
+        Donor("Donor Organization"),
         Driver("Driver"),
-        Mayor("Mayor"),
-        AlohaHelpManager("Aloha Help Manager"),
-        Doctor("Doctor"),
-        Donor("Donor");
+        CommunityOutreach("CommunityOutreach Organization"),
+        Nutritionist("Nutritionist Organization");
         
-        
-        private String value;
+        final private String value;
         private RoleType(String value){
             this.value = value;
         }
