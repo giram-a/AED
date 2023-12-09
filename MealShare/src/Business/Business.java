@@ -4,10 +4,18 @@
  */
 package Business;
 
+import java.awt.CardLayout;
+import javax.swing.JPanel;
+
 /**
  *
  * @author aniketgiram
  */
 public class Business {
     
+    public void redirection(JPanel MainCardLayout, String panelName, JPanel panel){
+        MainCardLayout.add(panelName, panel);
+        CardLayout layout = (CardLayout) MainCardLayout.getLayout();
+        layout.next(MainCardLayout);
+    }
 }
