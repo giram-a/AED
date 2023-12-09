@@ -6,6 +6,7 @@ package ui;
 
 import Business.Business;
 import ui.Auth.LoginJPanel;
+import ui.Logistics.Logistics;
 import ui.Nutritionist.Nutritionist;
 import ui.Nutritionist.ViewMealsJPanel;
 
@@ -95,7 +96,7 @@ public class MainJFrame extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void display() {
-        ViewMealsJPanel viewmeals = new ViewMealsJPanel();
-        this.business.redirection(MainCardLayout, viewmeals.getClass().getName(), viewmeals);
+        Logistics logistics = new Logistics();
+        this.business.redirection(MainCardLayout, logistics.getClass().getName(), logistics);
     }
 }
