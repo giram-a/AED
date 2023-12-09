@@ -3,15 +3,12 @@
 *.class
 *.jar
 ## NetBeans
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
+MealShare/nbproject/private/
+MealShare/build/
+MealShare/nbbuild/
+MealShare/dist/
+MealShare/nbdist/
 nbactions.xml
-nb-configuration.xml
+MealShare/nb-configuration.xml
 ## OS X
 .DS_Store
-/JavaApplication6/nbproject/private/
-/Final_Project/nbproject/private/
-/MealShare/nbproject/private/
