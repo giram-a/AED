@@ -5,7 +5,16 @@
 package ui.Auth;
 
 import Business.Common.ValidateStrings;
+import com.github.javafaker.Faker;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import javax.swing.InputVerifier;
+import javax.swing.JFrame;
+import org.knowm.xchart.PieChart;
+import org.knowm.xchart.PieChartBuilder;
+import org.knowm.xchart.SwingWrapper;
+import org.knowm.xchart.XChartPanel;
 
 /**
  *
@@ -19,6 +28,9 @@ public class LoginJPanel extends javax.swing.JPanel {
     public LoginJPanel() {
         initComponents();
         inputVerifier();
+//        Faker faker = new Faker();
+//        System.out.println("Name "+ faker.name().username());
+//        testChart();
     }
 
     /**
@@ -37,6 +49,7 @@ public class LoginJPanel extends javax.swing.JPanel {
         txtPassword = new javax.swing.JPasswordField();
         lblDont = new javax.swing.JLabel();
         btnCreateAccount = new javax.swing.JButton();
+        testPanel = new javax.swing.JPanel();
 
         lblLogin.setFont(new java.awt.Font("Arial", 2, 18)); // NOI18N
         lblLogin.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -50,6 +63,17 @@ public class LoginJPanel extends javax.swing.JPanel {
 
         btnCreateAccount.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         btnCreateAccount.setText("Create Account");
+
+        javax.swing.GroupLayout testPanelLayout = new javax.swing.GroupLayout(testPanel);
+        testPanel.setLayout(testPanelLayout);
+        testPanelLayout.setHorizontalGroup(
+            testPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        testPanelLayout.setVerticalGroup(
+            testPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -103,6 +127,7 @@ public class LoginJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblLogin;
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblUsername;
+    private javax.swing.JPanel testPanel;
     private javax.swing.JPasswordField txtPassword;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
@@ -110,5 +135,26 @@ public class LoginJPanel extends javax.swing.JPanel {
     private void inputVerifier() {
         InputVerifier stringValidation = new ValidateStrings();
         txtUsername.setInputVerifier(stringValidation);
+    }
+
+    private void testChart() {
+        // Create Chart
+        PieChart chart = new PieChartBuilder().width(400).height(400).title("Aniket").build();
+
+        // Customize Chart
+        Color[] sliceColors = new Color[] { new Color(224, 68, 14), new Color(230, 105, 62), new Color(236, 143, 110), new Color(243, 180, 159), new Color(246, 199, 182) };
+        chart.getStyler().setSeriesColors(sliceColors);
+
+        // Series
+        chart.addSeries("Gold", 24);
+        chart.addSeries("Silver", 21);
+        chart.addSeries("Platinum", 39);
+        chart.addSeries("Copper", 17);
+        chart.addSeries("Zinc", 40);
+        
+        testPanel.setLayout(new FlowLayout()); 
+        testPanel.setPreferredSize(new Dimension(400, 400));
+        testPanel.add(new XChartPanel(chart));
+//        testPanel.repaint();
     }
 }
