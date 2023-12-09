@@ -23,35 +23,29 @@ public class OrganizationDirectory {
     
     public Organization addOrganization(Type type)
     {
-       Organization organization = null;
-//        if (type.getValue().equals(Type.Volunteer.getValue())){
-//            organization = new VolunteerOrga();
-//            organizationList.add(organization);
-//        }
-//        else if (type.getValue().equals(Type.HelpSeeker.getValue())){
-//            organization = new HelpSeekerOrga();
-//            organizationList.add(organization);
-//        }
-//        else if (type.getValue().equals(Type.Supervisor.getValue())){
-//            organization = new SupervOrga();
-//            organizationList.add(organization);
-//        }
-//         else if (type.getValue().equals(Type.Donor.getValue())){
-//            organization = new DonorOrga();
-//            organizationList.add(organization);
-//        }
-//         else if (type.getValue().equals(Type.Transport.getValue())){
-//            organization = new TransportOrga();
-//            organizationList.add(organization);
-//        }
-//          else if (type.getValue().equals(Type.Mayor.getValue())){
-//            organization = new MayorOrga();
-//            organizationList.add(organization);
-//        }
-//           else if (type.getValue().equals(Type.Doctor.getValue())){
-//            organization = new DoctorOrga();
-//            organizationList.add(organization);
-//        }
+        Organization organization = null;
+        if (type.getValue().equals(Type.Volunteer.getValue())){
+            organization = new VolunteerOrganization();
+            organizationList.add(organization);
+        } else if (type.getValue().equals(Type.HelpSeeker.getValue())){
+            organization = new HelpSeekerOrganization();
+            organizationList.add(organization);
+        } else if (type.getValue().equals(Type.Supervisor.getValue())){
+            organization = new SupervisorOrganization();
+            organizationList.add(organization);
+        } else if (type.getValue().equals(Type.Donor.getValue())){
+            organization = new DonorOrganization();
+            organizationList.add(organization);
+        } else if (type.getValue().equals(Type.Transport.getValue())){
+            organization = new TransportOrganization();
+            organizationList.add(organization);
+        } else if (type.getValue().equals(Type.CommunityOutreach.getValue())){
+            organization = new CommunityOutreachOrganization();
+            organizationList.add(organization);
+        } else if (type.getValue().equals(Type.Nutritionist.getValue())){
+            organization = new NutritionistOrganization();
+            organizationList.add(organization);
+        }
         return organization;
     }
 
