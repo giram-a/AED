@@ -40,8 +40,8 @@ public abstract class Organization {
         Supervisor("Supervisor Organization"),
         Donor("Donor Organization"),
         Transport("Transport Organization"),
-        Mayor("Mayor Organization"),
-        Doctor("Doctor Organization");
+        CommunityOutreach("CommunityOutreach Organization"),
+        Nutritionist("Nutritionist Organization");
      
         private String value;
      

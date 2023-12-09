@@ -13,7 +13,7 @@ import java.util.ArrayList;
  *
  * @author aniketgiram
  */
-public class Enterprise extends Organization{
+public abstract class Enterprise extends Organization{
     
     private String enterpId;
     private static int count = 1;
@@ -40,13 +40,13 @@ public class Enterprise extends Organization{
     public enum EnterpriseType{
         
        School("School"),
-       AlohaHelp("AlohaHelp"),
-       NonProfit("NonProfit"),
+       MealShare("MealShare"),
+       NGO("NGO"),
        Government("Government"),
-       Hospital("Hospital");
+       SpiritualOrganization("SpiritualOrganization");
     
        
-       private String value;
+       final private String value;
        
        private EnterpriseType(String value)
        {

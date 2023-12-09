@@ -12,40 +12,42 @@ import java.util.ArrayList;
  */
 public class EnterpriseDirectory {
     
-    private ArrayList<Enterprise> enterpriseList;
+    private final ArrayList<Enterprise> enterpriseList;
     
     public EnterpriseDirectory()
     {
-        enterpriseList = new ArrayList<Enterprise>();
+        enterpriseList = new ArrayList<>();
     }
     
     
     public Enterprise addEnterprise(String name, Enterprise.EnterpriseType type)
     {
-      Enterprise enterprise = null;
-//      if(type ==Enterprise.EnterpriseType.AlohaHelp)
-//      {
-//       enterprise = new AlohaHelpEnterprise(name);
-//       enterpriseList.add(enterprise);     
-//      }
-//      else if (type == Enterprise.EnterpriseType.Government){
-//            enterprise = new GovernmentEnterprise(name);
-//            enterpriseList.add(enterprise);
-//        }
-//       else if (type == Enterprise.EnterpriseType.NonProfit){
-//            enterprise = new NonProfitEnterprise(name);
-//            enterpriseList.add(enterprise);
-//        }
-//        else  if(type ==Enterprise.EnterpriseType.School)
-//        {
-//         enterprise = new SchoolEnterprise(name);
-//         enterpriseList.add(enterprise);     
-//        }
-//      else  if(type ==Enterprise.EnterpriseType.Hospital)
-//        {
-//         enterprise = new HospitalEnterprise(name);
-//         enterpriseList.add(enterprise);     
-//        }
+        Enterprise enterprise = null;
+        if(null != type)
+        switch (type) {
+            case MealShare -> {
+                enterprise = new MealShare(name);     
+                enterpriseList.add(enterprise);
+            }
+            case Government -> {
+                enterprise = new GovernmentEnterprise(name);
+                enterpriseList.add(enterprise);
+            }
+            case NGO -> {
+                enterprise = new NGOEnterprise(name);
+                enterpriseList.add(enterprise);
+            }
+            case School -> {
+                enterprise = new SchoolEnterprise(name);
+                enterpriseList.add(enterprise);
+            }
+            case SpiritualOrganization -> {
+                enterprise = new SpiritualOrganizationEnterprise(name);
+                enterpriseList.add(enterprise);
+            }
+            default -> {
+            }
+        }
 
       return enterprise;
     }
