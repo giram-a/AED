@@ -12,3 +12,6 @@ nbactions.xml
 nb-configuration.xml
 ## OS X
 .DS_Store
+/JavaApplication6/nbproject/private/
+/Final_Project/nbproject/private/
+/MealShare/nbproject/private/
