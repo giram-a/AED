@@ -18,24 +18,21 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace min="-2" pref="112" max="-2" attributes="0"/>
-              <Component id="jLabel1" max="32767" attributes="0"/>
+              <Component id="jLabel1" pref="719" max="32767" attributes="0"/>
               <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
           </Group>
-          <Group type="102" alignment="1" attributes="0">
-              <EmptySpace min="-2" pref="96" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jButton1" alignment="1" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace min="-2" pref="91" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Component id="lblConfirmPassword" min="-2" max="-2" attributes="0"/>
                           <Component id="lblUsername" min="-2" max="-2" attributes="0"/>
                           <Component id="lblLastName" alignment="1" min="-2" max="-2" attributes="0"/>
                           <Component id="lblDateofBirth" alignment="1" min="-2" max="-2" attributes="0"/>
                           <Component id="lblGender" alignment="1" min="-2" max="-2" attributes="0"/>
-                          <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                              <Component id="lblCountry" min="-2" max="-2" attributes="0"/>
-                              <Component id="lblAddress" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="lblAddress1" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblCountry" alignment="1" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="48" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" max="-2" attributes="0">
@@ -43,9 +40,9 @@
                           <Component id="txtConfirmPassword" alignment="0" max="32767" attributes="0"/>
                           <Component id="txtLastName" alignment="0" max="32767" attributes="0"/>
                           <Component id="txtDateofBirth" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtGender" alignment="0" max="32767" attributes="0"/>
                           <Component id="txtAddress" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtCountry" min="-2" pref="190" max="-2" attributes="0"/>
+                          <Component id="txtCountry" max="32767" attributes="0"/>
+                          <Component id="txtGender" min="-2" pref="190" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="87" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
@@ -55,23 +52,32 @@
                           <Component id="lblOccupation" min="-2" max="-2" attributes="0"/>
                           <Component id="jLabel11" alignment="1" min="-2" max="-2" attributes="0"/>
                           <Component id="lblZipCode" alignment="1" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblAddress2" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="txtAddress1" max="32767" attributes="0"/>
                           <Component id="txtPassword" max="32767" attributes="0"/>
                           <Component id="txtFirstName" max="32767" attributes="0"/>
                           <Component id="txtEmail" alignment="0" max="32767" attributes="0"/>
                           <Component id="txtOccupation" alignment="0" max="32767" attributes="0"/>
                           <Component id="txtAge" alignment="0" max="32767" attributes="0"/>
-                          <Component id="txtZipCode" alignment="0" min="-2" pref="190" max="-2" attributes="0"/>
+                          <Component id="txtZipCode" min="-2" pref="190" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
-                      <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="62" max="-2" attributes="0"/>
+                      <Component id="btnBack" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
+                      <Component id="btnCreate" min="-2" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace min="-2" pref="93" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="32767" attributes="0"/>
+              <Component id="txtRole" min="-2" pref="170" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="340" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -81,6 +87,8 @@
               <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="txtRole" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblUsername" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtUsername" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -111,28 +119,30 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblGender" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtGender" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel11" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtAge" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtGender" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblAddress" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblAddress1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtAddress" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblZipCode" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtZipCode" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblAddress2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtAddress1" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblCountry" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtCountry" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblZipCode" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtZipCode" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="jButton1" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="jButton2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnCreate" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnBack" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="232" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -219,13 +229,11 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txtOccupation">
     </Component>
-    <Component class="javax.swing.JTextField" name="txtGender">
-    </Component>
     <Component class="javax.swing.JTextField" name="txtAge">
     </Component>
-    <Component class="javax.swing.JLabel" name="lblAddress">
+    <Component class="javax.swing.JLabel" name="lblAddress1">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Address:"/>
+        <Property name="text" type="java.lang.String" value="Address 1:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtAddress">
@@ -244,21 +252,56 @@
     </Component>
     <Component class="javax.swing.JTextField" name="txtCountry">
     </Component>
-    <Component class="javax.swing.JButton" name="jButton1">
+    <Component class="javax.swing.JButton" name="btnCreate">
       <Properties>
         <Property name="text" type="java.lang.String" value="Create"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCreateActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JButton" name="jButton2">
+    <Component class="javax.swing.JButton" name="btnBack">
       <Properties>
         <Property name="text" type="java.lang.String" value="Back"/>
       </Properties>
       <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBackActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JComboBox" name="txtGender">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="3">
+            <StringItem index="0" value="Male"/>
+            <StringItem index="1" value="Female"/>
+            <StringItem index="2" value="Others"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblAddress2">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Address 2:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtAddress1">
+    </Component>
+    <Component class="javax.swing.JComboBox" name="txtRole">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="3">
+            <StringItem index="0" value="Please Select a Role"/>
+            <StringItem index="1" value="Help Seeker"/>
+            <StringItem index="2" value="Volunteer"/>
+          </StringArray>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

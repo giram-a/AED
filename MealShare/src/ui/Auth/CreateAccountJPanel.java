@@ -4,17 +4,49 @@
  */
 package ui.Auth;
 
+import Business.Business;
+import Business.Common.ValidateDate;
+import Business.Common.ValidateEmail;
+import Business.Common.ValidateNumber;
+import Business.Common.ValidatePassword;
+import Business.Common.ValidateStrings;
+import Business.Enterprise.Enterprise;
+import Business.Enterprise.SchoolEnterprise;
+import Business.Network.Network;
+import Business.Organization.Organization;
+import Business.Person.PersonDirectory;
+import javax.swing.InputVerifier;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 /**
  *
  * @author samar
  */
 public class CreateAccountJPanel extends javax.swing.JPanel {
 
+    private JPanel mainCardLayout;
+    private PersonDirectory personDirectory;
+    private Business business; 
+    private Enterprise enterprise;
+    private Organization organization;
+    
     /**
      * Creates new form CreateAccountJPanel
      */
-    public CreateAccountJPanel() {
+    public CreateAccountJPanel(JPanel MainCardLayout, Business business) {
         initComponents();
+        validateInputs();
+        this.mainCardLayout = MainCardLayout;
+        this.business = business;
+        
+        for (Network n : business.getNetworkList()){
+            for(Enterprise e : n.getEnterpriseDirectory().getEnterpriseList()){
+                if(e instanceof SchoolEnterprise){
+                    this.enterprise = e;
+                }
+            }
+        }
     }
 
     /**
@@ -45,16 +77,19 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
         txtEmail = new javax.swing.JTextField();
         txtDateofBirth = new javax.swing.JTextField();
         txtOccupation = new javax.swing.JTextField();
-        txtGender = new javax.swing.JTextField();
         txtAge = new javax.swing.JTextField();
-        lblAddress = new javax.swing.JLabel();
+        lblAddress1 = new javax.swing.JLabel();
         txtAddress = new javax.swing.JTextField();
         lblZipCode = new javax.swing.JLabel();
         txtZipCode = new javax.swing.JTextField();
         lblCountry = new javax.swing.JLabel();
         txtCountry = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnCreate = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
+        txtGender = new javax.swing.JComboBox<>();
+        lblAddress2 = new javax.swing.JLabel();
+        txtAddress1 = new javax.swing.JTextField();
+        txtRole = new javax.swing.JComboBox<>();
 
         jLabel1.setFont(new java.awt.Font("Arial", 2, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -92,25 +127,31 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
             }
         });
 
-        lblAddress.setText("Address:");
+        lblAddress1.setText("Address 1:");
 
         lblZipCode.setText("Zip Code:");
 
         lblCountry.setText("Country:");
 
-        jButton1.setText("Create");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnCreate.setText("Create");
+        btnCreate.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnCreateActionPerformed(evt);
             }
         });
 
-        jButton2.setText("Back");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnBackActionPerformed(evt);
             }
         });
+
+        txtGender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Male", "Female", "Others" }));
+
+        lblAddress2.setText("Address 2:");
+
+        txtRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Please Select a Role", "Help Seeker", "Volunteer" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -118,31 +159,29 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(112, 112, 112)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 719, Short.MAX_VALUE)
                 .addGap(69, 69, 69))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(96, 96, 96)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
+                .addGap(91, 91, 91)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblConfirmPassword)
                             .addComponent(lblUsername)
                             .addComponent(lblLastName)
                             .addComponent(lblDateofBirth)
                             .addComponent(lblGender)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(lblCountry)
-                                .addComponent(lblAddress)))
+                            .addComponent(lblAddress1)
+                            .addComponent(lblCountry))
                         .addGap(48, 48, 48)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(txtUsername, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtConfirmPassword, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtLastName, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtDateofBirth, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtGender, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtAddress, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCountry, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtCountry)
+                            .addComponent(txtGender, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(87, 87, 87)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblFirstName)
@@ -150,9 +189,11 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
                             .addComponent(lblEmail)
                             .addComponent(lblOccupation)
                             .addComponent(jLabel11)
-                            .addComponent(lblZipCode))
+                            .addComponent(lblZipCode)
+                            .addComponent(lblAddress2))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtAddress1)
                             .addComponent(txtPassword)
                             .addComponent(txtFirstName)
                             .addComponent(txtEmail)
@@ -160,9 +201,15 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
                             .addComponent(txtAge)
                             .addComponent(txtZipCode, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(58, 58, 58)
-                        .addComponent(jButton2)))
-                .addGap(93, 93, 93))
+                        .addGap(62, 62, 62)
+                        .addComponent(btnBack)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnCreate)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(txtRole, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(340, 340, 340))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -170,6 +217,8 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
                 .addGap(35, 35, 35)
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
+                .addComponent(txtRole, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblUsername)
                     .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -196,24 +245,26 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblGender)
-                    .addComponent(txtGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11)
-                    .addComponent(txtAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblAddress)
+                    .addComponent(lblAddress1)
                     .addComponent(txtAddress, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblZipCode)
-                    .addComponent(txtZipCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(lblAddress2)
+                    .addComponent(txtAddress1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCountry)
-                    .addComponent(txtCountry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtCountry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblZipCode)
+                    .addComponent(txtZipCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton2))
-                .addGap(232, 232, 232))
+                    .addComponent(btnCreate)
+                    .addComponent(btnBack))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -225,11 +276,11 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtConfirmPasswordActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnBackActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         // TODO add your handling code here:
         String username = txtUsername.getText();
         String password = String.valueOf(txtPassword.getText());
@@ -239,23 +290,37 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
         String email = txtEmail.getText();
         String dateofBirth = txtDateofBirth.getText();
         String occupation = txtOccupation.getText();
-        String gender = txtGender.getText();
+        String gender = (String) txtGender.getSelectedItem();
         String age = txtAge.getText();
         String address = txtAddress.getText();
+        String address2 = txtAddress1.getText();
         String zipCode = txtZipCode.getText();
         String country = txtCountry.getText();
-                
-
+        String role = (String) txtRole.getSelectedItem();
         
-    }//GEN-LAST:event_jButton1ActionPerformed
+        if(txtRole.getSelectedIndex() == 0){
+            JOptionPane.showMessageDialog(this, "Please select a role to create an Account", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (isNullOrEmpty(username) || isNullOrEmpty(password) || isNullOrEmpty(confirmPassword)
+        || isNullOrEmpty(firstName) || isNullOrEmpty(lastName) || isNullOrEmpty(email)
+        || isNullOrEmpty(dateofBirth) || isNullOrEmpty(occupation) || isNullOrEmpty(gender)
+        || isNullOrEmpty(age) || isNullOrEmpty(address) || isNullOrEmpty(address2)
+        || isNullOrEmpty(zipCode) || isNullOrEmpty(country)) {
+            JOptionPane.showMessageDialog(this, "Please Enter all fields to create an Account", "Error", JOptionPane.ERROR_MESSAGE);
+        } else {
+            
+        }
+    }//GEN-LAST:event_btnCreateActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
+    private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnCreate;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel lblAddress;
+    private javax.swing.JLabel lblAddress1;
+    private javax.swing.JLabel lblAddress2;
     private javax.swing.JLabel lblConfirmPassword;
     private javax.swing.JLabel lblCountry;
     private javax.swing.JLabel lblDateofBirth;
@@ -268,17 +333,48 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblUsername;
     private javax.swing.JLabel lblZipCode;
     private javax.swing.JTextField txtAddress;
+    private javax.swing.JTextField txtAddress1;
     private javax.swing.JTextField txtAge;
     private javax.swing.JTextField txtConfirmPassword;
     private javax.swing.JTextField txtCountry;
     private javax.swing.JTextField txtDateofBirth;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtFirstName;
-    private javax.swing.JTextField txtGender;
+    private javax.swing.JComboBox<String> txtGender;
     private javax.swing.JTextField txtLastName;
     private javax.swing.JTextField txtOccupation;
     private javax.swing.JTextField txtPassword;
+    private javax.swing.JComboBox<String> txtRole;
     private javax.swing.JTextField txtUsername;
     private javax.swing.JTextField txtZipCode;
     // End of variables declaration//GEN-END:variables
+
+    private void validateInputs() {
+        InputVerifier stringValidation = new ValidateStrings();
+        txtFirstName.setInputVerifier(stringValidation);
+        txtLastName.setInputVerifier(stringValidation);
+        txtOccupation.setInputVerifier(stringValidation);
+        txtAddress.setInputVerifier(stringValidation);
+        txtAddress1.setInputVerifier(stringValidation);
+        txtCountry.setInputVerifier(stringValidation);
+        txtUsername.setInputVerifier(stringValidation);
+        
+        InputVerifier passwordValidation = new ValidatePassword();
+        txtPassword.setInputVerifier(passwordValidation);
+        txtConfirmPassword.setInputVerifier(passwordValidation);
+        
+        InputVerifier emailValidation = new ValidateEmail();
+        txtEmail.setInputVerifier(emailValidation);
+        
+        InputVerifier numberValidation = new ValidateNumber();
+        txtZipCode.setInputVerifier(numberValidation);
+        txtAge.setInputVerifier(numberValidation);
+        
+        InputVerifier dateValidation = new ValidateDate();
+        txtDateofBirth.setInputVerifier(dateValidation);
+    }
+    
+    private boolean isNullOrEmpty(String str) {
+        return str == null || str.trim().isEmpty();
+    }
 }
