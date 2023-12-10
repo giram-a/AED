@@ -41,8 +41,8 @@ public class EnterpriseDirectory {
                 enterprise = new SchoolEnterprise(name);
                 enterpriseList.add(enterprise);
             }
-            case SpiritualOrganization -> {
-                enterprise = new SpiritualOrganizationEnterprise(name);
+            case Hospital -> {
+                enterprise = new HospitalEnterprise(name);
                 enterpriseList.add(enterprise);
             }
             default -> {

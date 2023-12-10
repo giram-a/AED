@@ -11,9 +11,9 @@ import java.util.ArrayList;
  *
  * @author aniketgiram
  */
-public class SpiritualOrganizationEnterprise extends Enterprise{
-     public SpiritualOrganizationEnterprise(String name) {
-        super(name, EnterpriseType.SpiritualOrganization);
+public class HospitalEnterprise extends Enterprise{
+     public HospitalEnterprise(String name) {
+        super(name, EnterpriseType.Hospital);
     }
 
     @Override

@@ -43,7 +43,7 @@ public abstract class Enterprise extends Organization{
        MealShare("MealShare"),
        NGO("NGO"),
        Government("Government"),
-       SpiritualOrganization("SpiritualOrganization");
+       Hospital("Hospital");
     
        
        final private String value;

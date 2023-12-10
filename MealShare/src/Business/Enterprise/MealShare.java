@@ -20,7 +20,7 @@ public class MealShare extends Enterprise{
     
     public MealShare(String name)
     {
-     super(name, Enterprise.EnterpriseType.MealShare);  
+     super(name, EnterpriseType.MealShare);  
     }
     
 }
