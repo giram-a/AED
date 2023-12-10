@@ -313,6 +313,10 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_btnCreateActionPerformed
 
+    private void ddRoleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ddRoleActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ddRoleActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
