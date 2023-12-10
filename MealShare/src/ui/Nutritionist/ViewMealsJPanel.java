@@ -48,12 +48,12 @@ public class ViewMealsJPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Organization", "Meal content", "Protien", "Carb", "Calories"
+                "Organization", "Meal content", "Protein", "Carbs", "Calories"
             }
         ));
         jScrollPane1.setViewportView(tblViewMeals);
 
-        lblProtien.setText("Protien:");
+        lblProtien.setText("Protein:");
 
         lblCarbs.setText("Carbs:");
 

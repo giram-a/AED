@@ -6,6 +6,8 @@ package ui;
 
 import Business.Business;
 import ui.Auth.LoginJPanel;
+import ui.Donor.DonateMoneyJPanel;
+import ui.Donor.Donor;
 import ui.Logistics.Logistics;
 import ui.Nutritionist.Nutritionist;
 import ui.Nutritionist.ViewMealsJPanel;
@@ -96,7 +98,7 @@ public class MainJFrame extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void display() {
-        Logistics logistics = new Logistics();
-        this.business.redirection(MainCardLayout, logistics.getClass().getName(), logistics);
+        DonateMoneyJPanel donatemoney = new DonateMoneyJPanel();
+        this.business.redirection(MainCardLayout, donatemoney.getClass().getName(), donatemoney);
     }
 }
