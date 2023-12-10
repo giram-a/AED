@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <AuxValues>
     <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
     <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
@@ -111,8 +111,8 @@
               <Table columnCount="5" rowCount="0">
                 <Column editable="true" title="Organization" type="java.lang.Object"/>
                 <Column editable="true" title="Meal content" type="java.lang.Object"/>
-                <Column editable="true" title="Protien" type="java.lang.Object"/>
-                <Column editable="true" title="Carb" type="java.lang.Object"/>
+                <Column editable="true" title="Protein" type="java.lang.Object"/>
+                <Column editable="true" title="Carbs" type="java.lang.Object"/>
                 <Column editable="true" title="Calories" type="java.lang.Object"/>
               </Table>
             </Property>
@@ -160,7 +160,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblProtien">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Protien:"/>
+        <Property name="text" type="java.lang.String" value="Protein:"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblCarbs">
