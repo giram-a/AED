@@ -8,9 +8,13 @@ import Business.Business;
 import Business.ConfigureABusiness;
 import ui.Auth.CreateAccountJPanel;
 import ui.Auth.LoginJPanel;
+import ui.Donor.CreateProfile;
 import ui.Donor.DonateMoneyJPanel;
 import ui.Donor.Donor;
+import ui.Donor.ViewDonationHistory;
+import ui.Donor.ViewUpdateProfile;
 import ui.Logistics.Logistics;
+import ui.Nutritionist.ManageProfileJPanel;
 import ui.Nutritionist.Nutritionist;
 import ui.Nutritionist.ViewMealsJPanel;
 

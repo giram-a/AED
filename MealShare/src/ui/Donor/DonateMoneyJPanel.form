@@ -16,50 +16,36 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace pref="212" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <EmptySpace min="-2" pref="71" max="-2" attributes="0"/>
-                      <Component id="lblDonateForAMeal" max="32767" attributes="0"/>
-                  </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <EmptySpace min="-2" pref="150" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="lblEnterName" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblEnterCardDetails" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblExpiryDate" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblEnterAmount" min="-2" max="-2" attributes="0"/>
-                          <Component id="lblOrganization" alignment="0" min="-2" max="-2" attributes="0"/>
-                          <Component id="btnDonation" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="-2" pref="43" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="btnCancel" min="-2" max="-2" attributes="0"/>
-                                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                      <Component id="txtName" alignment="0" pref="190" max="32767" attributes="0"/>
-                                      <Component id="txtCardDetails" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="txtExpiryDate" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="txtAmountDonated" alignment="0" max="32767" attributes="0"/>
-                                  </Group>
-                              </Group>
-                          </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="txtOrganizationName" min="-2" pref="190" max="-2" attributes="0"/>
-                          </Group>
-                      </Group>
-                      <EmptySpace min="0" pref="125" max="32767" attributes="0"/>
-                  </Group>
+                  <Component id="lblEnterName" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblEnterCardDetails" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblExpiryDate" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblEnterAmount" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblOrganization" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnDonation" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace min="113" pref="113" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="txtName" alignment="0" pref="190" max="32767" attributes="0"/>
+                      <Component id="txtCardDetails" alignment="0" max="32767" attributes="0"/>
+                      <Component id="txtExpiryDate" alignment="0" max="32767" attributes="0"/>
+                      <Component id="txtAmountDonated" alignment="0" max="32767" attributes="0"/>
+                  </Group>
+                  <Component id="txtOrganizationName" alignment="1" min="-2" pref="190" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="212" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
               <Component id="btnBack" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="1" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="lblDonateForAMeal" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -98,10 +84,7 @@
                   <Component id="txtAmountDonated" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="55" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="btnDonation" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnCancel" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="btnDonation" min="-2" max="-2" attributes="0"/>
               <EmptySpace pref="108" max="32767" attributes="0"/>
               <Component id="btnBack" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
@@ -121,12 +104,12 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblOrganization">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Enter organization name :"/>
+        <Property name="text" type="java.lang.String" value="Enter Organization Name :"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblEnterName">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Enter name :"/>
+        <Property name="text" type="java.lang.String" value="Enter Name :"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblEnterCardDetails">
@@ -149,7 +132,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblEnterAmount">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Enter amount to donate :"/>
+        <Property name="text" type="java.lang.String" value="Enter Amount to Donate :"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtAmountDonated">
@@ -157,11 +140,6 @@
     <Component class="javax.swing.JButton" name="btnDonation">
       <Properties>
         <Property name="text" type="java.lang.String" value="Make a donation!"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="btnCancel">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Cancel"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JButton" name="btnBack">

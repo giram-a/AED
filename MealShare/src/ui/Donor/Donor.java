@@ -32,7 +32,6 @@ public class Donor extends javax.swing.JPanel {
         btnBack = new javax.swing.JButton();
         btnCreateProfile = new javax.swing.JButton();
         btnViewUpdateProfile = new javax.swing.JButton();
-        btnDonationRequest = new javax.swing.JButton();
 
         lblDonor.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
         lblDonor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -48,31 +47,27 @@ public class Donor extends javax.swing.JPanel {
 
         btnViewUpdateProfile.setText("View/Update Profile");
 
-        btnDonationRequest.setText("View Donation Request");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblDonor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(224, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnDonateMoney, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnDonationHistory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnDonationRequest))
-                .addGap(142, 142, 142)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnCreateProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnViewUpdateProfile))
-                .addContainerGap(246, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(62, 62, 62)
-                .addComponent(btnBack)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblDonor, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap(300, Short.MAX_VALUE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnDonateMoney, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnDonationHistory, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE))
+                            .addGap(142, 142, 142)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(btnCreateProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(btnViewUpdateProfile)))
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(62, 62, 62)
+                            .addComponent(btnBack))))
+                .addContainerGap(300, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -87,9 +82,7 @@ public class Donor extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDonationHistory)
                     .addComponent(btnViewUpdateProfile))
-                .addGap(40, 40, 40)
-                .addComponent(btnDonationRequest)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 218, Short.MAX_VALUE)
+                .addGap(280, 280, 280)
                 .addComponent(btnBack)
                 .addGap(35, 35, 35))
         );
@@ -101,7 +94,6 @@ public class Donor extends javax.swing.JPanel {
     private javax.swing.JButton btnCreateProfile;
     private javax.swing.JButton btnDonateMoney;
     private javax.swing.JButton btnDonationHistory;
-    private javax.swing.JButton btnDonationRequest;
     private javax.swing.JButton btnViewUpdateProfile;
     private javax.swing.JLabel lblDonor;
     // End of variables declaration//GEN-END:variables

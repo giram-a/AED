@@ -18,16 +18,21 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel1" max="32767" attributes="0"/>
+              <Component id="lblNutritionist" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="146" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="btnManageProfile" max="32767" attributes="0"/>
                   <Component id="btnViewMeals" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="644" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace pref="414" max="32767" attributes="0"/>
+              <Component id="btnExit" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="414" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -35,21 +40,23 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="70" max="-2" attributes="0"/>
-              <Component id="jLabel1" min="-2" pref="70" max="-2" attributes="0"/>
+              <Component id="lblNutritionist" min="-2" pref="70" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="60" max="-2" attributes="0"/>
               <Component id="btnViewMeals" min="-2" pref="31" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
               <Component id="btnManageProfile" min="-2" pref="31" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="306" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
+              <Component id="btnExit" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="249" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JLabel" name="jLabel1">
+    <Component class="javax.swing.JLabel" name="lblNutritionist">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-          <Font name="Segoe UI" size="36" style="1"/>
+          <Font name="Segoe UI" size="24" style="2"/>
         </Property>
         <Property name="horizontalAlignment" type="int" value="0"/>
         <Property name="text" type="java.lang.String" value="Nutritionist"/>
@@ -64,6 +71,11 @@
     <Component class="javax.swing.JButton" name="btnManageProfile">
       <Properties>
         <Property name="text" type="java.lang.String" value="Manage Profile"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnExit">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Exit"/>
       </Properties>
     </Component>
   </SubComponents>
