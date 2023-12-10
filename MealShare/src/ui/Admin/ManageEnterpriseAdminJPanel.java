@@ -54,6 +54,7 @@ public class ManageEnterpriseAdminJPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         lblManageEnterpriseAdmin = new javax.swing.JLabel();
         lblAddNewEnterpriseAdmin = new javax.swing.JLabel();
@@ -64,7 +65,7 @@ public class ManageEnterpriseAdminJPanel extends javax.swing.JPanel {
         lblUsername = new javax.swing.JLabel();
         lblPassword = new javax.swing.JLabel();
         cbEnterprise = new javax.swing.JComboBox<>();
-        txtEnterpriseSupervisorName = new javax.swing.JTextField();
+        txtEnterpriseAdminName = new javax.swing.JTextField();
         txtUsername = new javax.swing.JTextField();
         txtPassword = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -73,12 +74,16 @@ public class ManageEnterpriseAdminJPanel extends javax.swing.JPanel {
         btnCreate = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
 
+        jLabel1.setFont(new java.awt.Font("Arial", 2, 18)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Manage Enterprise Admin ");
+
         lblManageEnterpriseAdmin.setFont(new java.awt.Font("Arial", 2, 18)); // NOI18N
         lblManageEnterpriseAdmin.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblManageEnterpriseAdmin.setText("Manage Enterprise Admin ");
 
-        lblAddNewEnterpriseSupervisor.setFont(new java.awt.Font("Arial", 2, 18)); // NOI18N
-        lblAddNewEnterpriseSupervisor.setText("Add New Enterprise Supervisor");
+        lblAddNewEnterpriseAdmin.setFont(new java.awt.Font("Arial", 2, 18)); // NOI18N
+        lblAddNewEnterpriseAdmin.setText("Add New Enterprise Admin");
 
         cbNetwork.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         cbNetwork.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "California", "Massachusetts", "Texas", "Florida", "Ohio", "Georgia" }));
@@ -92,7 +97,7 @@ public class ManageEnterpriseAdminJPanel extends javax.swing.JPanel {
 
         lblEnterprise.setText("Enterprise:");
 
-        lblEnterpriseAdmin.setText("Enterprise Supervisor Name:");
+        lblEnterpriseAdmin.setText("Enterprise Admin Name:");
 
         lblUsername.setText("Username:");
 
@@ -139,7 +144,7 @@ public class ManageEnterpriseAdminJPanel extends javax.swing.JPanel {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(lblManageEnterpriseAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(lblManageEnterpriseAdmin, javax.swing.GroupLayout.DEFAULT_SIZE, 888, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(61, 61, 61)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -164,18 +169,10 @@ public class ManageEnterpriseAdminJPanel extends javax.swing.JPanel {
                                                 .addComponent(btnBack))
                                             .addGap(18, 18, 18)
                                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                .addComponent(txtEnterpriseSupervisorName, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
+                                                .addComponent(txtEnterpriseAdminName, javax.swing.GroupLayout.DEFAULT_SIZE, 191, Short.MAX_VALUE)
                                                 .addComponent(txtUsername)
-                                                .addComponent(txtPassword))))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(lblNetwork)
-                                            .addComponent(lblEnterprise))
-                                        .addGap(124, 124, 124)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                            .addComponent(cbEnterprise, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(cbCalifornia, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                .addGap(18, 18, 18)
+                                                .addComponent(txtPassword)))))
+                                .addGap(19, 19, 19)
                                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(btnDelete))
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -186,10 +183,10 @@ public class ManageEnterpriseAdminJPanel extends javax.swing.JPanel {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(70, 70, 70)
                 .addComponent(lblManageEnterpriseAdmin)
-                .addGap(45, 45, 45)
+                .addGap(38, 38, 38)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(lblAddNewEnterpriseSupervisor)
+                        .addComponent(lblAddNewEnterpriseAdmin)
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(cbNetwork, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -201,7 +198,7 @@ public class ManageEnterpriseAdminJPanel extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblEnterpriseAdmin)
-                            .addComponent(txtEnterpriseSupervisorName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtEnterpriseAdminName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblUsername)
@@ -224,17 +221,27 @@ public class ManageEnterpriseAdminJPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 888, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(70, 70, 70)
+                .addComponent(jLabel1)
+                .addContainerGap(525, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(0, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(0, 0, Short.MAX_VALUE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -418,7 +425,7 @@ public class ManageEnterpriseAdminJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblAddNewEnterpriseSupervisor;
+    private javax.swing.JLabel lblAddNewEnterpriseAdmin;
     private javax.swing.JLabel lblEnterprise;
     private javax.swing.JLabel lblEnterpriseAdmin;
     private javax.swing.JLabel lblManageEnterpriseAdmin;
@@ -426,7 +433,7 @@ public class ManageEnterpriseAdminJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblPassword;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JTable tblManageEnterpriseAdmin;
-    private javax.swing.JTextField txtEnterpriseSupervisorName;
+    private javax.swing.JTextField txtEnterpriseAdminName;
     private javax.swing.JTextField txtPassword;
     private javax.swing.JTextField txtUsername;
     // End of variables declaration//GEN-END:variables
