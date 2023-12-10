@@ -26,22 +26,26 @@ public class HelpSeekerJPanel extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        lblManageProfile = new javax.swing.JButton();
+        btnManageProfile = new javax.swing.JButton();
         lblHelpSeeker = new javax.swing.JLabel();
         btnCreateRequest = new javax.swing.JButton();
-        lblProvideTestimony = new javax.swing.JButton();
+        btnProvideTestimony = new javax.swing.JButton();
         btnViewMeals = new javax.swing.JButton();
 
-        lblManageProfile.setText("Manage Profile");
+        btnManageProfile.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        btnManageProfile.setText("Manage Profile");
 
         lblHelpSeeker.setFont(new java.awt.Font("Arial", 2, 24)); // NOI18N
         lblHelpSeeker.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblHelpSeeker.setText("Help Seeker");
 
+        btnCreateRequest.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         btnCreateRequest.setText("Create Request");
 
-        lblProvideTestimony.setText("Provide Testimony");
+        btnProvideTestimony.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
+        btnProvideTestimony.setText("Provide Testimony");
 
+        btnViewMeals.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         btnViewMeals.setText("View Meals");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -57,23 +61,23 @@ public class HelpSeekerJPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(btnCreateRequest, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(btnViewMeals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblProvideTestimony, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblManageProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(btnProvideTestimony, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnManageProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(568, 568, 568))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(36, 36, 36)
+                .addGap(70, 70, 70)
                 .addComponent(lblHelpSeeker)
                 .addGap(59, 59, 59)
                 .addComponent(btnCreateRequest)
                 .addGap(50, 50, 50)
                 .addComponent(btnViewMeals)
                 .addGap(50, 50, 50)
-                .addComponent(lblProvideTestimony)
+                .addComponent(btnProvideTestimony)
                 .addGap(50, 50, 50)
-                .addComponent(lblManageProfile)
+                .addComponent(btnManageProfile)
                 .addGap(235, 235, 235))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -81,9 +85,9 @@ public class HelpSeekerJPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateRequest;
+    private javax.swing.JButton btnManageProfile;
+    private javax.swing.JButton btnProvideTestimony;
     private javax.swing.JButton btnViewMeals;
     private javax.swing.JLabel lblHelpSeeker;
-    private javax.swing.JButton lblManageProfile;
-    private javax.swing.JButton lblProvideTestimony;
     // End of variables declaration//GEN-END:variables
 }
