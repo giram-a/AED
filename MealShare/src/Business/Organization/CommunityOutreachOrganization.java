@@ -4,6 +4,7 @@
  */
 package Business.Organization;
 
+import Business.Roles.CommunityOutreachRole;
 import Business.Roles.Role;
 import java.util.ArrayList;
 
@@ -19,7 +20,7 @@ public class CommunityOutreachOrganization extends Organization{
     @Override
     public ArrayList<Role> getSupportedRole() {
         ArrayList<Role> roles = new ArrayList<>();
-//        roles.add(new AdminRole());
+        roles.add(new CommunityOutreachRole());
         return roles;
     }
 }

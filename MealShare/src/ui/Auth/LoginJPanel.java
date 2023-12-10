@@ -4,13 +4,22 @@
  */
 package ui.Auth;
 
+import Business.Business;
+import Business.Common.ValidatePassword;
 import Business.Common.ValidateStrings;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
 import com.github.javafaker.Faker;
+import java.awt.CardLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import javax.swing.InputVerifier;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import org.knowm.xchart.PieChart;
 import org.knowm.xchart.PieChartBuilder;
 import org.knowm.xchart.SwingWrapper;
@@ -21,13 +30,18 @@ import org.knowm.xchart.XChartPanel;
  * @author samar
  */
 public class LoginJPanel extends javax.swing.JPanel {
-
+    
+    JPanel mainCardLayout;
+    Business business;
+    
     /**
      * Creates new form LoginJPanel
      */
-    public LoginJPanel() {
+    public LoginJPanel(JPanel MainCardLayout, Business business) {
         initComponents();
         inputVerifier();
+        this.business = business;
+        this.mainCardLayout = MainCardLayout;
 //        Faker faker = new Faker();
 //        System.out.println("Name "+ faker.name().username());
 //        testChart();
@@ -50,6 +64,7 @@ public class LoginJPanel extends javax.swing.JPanel {
         lblDont = new javax.swing.JLabel();
         btnCreateAccount = new javax.swing.JButton();
         testPanel = new javax.swing.JPanel();
+        btnLogin = new javax.swing.JButton();
 
         lblLogin.setFont(new java.awt.Font("Arial", 2, 18)); // NOI18N
         lblLogin.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -75,29 +90,34 @@ public class LoginJPanel extends javax.swing.JPanel {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
+        btnLogin.setText("Login");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(305, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(64, 64, 64)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtPassword, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
-                                .addComponent(txtUsername))
-                            .addComponent(lblDont, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnCreateAccount))
-                        .addGap(0, 274, Short.MAX_VALUE)))
+                .addContainerGap()
+                .addComponent(lblLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGap(328, 328, 328)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblDont, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCreateAccount)
+                    .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(258, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,17 +132,77 @@ public class LoginJPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblPassword)
                     .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
+                .addGap(18, 18, 18)
+                .addComponent(btnLogin)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(lblDont)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCreateAccount)
-                .addContainerGap(301, Short.MAX_VALUE))
+                .addContainerGap(268, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        // TODO add your handling code here:
+        String username = txtUsername.getText();
+        String password = String.valueOf(txtPassword.getPassword());
+        
+        if (isNullOrEmpty(username)) {
+            System.out.println("Username cannot be empty.");
+        } else {
+            // Check for null or empty password
+            if (password == null || password.length() == 0) {
+                System.out.println("Password cannot be empty.");
+            } else {
+                UserAccount userAccount = business.getUserAccountDirectory().authenticateUser(username, password);
+                Enterprise inEnterprise = null;
+                Organization inOrganization = null;
+                if (userAccount == null) {
+                    for (Network network : business.getNetworkList()) {
+                        //Step 2-a: Check against each enterprise
+                        for (Enterprise enterprise : network.getEnterpriseDirectory().getEnterpriseList()) {
+                            userAccount = enterprise.getUserAccountDirectory().authenticateUser(username, password);
+                            if (userAccount == null ) {
+                                //Step3: Check against each organization inside that enterprise
+                                for (Organization organization : enterprise.getOrganizationDirectory().getOrganizationList()) {
+                                    userAccount = organization.getUserAccountDirectory().authenticateUser(username, password);
+                                    if (userAccount != null ) {
+                                        inEnterprise = enterprise;
+                                        inOrganization = organization;
+                                        break;
+                                    }
+                                }
+                            } else {
+                                inEnterprise = enterprise;
+                                break;
+                            }
+                            if (inOrganization != null) {
+                                break;
+                            }
+                        }
+                        if (inEnterprise != null) {
+                            break;
+                        }
+                    }
+                }
+        
+                if (userAccount == null) {
+                    System.out.println("null");
+                    JOptionPane.showMessageDialog(null, "Invalid Credentails!");
+                } 
+                else {
+                    JPanel panel = userAccount.getRole().createWorkArea(mainCardLayout, userAccount, inOrganization, inEnterprise, business);
+                    business.redirection(mainCardLayout, panel.getClass().getName(), panel);
+                }
+        
+            }
+        }
+    }//GEN-LAST:event_btnLoginActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateAccount;
+    private javax.swing.JButton btnLogin;
     private javax.swing.JLabel lblDont;
     private javax.swing.JLabel lblLogin;
     private javax.swing.JLabel lblPassword;
@@ -135,6 +215,13 @@ public class LoginJPanel extends javax.swing.JPanel {
     private void inputVerifier() {
         InputVerifier stringValidation = new ValidateStrings();
         txtUsername.setInputVerifier(stringValidation);
+        
+        InputVerifier passwordValidation = new ValidatePassword();
+        txtPassword.setInputVerifier(passwordValidation);
+    }
+    
+    private boolean isNullOrEmpty(String str) {
+        return str == null || str.trim().isEmpty();
     }
 
     private void testChart() {

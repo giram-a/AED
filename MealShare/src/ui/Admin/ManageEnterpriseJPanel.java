@@ -4,17 +4,42 @@
  */
 package ui.Admin;
 
+import Business.Business;
+import Business.Common.ValidateStrings;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.InputVerifier;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author samar
  */
 public class ManageEnterpriseJPanel extends javax.swing.JPanel {
 
+    JPanel userProcessContainer;
+    UserAccount account;
+    Enterprise enterprise;
+    Organization organization;
+    Business business;
     /**
      * Creates new form ManageEnterpriseJPanel
      */
-    public ManageEnterpriseJPanel() {
+    public ManageEnterpriseJPanel(JPanel userProcessContainer, UserAccount account, Enterprise enterprise, Organization organization, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        addInputVerifiers();
+        populateEnterpriseTable();
+        populateComboBox();
     }
 
     /**
@@ -38,6 +63,7 @@ public class ManageEnterpriseJPanel extends javax.swing.JPanel {
         tblManageEnterprise = new javax.swing.JTable();
         btnDelete = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
+        btnCreate = new javax.swing.JButton();
 
         lblManageEnterprise.setFont(new java.awt.Font("Arial", 2, 24)); // NOI18N
         lblManageEnterprise.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -59,10 +85,7 @@ public class ManageEnterpriseJPanel extends javax.swing.JPanel {
 
         tblManageEnterprise.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Enterprise Name", "Network", "Type"
@@ -71,8 +94,25 @@ public class ManageEnterpriseJPanel extends javax.swing.JPanel {
         jScrollPane1.setViewportView(tblManageEnterprise);
 
         btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+
+        btnCreate.setText("Create");
+        btnCreate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -97,10 +137,12 @@ public class ManageEnterpriseJPanel extends javax.swing.JPanel {
                                     .addComponent(lblEnterpriseType)
                                     .addComponent(lblEnterpriseName))
                                 .addGap(28, 28, 28)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(cbNetwork, 0, 190, Short.MAX_VALUE)
-                                    .addComponent(cbEnterpriseType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtEnterpriseName))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnCreate)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(cbNetwork, 0, 190, Short.MAX_VALUE)
+                                        .addComponent(cbEnterpriseType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txtEnterpriseName)))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(33, 33, 33))
@@ -129,7 +171,9 @@ public class ManageEnterpriseJPanel extends javax.swing.JPanel {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblEnterpriseName)
-                            .addComponent(txtEnterpriseName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtEnterpriseName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCreate))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(27, 27, 27)
                 .addComponent(btnDelete)
@@ -139,9 +183,146 @@ public class ManageEnterpriseJPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
+        // TODO add your handling code here:
+        if(txtEnterpriseName.getText().trim().isEmpty())
+        {
+           JOptionPane.showMessageDialog(null, "Please enter valid name !");
+            return;  
+        }
+        
+        Network network = null;
+        String _network = (String) cbNetwork.getSelectedItem();
+        for (Network n : business.getNetworkList()) {
+            if(_network.equals(n.toString())){
+                network = n;
+                break;
+            }
+        }
+         
+        Enterprise.EnterpriseType type = null;
+        String _type = (String) cbEnterpriseType.getSelectedItem();
+        
+        for (Enterprise.EnterpriseType t : Enterprise.EnterpriseType.values()) {
+            if(_type.equals(t.toString())){
+                type = t;
+                break;
+            }
+                
+        }
+        
+        
+        if (network == null || type == null) {
+            JOptionPane.showMessageDialog(null, "Invalid Input!");
+            return;
+        }
+        
+        String name = txtEnterpriseName.getText();
+        for(Enterprise e : network.getEnterpriseDirectory().getEnterpriseList())
+        {
+            if(name.equalsIgnoreCase(e.getName()) || type.equals(e.getEnterpriseType()))
+            {
+                JOptionPane.showMessageDialog(null, "Enterprise already exits!", "warning",JOptionPane.WARNING_MESSAGE);
+                return;                 
+            }
+        }
+      
+        Enterprise enterprise = network.getEnterpriseDirectory().addEnterprise(name, type);
+        JOptionPane.showMessageDialog(null, "Enterprise has been added successfully", "success",JOptionPane.PLAIN_MESSAGE);
+        populateEnterpriseTable();
+        resetFields();
+    }//GEN-LAST:event_btnCreateActionPerformed
+
+    private void populateComboBox() {
+        cbNetwork.removeAllItems();
+        cbEnterpriseType.removeAllItems();
+        
+        for (Network network : business.getNetworkList()) {
+            cbNetwork.addItem(network.toString());
+        }
+
+        for (Enterprise.EnterpriseType type : Enterprise.EnterpriseType.values()) {
+            cbEnterpriseType.addItem(type.toString());
+        }
+
+    }
+    
+    private void addInputVerifiers() {
+        InputVerifier stringValidation = new ValidateStrings();
+        txtEnterpriseName.setInputVerifier(stringValidation);
+    }
+    
+    public void resetFields()
+    {
+        txtEnterpriseName.setText("");
+    }
+    
+    private void populateEnterpriseTable() {
+        DefaultTableModel model = (DefaultTableModel) tblManageEnterprise.getModel();
+
+        model.setRowCount(0);
+        for (Network network : business.getNetworkList()) {
+            for (Enterprise enterprise : network.getEnterpriseDirectory().getEnterpriseList()) {
+                Object[] row = new Object[3];
+                row[0] = enterprise;
+                row[1] = network.getCity();
+                row[2] = enterprise.getEnterpriseType().getValue();
+
+                model.addRow(row);
+            }
+        }
+    }
+    
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        AdminJPanel adminJPanel = new AdminJPanel(userProcessContainer, account, enterprise, organization, business);
+        business.redirection(userProcessContainer, adminJPanel.getClass().getName(), adminJPanel);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        
+        Enterprise entToBeDeleted = null;
+        int selectedRow = tblManageEnterprise.getSelectedRow();
+        if(selectedRow >= 0)
+        {
+            int dialogButton = JOptionPane.YES_NO_OPTION;
+            int dialogResult = JOptionPane.showConfirmDialog(this, "Would you like to delete the row ", "warning",dialogButton);
+            if(dialogResult == JOptionPane.YES_OPTION)
+            {
+                Enterprise enterprise = (Enterprise) tblManageEnterprise.getValueAt(selectedRow, 0);
+                for (Network network : business.getNetworkList()) 
+                {
+                    for (Enterprise e : network.getEnterpriseDirectory().getEnterpriseList())
+                    {
+                       if(e.getEnterpriseType().getValue().equals(enterprise.getEnterpriseType().getValue()))
+                        {
+                           if(enterprise.getName().equals(e.getName()))  
+                           {
+                             entToBeDeleted = e;
+                           }
+                        }
+                    }
+                    
+                if(entToBeDeleted!=null)
+                {
+                    network.getEnterpriseDirectory().deleteEnterprise(entToBeDeleted);
+                }
+            }
+            JOptionPane.showMessageDialog(this, "Enterprise has been deleted successfully", "success",JOptionPane.PLAIN_MESSAGE);
+            populateEnterpriseTable();
+            }
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "Please select a row", "warning",JOptionPane.PLAIN_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
+    private javax.swing.JButton btnCreate;
     private javax.swing.JButton btnDelete;
     private javax.swing.JComboBox<String> cbEnterpriseType;
     private javax.swing.JComboBox<String> cbNetwork;

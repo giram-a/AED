@@ -27,7 +27,7 @@ public class ConfigureABusiness {
         person.setLastName("Admin");
         person.setName();
         
-        UserAccount ua = business.getUserAccountDirectory().addUserAccount("sysadmin", "sysadmin", person, new SystemAdminRole());
+        UserAccount ua = business.getUserAccountDirectory().addUserAccount("sysadmin", "sys1#", person, new SystemAdminRole());
         ua.setEnabled(true);
         
         Network network = business.addNetwork();
