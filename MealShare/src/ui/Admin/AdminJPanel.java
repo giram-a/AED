@@ -4,17 +4,34 @@
  */
 package ui.Admin;
 
+import Business.Business;
+import Business.Enterprise.Enterprise;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import javax.swing.JPanel;
+
 /**
  *
  * @author samar
  */
 public class AdminJPanel extends javax.swing.JPanel {
-
+    
+    JPanel userProcessContainer;
+    UserAccount account;
+    Enterprise enterprise;
+    Organization organization;
+    Business business;
+            
     /**
      * Creates new form AdminJPanel
      */
-    public AdminJPanel() {
+    public AdminJPanel(JPanel userProcessContainer, UserAccount account, Enterprise enterprise, Organization organization, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        this.organization = organization;
     }
 
     /**
@@ -36,10 +53,25 @@ public class AdminJPanel extends javax.swing.JPanel {
         lblAdmin.setText("Admin");
 
         btnManageNetwork.setText("Manage Network");
+        btnManageNetwork.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManageNetworkActionPerformed(evt);
+            }
+        });
 
         btnManageEnterprise.setText("Manage Enterprise ");
+        btnManageEnterprise.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManageEnterpriseActionPerformed(evt);
+            }
+        });
 
         btnManageEnterpriseAdmin.setText("Manage Enterprise Admin");
+        btnManageEnterpriseAdmin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManageEnterpriseAdminActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -71,6 +103,24 @@ public class AdminJPanel extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnManageNetworkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageNetworkActionPerformed
+        // TODO add your handling code here:
+        ManageNetworkJPanel manageNetworkJPanel = new ManageNetworkJPanel(userProcessContainer, account, enterprise, organization, business);
+        business.redirection(userProcessContainer, manageNetworkJPanel.getClass().getName(), manageNetworkJPanel);
+    }//GEN-LAST:event_btnManageNetworkActionPerformed
+
+    private void btnManageEnterpriseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageEnterpriseActionPerformed
+        // TODO add your handling code here:
+        ManageEnterpriseJPanel manageEnterpriseJPanel = new ManageEnterpriseJPanel(userProcessContainer, account, enterprise, organization, business);
+        business.redirection(userProcessContainer, manageEnterpriseJPanel.getClass().getName(), manageEnterpriseJPanel);
+    }//GEN-LAST:event_btnManageEnterpriseActionPerformed
+
+    private void btnManageEnterpriseAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageEnterpriseAdminActionPerformed
+        // TODO add your handling code here:
+        ManageEnterpriseAdminJPanel manageEnterpriseAdminJPanel = new ManageEnterpriseAdminJPanel(userProcessContainer, account, enterprise, organization, business);
+        business.redirection(userProcessContainer, manageEnterpriseAdminJPanel.getClass().getName(), manageEnterpriseAdminJPanel);
+    }//GEN-LAST:event_btnManageEnterpriseAdminActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

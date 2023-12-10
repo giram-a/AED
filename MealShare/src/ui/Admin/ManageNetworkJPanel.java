@@ -4,17 +4,40 @@
  */
 package ui.Admin;
 
+import Business.Business;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import java.awt.CardLayout;
+import java.awt.Component;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author samar
  */
 public class ManageNetworkJPanel extends javax.swing.JPanel {
-
+    
+    JPanel userProcessContainer;
+    UserAccount account;
+    Enterprise enterprise;
+    Organization organization;
+    Business business;
+    
     /**
      * Creates new form ManageNetworkJPanel
      */
-    public ManageNetworkJPanel() {
+    public ManageNetworkJPanel(JPanel userProcessContainer, UserAccount account, Enterprise enterprise, Organization organization, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        populateNetworkTable();
     }
 
     /**
@@ -55,19 +78,27 @@ public class ManageNetworkJPanel extends javax.swing.JPanel {
         lblCity.setText("City:");
 
         btnAdd.setText("Add");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         cbCountry.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "United States of America" }));
 
         cbState.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "California", "Massachusetts", "Texas", "Florida", "Ohio", "Georgia" }));
+        cbState.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbStateActionPerformed(evt);
+            }
+        });
 
         cbCity.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Boston", "San Francisco", "Los Angeles" }));
+        cbCity.setEnabled(false);
 
         tblNetwork.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Country", "State", "City"
@@ -76,8 +107,18 @@ public class ManageNetworkJPanel extends javax.swing.JPanel {
         jScrollPane1.setViewportView(tblNetwork);
 
         btnDelete.setText("Delete");
+        btnDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDeleteActionPerformed(evt);
+            }
+        });
 
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -154,6 +195,116 @@ public class ManageNetworkJPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // TODO add your handling code here:
+        if(cbState.getSelectedIndex()<0 ||
+                cbCity.getSelectedIndex() <0)
+        {
+            JOptionPane.showMessageDialog(null, "Please select all the values", "warning",JOptionPane.WARNING_MESSAGE);
+            return;
+           }
+        else
+        {
+        
+        String country = (String) cbCountry.getSelectedItem();
+        String state = (String) cbState.getSelectedItem();
+        String city = (String) cbCity.getSelectedItem();
+        if(!business.getNetworkList().isEmpty())
+        {
+         for(Network network : business.getNetworkList())
+         {
+             if(city.equals(network.getCity()))
+             {
+                JOptionPane.showMessageDialog(null, "Network already exists! ", "warning",JOptionPane.WARNING_MESSAGE);
+                return;      
+             }
+         }
+        }
+       
+        Network network = business.addNetwork();
+      
+        network.setCountry(country);
+        network.setState(state);
+        network.setCity(city);
+
+        populateNetworkTable();
+        }
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void cbStateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbStateActionPerformed
+        // TODO add your handling code here:
+        cbCity.removeAllItems();
+        cbCity.enable(true);
+        if(cbState.getSelectedItem() == "California")
+        {
+            cbCity.addItem("Los Angeles");
+            cbCity.addItem("San Francisco");
+         }
+        else if(cbState.getSelectedItem() == "Massachusetts")
+        {
+            cbCity.addItem("Boston");
+            cbCity.addItem("Cambridge");    
+        }
+        else if(cbState.getSelectedItem() == "Texas")
+        {
+            cbCity.addItem("Houston");
+        }
+        else if(cbState.getSelectedItem() == "Florida")
+        {
+            cbCity.addItem("Miami");
+            cbCity.addItem("Orlando");    
+        }
+        else if(cbState.getSelectedItem() == "Ohio")
+        {
+            cbCity.addItem("Columbus");
+            cbCity.addItem("Cleveland");    
+        }
+        else if(cbState.getSelectedItem() == "Georgia")
+        {
+            cbCity.addItem("Atlanta");
+            cbCity.addItem("Savannah");    
+        }
+    }//GEN-LAST:event_cbStateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = tblNetwork.getSelectedRow();
+        if(selectedRow >= 0)
+        {
+            int dialogButton = JOptionPane.YES_NO_OPTION;
+            int dialogResult = JOptionPane.showConfirmDialog(this, "Would you like to delete the row ", "warning",dialogButton);
+            if(dialogResult == JOptionPane.YES_OPTION)
+            {
+                Network network = (Network) tblNetwork.getValueAt(selectedRow, 2);
+                business.deleteNetwork(network);
+                populateNetworkTable();
+               
+            }
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Please select a row", "warning",JOptionPane.PLAIN_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        AdminJPanel adminJPanel = new AdminJPanel(userProcessContainer, account, enterprise, organization, business);
+        business.redirection(userProcessContainer, adminJPanel.getClass().getName(), adminJPanel);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void populateNetworkTable() {
+        
+        DefaultTableModel model = (DefaultTableModel) tblNetwork.getModel();
+        model.setRowCount(0);
+        for (Network network : business.getNetworkList()) {
+            Object[] row = new Object[3];
+            row[0] = network.getCountry();
+            row[1] = network.getState();
+            row[2] = network;
+            
+            model.addRow(row);
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
