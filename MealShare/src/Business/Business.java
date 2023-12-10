@@ -19,7 +19,7 @@ import javax.swing.JPanel;
  */
 public class Business extends Organization{
     private static Business business;
-    private ArrayList<Network> networkList;
+    final private ArrayList<Network> networkList;
 
     public static Business getInstance() {
         if (business == null) {
