@@ -38,26 +38,23 @@ public class DonateMoneyJPanel extends javax.swing.JPanel {
         lblEnterAmount = new javax.swing.JLabel();
         txtAmountDonated = new javax.swing.JTextField();
         btnDonation = new javax.swing.JButton();
-        btnCancel = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
 
         lblDonateForAMeal.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
         lblDonateForAMeal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblDonateForAMeal.setText("Donate for a Meal");
 
-        lblOrganization.setText("Enter organization name :");
+        lblOrganization.setText("Enter Organization Name :");
 
-        lblEnterName.setText("Enter name :");
+        lblEnterName.setText("Enter Name :");
 
         lblEnterCardDetails.setText("Enter Debit/Credit Card number :");
 
         lblExpiryDate.setText("Enter Expiry Date (MM/YYYY) :");
 
-        lblEnterAmount.setText("Enter amount to donate :");
+        lblEnterAmount.setText("Enter Amount to Donate :");
 
         btnDonation.setText("Make a donation!");
-
-        btnCancel.setText("Cancel");
 
         btnBack.setText("Back");
 
@@ -66,39 +63,30 @@ public class DonateMoneyJPanel extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap(212, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(71, 71, 71)
-                        .addComponent(lblDonateForAMeal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(150, 150, 150)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblEnterName)
-                            .addComponent(lblEnterCardDetails)
-                            .addComponent(lblExpiryDate)
-                            .addComponent(lblEnterAmount)
-                            .addComponent(lblOrganization)
-                            .addComponent(btnDonation))
-                        .addGap(70, 70, 70)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(43, 43, 43)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnCancel)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(txtName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-                                        .addComponent(txtCardDetails, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtExpiryDate, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtAmountDonated, javax.swing.GroupLayout.Alignment.LEADING))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtOrganizationName, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 125, Short.MAX_VALUE)))
-                .addContainerGap())
+                    .addComponent(lblEnterName)
+                    .addComponent(lblEnterCardDetails)
+                    .addComponent(lblExpiryDate)
+                    .addComponent(lblEnterAmount)
+                    .addComponent(lblOrganization)
+                    .addComponent(btnDonation))
+                .addGap(113, 113, 113)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(txtName, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                        .addComponent(txtCardDetails, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtExpiryDate, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(txtAmountDonated, javax.swing.GroupLayout.Alignment.LEADING))
+                    .addComponent(txtOrganizationName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(212, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addComponent(btnBack)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(lblDonateForAMeal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -128,9 +116,7 @@ public class DonateMoneyJPanel extends javax.swing.JPanel {
                     .addComponent(lblEnterAmount)
                     .addComponent(txtAmountDonated, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(55, 55, 55)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDonation)
-                    .addComponent(btnCancel))
+                .addComponent(btnDonation)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 108, Short.MAX_VALUE)
                 .addComponent(btnBack)
                 .addGap(15, 15, 15))
@@ -140,7 +126,6 @@ public class DonateMoneyJPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDonation;
     private javax.swing.JLabel lblDonateForAMeal;
     private javax.swing.JLabel lblEnterAmount;
