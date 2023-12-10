@@ -24,24 +24,21 @@
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <Group type="103" groupAlignment="1" attributes="0">
-                          <Group type="102" attributes="0">
+                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="103" groupAlignment="1" attributes="0">
+                              <Component id="lblDate" min="-2" pref="99" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="lblTime" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="lblMealRequired" alignment="0" max="32767" attributes="0"/>
-                                  <Component id="cbDelivery" alignment="0" min="-2" pref="99" max="-2" attributes="0"/>
+                                  <Component id="cbDelivery" alignment="1" min="-2" pref="99" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                           </Group>
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="lblDate" min="-2" pref="99" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="btnBack" min="-2" max="-2" attributes="0"/>
                       </Group>
+                      <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="btnCreate" min="-2" max="-2" attributes="0"/>
                           <Component id="cbTime" max="32767" attributes="0"/>
-                          <Component id="txtMealRequired" alignment="0" max="32767" attributes="0"/>
                           <Component id="cbDinein" alignment="0" max="32767" attributes="0"/>
                           <Component id="txtDate" alignment="0" min="-2" pref="190" max="-2" attributes="0"/>
                       </Group>
@@ -61,24 +58,22 @@
                   <Component id="lblTime" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="cbTime" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblMealRequired" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="txtMealRequired" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="cbDelivery" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="cbDinein" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="txtDate" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="lblDate" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="txtDate" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-              <Component id="btnCreate" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="209" max="32767" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="btnCreate" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="btnBack" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace pref="305" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -114,13 +109,6 @@
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="lblMealRequired">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Meal Required:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtMealRequired">
-    </Component>
     <Component class="javax.swing.JCheckBox" name="cbDelivery">
       <Properties>
         <Property name="text" type="java.lang.String" value="Delivery"/>
@@ -145,6 +133,11 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCreateActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="btnBack">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Back"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

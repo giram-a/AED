@@ -27,8 +27,9 @@
                   <Component id="btnManageNetwork" max="32767" attributes="0"/>
                   <Component id="btnManageEnterprise" max="32767" attributes="0"/>
                   <Component id="btnManageEnterpriseAdmin" max="32767" attributes="0"/>
+                  <Component id="jButton1" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace pref="485" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="485" max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -43,6 +44,8 @@
               <Component id="btnManageEnterprise" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
               <Component id="btnManageEnterpriseAdmin" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="44" max="-2" attributes="0"/>
+              <Component id="jButton1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -81,6 +84,11 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnManageEnterpriseAdminActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="jButton1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Manage Nutritionist"/>
+      </Properties>
     </Component>
   </SubComponents>
 </Form>

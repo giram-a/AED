@@ -29,13 +29,12 @@ public class CreateRequestJPanel extends javax.swing.JPanel {
         lblCreateRequest = new javax.swing.JLabel();
         lblTime = new javax.swing.JLabel();
         cbTime = new javax.swing.JComboBox<>();
-        lblMealRequired = new javax.swing.JLabel();
-        txtMealRequired = new javax.swing.JTextField();
         cbDelivery = new javax.swing.JCheckBox();
         cbDinein = new javax.swing.JCheckBox();
         lblDate = new javax.swing.JLabel();
         txtDate = new javax.swing.JTextField();
         btnCreate = new javax.swing.JButton();
+        btnBack = new javax.swing.JButton();
 
         lblCreateRequest.setFont(new java.awt.Font("Arial", 2, 24)); // NOI18N
         lblCreateRequest.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -45,8 +44,6 @@ public class CreateRequestJPanel extends javax.swing.JPanel {
 
         cbTime.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         cbTime.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "12.30 - 3.00 Pm", "7.30 - 10.00 Pm" }));
-
-        lblMealRequired.setText("Meal Required:");
 
         cbDelivery.setText("Delivery");
 
@@ -61,6 +58,8 @@ public class CreateRequestJPanel extends javax.swing.JPanel {
             }
         });
 
+        btnBack.setText("Back");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -72,20 +71,18 @@ public class CreateRequestJPanel extends javax.swing.JPanel {
                         .addComponent(lblCreateRequest, javax.swing.GroupLayout.DEFAULT_SIZE, 840, Short.MAX_VALUE)
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(lblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(lblTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(lblMealRequired, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(cbDelivery, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                                    .addComponent(cbDelivery, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnBack))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btnCreate)
                             .addComponent(cbTime, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtMealRequired)
                             .addComponent(cbDinein, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(244, 244, 244))))
@@ -99,43 +96,39 @@ public class CreateRequestJPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTime)
                     .addComponent(cbTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblMealRequired)
-                    .addComponent(txtMealRequired, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(33, 33, 33)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbDelivery)
                     .addComponent(cbDinein))
-                .addGap(32, 32, 32)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblDate))
-                .addGap(34, 34, 34)
-                .addComponent(btnCreate)
-                .addContainerGap(209, Short.MAX_VALUE))
+                    .addComponent(lblDate)
+                    .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnCreate)
+                    .addComponent(btnBack))
+                .addContainerGap(305, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         // TODO add your handling code here:
         String time = (String) cbTime.getSelectedItem();
-        String mealRequired = txtMealRequired.getText();
         String date = txtDate.getText();
         
     }//GEN-LAST:event_btnCreateActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBack;
     private javax.swing.JButton btnCreate;
     private javax.swing.JCheckBox cbDelivery;
     private javax.swing.JCheckBox cbDinein;
     private javax.swing.JComboBox<String> cbTime;
     private javax.swing.JLabel lblCreateRequest;
     private javax.swing.JLabel lblDate;
-    private javax.swing.JLabel lblMealRequired;
     private javax.swing.JLabel lblTime;
     private javax.swing.JTextField txtDate;
-    private javax.swing.JTextField txtMealRequired;
     // End of variables declaration//GEN-END:variables
 }
