@@ -78,6 +78,11 @@ public class LoginJPanel extends javax.swing.JPanel {
 
         btnCreateAccount.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         btnCreateAccount.setText("Create Account");
+        btnCreateAccount.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateAccountActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout testPanelLayout = new javax.swing.GroupLayout(testPanel);
         testPanel.setLayout(testPanelLayout);
@@ -198,6 +203,12 @@ public class LoginJPanel extends javax.swing.JPanel {
             }
         }
     }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void btnCreateAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateAccountActionPerformed
+        // TODO add your handling code here:
+        CreateAccountJPanel createAccountJPanel = new CreateAccountJPanel(mainCardLayout, business);
+        business.redirection(mainCardLayout, createAccountJPanel.getClass().getName(), createAccountJPanel);
+    }//GEN-LAST:event_btnCreateAccountActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

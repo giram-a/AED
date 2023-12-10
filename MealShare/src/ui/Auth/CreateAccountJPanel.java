@@ -9,12 +9,33 @@ import Business.Common.ValidateDate;
 import Business.Common.ValidateEmail;
 import Business.Common.ValidateNumber;
 import Business.Common.ValidatePassword;
+import Business.Common.ValidatePhoneNumber;
 import Business.Common.ValidateStrings;
+import Business.Common.Validation;
 import Business.Enterprise.Enterprise;
+import Business.Enterprise.HospitalEnterprise;
+import Business.Enterprise.MealShare;
 import Business.Enterprise.SchoolEnterprise;
 import Business.Network.Network;
+import Business.Organization.HelpSeekerOrganization;
+import Business.Organization.NutritionistOrganization;
 import Business.Organization.Organization;
+import static Business.Organization.Organization.Type.HelpSeeker;
+import Business.Organization.SupervisorOrganization;
+import Business.Organization.VolunteerOrganization;
+import Business.Person.HelpSeeker;
+import Business.Person.Person;
 import Business.Person.PersonDirectory;
+import Business.Roles.HelpSeekerRole;
+import Business.UserAccount.UserAccount;
+import Business.WrokQueue.SupervisorWorkRequest;
+import java.awt.HeadlessException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.InputVerifier;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -40,13 +61,7 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
         this.mainCardLayout = MainCardLayout;
         this.business = business;
         
-        for (Network n : business.getNetworkList()){
-            for(Enterprise e : n.getEnterpriseDirectory().getEnterpriseList()){
-                if(e instanceof SchoolEnterprise){
-                    this.enterprise = e;
-                }
-            }
-        }
+        populateNetworkComboBox();
     }
 
     /**
@@ -68,7 +83,7 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
         lblDateofBirth = new javax.swing.JLabel();
         lblOccupation = new javax.swing.JLabel();
         lblGender = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
+        lblPhoneNo = new javax.swing.JLabel();
         txtUsername = new javax.swing.JTextField();
         txtPassword = new javax.swing.JTextField();
         txtConfirmPassword = new javax.swing.JTextField();
@@ -77,19 +92,23 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
         txtEmail = new javax.swing.JTextField();
         txtDateofBirth = new javax.swing.JTextField();
         txtOccupation = new javax.swing.JTextField();
-        txtAge = new javax.swing.JTextField();
+        txtPhoneNumber = new javax.swing.JTextField();
         lblAddress1 = new javax.swing.JLabel();
         txtAddress = new javax.swing.JTextField();
         lblZipCode = new javax.swing.JLabel();
         txtZipCode = new javax.swing.JTextField();
         lblCountry = new javax.swing.JLabel();
-        txtCountry = new javax.swing.JTextField();
         btnCreate = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
         txtGender = new javax.swing.JComboBox<>();
         lblAddress2 = new javax.swing.JLabel();
         txtAddress1 = new javax.swing.JTextField();
         txtRole = new javax.swing.JComboBox<>();
+        cbCountry = new javax.swing.JComboBox<>();
+        lblstate = new javax.swing.JLabel();
+        cbState = new javax.swing.JComboBox<>();
+        jLabel2 = new javax.swing.JLabel();
+        cbCity = new javax.swing.JComboBox<>();
 
         jLabel1.setFont(new java.awt.Font("Arial", 2, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -113,7 +132,7 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
 
         lblGender.setText("Gender:");
 
-        jLabel11.setText("Age:");
+        lblPhoneNo.setText("Phone Number");
 
         txtConfirmPassword.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -147,11 +166,26 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
             }
         });
 
-        txtGender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Male", "Female", "Others" }));
+        txtGender.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Please Select a Gender", "Male", "Female", "Others" }));
 
         lblAddress2.setText("Address 2:");
 
-        txtRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Please Select a Role", "Help Seeker", "Volunteer" }));
+        txtRole.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Please Select a Role", "Help Seeker", "Volunteer", "Nutritionist" }));
+
+        cbCountry.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "United States of America" }));
+        cbCountry.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbCountryActionPerformed(evt);
+            }
+        });
+
+        lblstate.setText("State:");
+
+        cbState.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Please Select State" }));
+
+        jLabel2.setText("Choose Closest City:");
+
+        cbCity.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Please Select City" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -159,13 +193,14 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(112, 112, 112)
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 719, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(69, 69, 69))
             .addGroup(layout.createSequentialGroup()
-                .addGap(91, 91, 91)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(lblZipCode)
                             .addComponent(lblConfirmPassword)
                             .addComponent(lblUsername)
                             .addComponent(lblLastName)
@@ -174,42 +209,46 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
                             .addComponent(lblAddress1)
                             .addComponent(lblCountry))
                         .addGap(48, 48, 48)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtUsername, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtConfirmPassword, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtLastName, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtDateofBirth, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtAddress, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCountry)
-                            .addComponent(txtGender, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(87, 87, 87)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(txtUsername, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtConfirmPassword, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtLastName, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtDateofBirth, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtAddress, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(txtGender, 0, 190, Short.MAX_VALUE)
+                                .addComponent(cbCountry, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(txtZipCode, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(39, 39, 39)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(lblFirstName)
                             .addComponent(lblPassword)
                             .addComponent(lblEmail)
                             .addComponent(lblOccupation)
-                            .addComponent(jLabel11)
-                            .addComponent(lblZipCode)
-                            .addComponent(lblAddress2))
+                            .addComponent(lblPhoneNo)
+                            .addComponent(lblAddress2)
+                            .addComponent(lblstate)
+                            .addComponent(jLabel2))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtAddress1)
+                            .addComponent(txtAddress1, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
                             .addComponent(txtPassword)
                             .addComponent(txtFirstName)
                             .addComponent(txtEmail)
                             .addComponent(txtOccupation)
-                            .addComponent(txtAge)
-                            .addComponent(txtZipCode, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(txtPhoneNumber)
+                            .addComponent(cbState, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(cbCity, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(62, 62, 62)
+                        .addGap(53, 53, 53)
                         .addComponent(btnBack)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnCreate)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(385, Short.MAX_VALUE)
                 .addComponent(txtRole, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(340, 340, 340))
+                .addContainerGap(345, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -245,8 +284,8 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblGender)
-                    .addComponent(jLabel11)
-                    .addComponent(txtAge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblPhoneNo)
+                    .addComponent(txtPhoneNumber, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtGender, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -257,10 +296,16 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblCountry)
-                    .addComponent(txtCountry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbCountry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblstate)
+                    .addComponent(cbState, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblZipCode)
-                    .addComponent(txtZipCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                    .addComponent(txtZipCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2)
+                    .addComponent(cbCity, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCreate)
                     .addComponent(btnBack))
@@ -280,36 +325,208 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnBackActionPerformed
 
+    private void populateNetworkComboBox()
+    {
+        cbCity.removeAllItems();
+        if(business.getNetworkList().isEmpty())
+        {
+            JOptionPane.showMessageDialog(null, "Networks does not exist! Sorry for inconvenience.");  
+             return;        
+        }
+        cbCity.addItem("Please Choose a City");
+           
+        for(Network network : business.getNetworkList()){
+             cbCity.addItem(network.toString());
+        }
+    }
+    
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         // TODO add your handling code here:
-        String username = txtUsername.getText();
-        String password = String.valueOf(txtPassword.getText());
-        String confirmPassword = String.valueOf(txtConfirmPassword.getText());
-        String firstName = txtFirstName.getText();
-        String lastName = txtLastName.getText();
-        String email = txtEmail.getText();
-        String dateofBirth = txtDateofBirth.getText();
-        String occupation = txtOccupation.getText();
-        String gender = (String) txtGender.getSelectedItem();
-        String age = txtAge.getText();
-        String address = txtAddress.getText();
-        String address2 = txtAddress1.getText();
-        String zipCode = txtZipCode.getText();
-        String country = txtCountry.getText();
-        String role = (String) txtRole.getSelectedItem();
-        
-        if(txtRole.getSelectedIndex() == 0){
-            JOptionPane.showMessageDialog(this, "Please select a role to create an Account", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        if (isNullOrEmpty(username) || isNullOrEmpty(password) || isNullOrEmpty(confirmPassword)
-        || isNullOrEmpty(firstName) || isNullOrEmpty(lastName) || isNullOrEmpty(email)
-        || isNullOrEmpty(dateofBirth) || isNullOrEmpty(occupation) || isNullOrEmpty(gender)
-        || isNullOrEmpty(age) || isNullOrEmpty(address) || isNullOrEmpty(address2)
-        || isNullOrEmpty(zipCode) || isNullOrEmpty(country)) {
-            JOptionPane.showMessageDialog(this, "Please Enter all fields to create an Account", "Error", JOptionPane.ERROR_MESSAGE);
-        } else {
+        try{
+            String username = txtUsername.getText();
+            String password = String.valueOf(txtPassword.getText());
+            String confirmPassword = String.valueOf(txtConfirmPassword.getText());
+            String firstName = txtFirstName.getText();
+            String lastName = txtLastName.getText();
+            String email = txtEmail.getText();
+            String dateofBirth = txtDateofBirth.getText();
+            String occupation = txtOccupation.getText();
+            String gender = (String) txtGender.getSelectedItem();
+            String phoneNumber = txtPhoneNumber.getText();
+            String address = txtAddress.getText();
+            String address2 = txtAddress1.getText();
+            String zipCode = txtZipCode.getText();
+            String country = (String) cbCountry.getSelectedItem();
+            String state = (String) cbState.getSelectedItem();
+            String city = (String) cbCity.getSelectedItem();
             
+            if(cbState.getSelectedIndex()<1)
+            {
+                JOptionPane.showMessageDialog(null, "Please Enter valid state ","warning", JOptionPane.WARNING_MESSAGE);
+                return;             
+            }
+            if(txtGender.getSelectedIndex()<1 )
+            {
+                JOptionPane.showMessageDialog(null, "Please Enter valid gender ","warning", JOptionPane.WARNING_MESSAGE);
+                return;             
+            }
+            if(txtRole.getSelectedIndex()<1)
+            {
+                JOptionPane.showMessageDialog(null, "Please select a role","warning", JOptionPane.WARNING_MESSAGE);
+                return;       
+            }
+            
+            Date dateOfBirthVal = new SimpleDateFormat("MM/dd/yyyy").parse((String) dateofBirth) ;
+            int age = Validation.calculateAge(dateOfBirthVal);
+            
+            if(txtRole.getSelectedIndex() == 0){
+                JOptionPane.showMessageDialog(this, "Please select a role to create an Account", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            if (isNullOrEmpty(username) || isNullOrEmpty(password) || isNullOrEmpty(confirmPassword)
+            || isNullOrEmpty(firstName) || isNullOrEmpty(lastName) || isNullOrEmpty(email)
+            || isNullOrEmpty(dateofBirth) || isNullOrEmpty(occupation) || isNullOrEmpty(gender)
+            || isNullOrEmpty(phoneNumber) || isNullOrEmpty(address) || isNullOrEmpty(address2)
+            || isNullOrEmpty(zipCode)) {
+                JOptionPane.showMessageDialog(this, "Please Enter all fields to create an Account", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                Person person = null;
+                if(txtRole.getSelectedItem() == "Help Seeker"){
+                    if(txtPassword.getText().length() == 0 || txtConfirmPassword.getText().length() == 0)
+                    {
+                        JOptionPane.showMessageDialog(null, "Please enter Password and Confirm Password","warning", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+               
+                    if(cbCity.getSelectedIndex()<1)
+                    {
+                        JOptionPane.showMessageDialog(null, "Please choose a closest city","warning", JOptionPane.WARNING_MESSAGE);
+                        return;     
+                    }
+                    
+                    Network helpSeekerNw =  getNetwork((String) cbCity.getSelectedItem());
+                    
+                    if(!(password.equals(confirmPassword)))
+                    {
+                        JOptionPane.showMessageDialog(null, "Password does not match, Please Enter valid Password Address","warning", JOptionPane.WARNING_MESSAGE);
+                        return;
+                    }
+                    getEnterprise(helpSeekerNw);
+                    if(enterprise == null)
+                    {
+                        JOptionPane.showMessageDialog(null, "Enterprise does not exist for the network! "+helpSeekerNw.getName(),"warning", JOptionPane.WARNING_MESSAGE);
+                        return;      
+                    } 
+                    
+                    getOrganization("HelpSeeker",enterprise);
+                    
+                    if(organization == null)
+                    {
+                        JOptionPane.showMessageDialog(null, "HelpSeeker Organization does not exist for the enterprise! "+enterprise.getName(),"warning", JOptionPane.WARNING_MESSAGE);
+                        return;      
+                    } 
+                    System.out.println("Organization is"+ organization);
+                    person = organization.getPersonDirectory().addCustomer();
+                    person.setHelpSeeker(true);
+ 
+                    for(Enterprise e : helpSeekerNw.getEnterpriseDirectory().getEnterpriseList())
+                    {
+                        for(UserAccount ua : e.getUserAccountDirectory().getUserAccountList())
+                        {
+                            if(ua.getUserName().equals(username))
+                            {
+                                JOptionPane.showMessageDialog(null, "User Name already exists!, Please Enter valid user name","warning", JOptionPane.WARNING_MESSAGE);
+                                return;  
+                            }
+                            else
+                            {
+                                for(Organization o : e.getOrganizationDirectory().getOrganizationList())
+                                {  
+                                    for(UserAccount ua1 : o.getUserAccountDirectory().getUserAccountList())
+                                    {  
+                                        if(ua1.getUserName().equals(username))
+                                        {
+                                            JOptionPane.showMessageDialog(null, "User Name already exists!, Please Enter valid user name","warning", JOptionPane.WARNING_MESSAGE);
+                                            return;  
+                                        }   
+                                    } 
+                                }
+                            }
+                        }
+                    }
+                    if(!organization.getUserAccountDirectory().checkIfUsernameIsUnique(username))
+                    {
+                        JOptionPane.showMessageDialog(null, "User Name already exists!, Please Enter valid user name","warning", JOptionPane.WARNING_MESSAGE);
+                        organization.getPersonDirectory().getCustomerLsit().remove((HelpSeeker) person);
+                        return;
+                    }
+                    
+                    UserAccount userAccount = organization.getUserAccountDirectory().addUserAccount(username, password, person, new HelpSeekerRole());
+                    userAccount.setPerson(person);
+                    userAccount.setNetwork((Network)helpSeekerNw);  
+                    System.out.println("here3");
+                    // Send Req to Supervisor for approval       
+                    SupervisorWorkRequest request = new SupervisorWorkRequest();
+                    request.setMessage(SupervisorWorkRequest.REQUEST_APPROVAL);
+                    request.setSender(userAccount);
+                    request.setStatus(SupervisorWorkRequest.REQUEST_SENT);
+                    request.setRequestDate(new Date());
+                    
+                    // For Supervisor  
+                    for(Enterprise e : helpSeekerNw.getEnterpriseDirectory().getEnterpriseList())
+                    {
+                        if(e instanceof MealShare)
+                        {
+                            for(Organization organization : e.getOrganizationDirectory().getOrganizationList())
+                            {
+                                if (organization instanceof SupervisorOrganization){
+                                    this.organization = organization;
+                                    this.personDirectory = organization.getPersonDirectory();
+                                }
+                            }
+                        }
+                    }
+                    
+                    if (organization!=null){
+                        organization.getworkQ().getWorkRequestList().add(request);
+                        userAccount.getWorkQueue().getWorkRequestList().add(request);
+                        userAccount.setEnabled(false);
+                    }
+                }
+                
+                person.setFirstName(firstName);
+                person.setLastName(lastName);
+                person.setAddress2(address2);
+                person.setAddress1(address);
+                person.setTown(city);
+                person.setZipCode(zipCode);
+                person.setOccupation(occupation);
+                person.setEmailId(email);
+                person.setDob(dateOfBirthVal);
+                person.setPhoneNumber(phoneNumber);
+                person.setGender(gender);
+                person.setCountry(country);
+                person.setState(state);
+                person.setName();
+                person.setAge(age);
+                
+               
+                JOptionPane.showMessageDialog(null, "Your Profile has been created successfully", "success", JOptionPane.PLAIN_MESSAGE);
+                resetFields();
+            }
+        }catch(NumberFormatException npe)
+        {
+            JOptionPane.showMessageDialog(null, "Please Enter valid Number ! ");
+        }
+        catch(NullPointerException e )
+        {
+            JOptionPane.showMessageDialog(null, "Organization does not exist! ");  
+        }
+        catch(HeadlessException e )
+        {
+            JOptionPane.showMessageDialog(null, "Please Enter data in all the fields");  
+        } catch (ParseException ex) {
+            Logger.getLogger(CreateAccountJPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_btnCreateActionPerformed
 
@@ -317,12 +534,135 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_ddRoleActionPerformed
 
+    private void cbCountryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbCountryActionPerformed
+          // TODO add your handling code here:
+            cbState.removeAllItems();
+            cbState.addItem("Please Select a State");
+            HashSet<String> hsstateVal = new HashSet<>();
+            for (Network network : business.getNetworkList())
+            {
+                if(network.getCountry().equals(cbCountry.getSelectedItem()))
+                {
+                    hsstateVal.add(network.getState());
+                }
+            }
+            for(String s1 : hsstateVal)
+            {
+                cbState.addItem(s1);
+            }
+    }//GEN-LAST:event_cbCountryActionPerformed
+
+    public void resetFields()
+    {
+    txtUsername.setText("");
+    txtPassword.setText("");
+    txtConfirmPassword.setText("");
+//            String firstName = txtFirstName.getText();
+//            String lastName = txtLastName.getText();
+//            String email = txtEmail.getText();
+//            String dateofBirth = txtDateofBirth.getText();
+//            String occupation = txtOccupation.getText();
+//            String phoneNumber = txtPhoneNumber.getText();
+//            String address = txtAddress.getText();
+//            String address2 = txtAddress1.getText();
+//            String zipCode = txtZipCode.getText();
+//            String role = (String) txtRole.getSelectedItem();
+
+    }
+    
+    private Network getNetwork(String n){
+        if(n != null){
+            for (Network _network : business.getNetworkList()) {
+                if(n.equals(_network.toString())){
+                    return _network;
+                }
+            }
+        }
+        return null;
+    }
+    
+    private Enterprise getEnterpriseObj(String e, Network network){
+        if(e != null){
+            for (Enterprise enterprise : network.getEnterpriseDirectory().getEnterpriseList()) {
+                if(e.equals(enterprise.toString())){
+                    return enterprise;
+                }
+            }
+        }
+        return null;
+    }
+    
+    public void getEnterprise(Network network)
+    {
+        try
+        {
+         for (Network n : business.getNetworkList())
+            {
+            if(n.getCity().equals(network.getCity()))   
+            {  
+            for(Enterprise e : n.getEnterpriseDirectory().getEnterpriseList())
+              {
+                if(e instanceof SchoolEnterprise && txtRole.getSelectedItem() == "Volunteer")
+                {
+                  this.enterprise = e;
+                  network = n;
+                }
+                else if(e instanceof MealShare && txtRole.getSelectedItem() == "Help Seeker")
+                {
+                  this.enterprise = e;
+                   network = n;
+                }
+                else if(e instanceof HospitalEnterprise && txtRole.getSelectedItem() == "Nutritionist")
+                {
+                    this.enterprise = e;
+                    network = n;
+                }
+              }
+            }
+            }
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Please create Enterprise","warning", JOptionPane.WARNING_MESSAGE);
+        }
+    }
+    
+    public void getOrganization(String orgVal, Enterprise e){
+     try
+        {
+            for(Organization organization : e.getOrganizationDirectory().getOrganizationList()){
+                System.out.println("Enter " + organization.getName());
+                if(orgVal.equals("Volunteer") && organization instanceof VolunteerOrganization)
+                {
+                    this.organization = organization;
+                    this.personDirectory = organization.getPersonDirectory();
+                }     
+                else if(orgVal.equals("HelpSeeker") && organization instanceof HelpSeekerOrganization)
+                {
+                    this.organization = organization;
+                    this.personDirectory = organization.getPersonDirectory();
+                }  
+                else if(orgVal.equals("Nutritionist") && organization instanceof NutritionistOrganization)
+                {
+                   this.organization = organization;
+                   this.personDirectory = organization.getPersonDirectory();
+                } 
+            }
+        }
+        catch(Exception ex)
+        {
+         return;     
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnCreate;
+    private javax.swing.JComboBox<String> cbCity;
+    private javax.swing.JComboBox<String> cbCountry;
+    private javax.swing.JComboBox<String> cbState;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel lblAddress1;
     private javax.swing.JLabel lblAddress2;
     private javax.swing.JLabel lblConfirmPassword;
@@ -334,13 +674,13 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lblLastName;
     private javax.swing.JLabel lblOccupation;
     private javax.swing.JLabel lblPassword;
+    private javax.swing.JLabel lblPhoneNo;
     private javax.swing.JLabel lblUsername;
     private javax.swing.JLabel lblZipCode;
+    private javax.swing.JLabel lblstate;
     private javax.swing.JTextField txtAddress;
     private javax.swing.JTextField txtAddress1;
-    private javax.swing.JTextField txtAge;
     private javax.swing.JTextField txtConfirmPassword;
-    private javax.swing.JTextField txtCountry;
     private javax.swing.JTextField txtDateofBirth;
     private javax.swing.JTextField txtEmail;
     private javax.swing.JTextField txtFirstName;
@@ -348,6 +688,7 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtLastName;
     private javax.swing.JTextField txtOccupation;
     private javax.swing.JTextField txtPassword;
+    private javax.swing.JTextField txtPhoneNumber;
     private javax.swing.JComboBox<String> txtRole;
     private javax.swing.JTextField txtUsername;
     private javax.swing.JTextField txtZipCode;
@@ -360,7 +701,6 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
         txtOccupation.setInputVerifier(stringValidation);
         txtAddress.setInputVerifier(stringValidation);
         txtAddress1.setInputVerifier(stringValidation);
-        txtCountry.setInputVerifier(stringValidation);
         txtUsername.setInputVerifier(stringValidation);
         
         InputVerifier passwordValidation = new ValidatePassword();
@@ -372,7 +712,9 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
         
         InputVerifier numberValidation = new ValidateNumber();
         txtZipCode.setInputVerifier(numberValidation);
-        txtAge.setInputVerifier(numberValidation);
+        
+        InputVerifier phNumberValidation = new ValidatePhoneNumber();
+        txtPhoneNumber.setInputVerifier(phNumberValidation);
         
         InputVerifier dateValidation = new ValidateDate();
         txtDateofBirth.setInputVerifier(dateValidation);
