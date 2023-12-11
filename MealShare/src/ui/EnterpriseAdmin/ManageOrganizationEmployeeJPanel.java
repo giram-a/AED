@@ -2,7 +2,21 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
-package ui.NGO;
+package ui.EnterpriseAdmin;
+
+import Business.Business;
+import Business.Common.ValidateStrings;
+import Business.Enterprise.Enterprise;
+import Business.Organization.Organization;
+import Business.Organization.OrganizationDirectory;
+import Business.Person.HelpSeeker;
+import Business.Person.Person;
+import Business.Person.Volunteer;
+import Business.UserAccount.UserAccount;
+import javax.swing.InputVerifier;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -10,11 +24,25 @@ package ui.NGO;
  */
 public class ManageOrganizationEmployeeJPanel extends javax.swing.JPanel {
 
+    private OrganizationDirectory organizationDir;
+    private JPanel userProcessContainer;
+    Business business;
+    UserAccount account;
+    Enterprise enterprise;
+    
     /**
      * Creates new form ManageOrganizationEmployeeJPanel
      */
-    public ManageOrganizationEmployeeJPanel() {
+    public ManageOrganizationEmployeeJPanel(JPanel userProcessContainer, Enterprise enterprise, UserAccount account, Business business, OrganizationDirectory organizationDir) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.organizationDir = organizationDir;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        addInputVerifiers();
+        populateOrganizationComboBox();
+        populateOrganizationEmpComboBox();
     }
 
     /**
@@ -29,7 +57,7 @@ public class ManageOrganizationEmployeeJPanel extends javax.swing.JPanel {
         lblManageOrganizationEmployee = new javax.swing.JLabel();
         lblCreateEmployee = new javax.swing.JLabel();
         lblOrganization1 = new javax.swing.JLabel();
-        cbOrganization1 = new javax.swing.JComboBox<>();
+        cbOrganizationEmp = new javax.swing.JComboBox<>();
         lblFirstName = new javax.swing.JLabel();
         txtFirstName = new javax.swing.JTextField();
         lblLastName = new javax.swing.JLabel();
@@ -50,13 +78,18 @@ public class ManageOrganizationEmployeeJPanel extends javax.swing.JPanel {
 
         lblOrganization1.setText("Organization:");
 
-        cbOrganization1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Donor Organization" }));
+        cbOrganizationEmp.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Donor Organization" }));
 
         lblFirstName.setText("First Name:");
 
         lblLastName.setText("Last Name:");
 
         btnCreate.setText("Create");
+        btnCreate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateActionPerformed(evt);
+            }
+        });
 
         tblManageOrganizationEmployee.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -81,6 +114,11 @@ public class ManageOrganizationEmployeeJPanel extends javax.swing.JPanel {
         });
 
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -121,7 +159,7 @@ public class ManageOrganizationEmployeeJPanel extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(lblOrganization1)
                                 .addGap(29, 29, 29)
-                                .addComponent(cbOrganization1, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(cbOrganizationEmp, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(15, 15, 15))))
         );
@@ -135,7 +173,7 @@ public class ManageOrganizationEmployeeJPanel extends javax.swing.JPanel {
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblOrganization1)
-                    .addComponent(cbOrganization1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cbOrganizationEmp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblOrganization)
                     .addComponent(cbOrganization, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(31, 31, 31)
@@ -157,16 +195,148 @@ public class ManageOrganizationEmployeeJPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private Organization getOrganization(String name){
+        if(name != null){
+            for (Organization organization : organizationDir.getOrganizationList()){
+                if(name.equals(organization.toString())){
+                    return organization;
+                }
+            }
+        }
+        return null;
+    }
+    
     private void cbOrganizationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbOrganizationActionPerformed
         // TODO add your handling code here:
+        String org = (String) cbOrganization.getSelectedItem();
+        
+        if(org != null){
+            for (Organization organization : organizationDir.getOrganizationList()){
+                if(org.equals(organization.toString())){
+                    populateEmployeeAndPeopleTable(organization);
+                }
+
+            }
+        }
     }//GEN-LAST:event_cbOrganizationActionPerformed
 
+    final public void populateOrganizationComboBox(){
+        cbOrganization.removeAllItems();
+        
+        for (Organization organization : organizationDir.getOrganizationList()){
+            cbOrganization.addItem(organization.toString());
+        }
+    }
+    
+    final public void populateOrganizationEmpComboBox(){
+        cbOrganizationEmp.removeAllItems();
+        
+        for(Organization organization : organizationDir.getOrganizationList()){
+
+            if(!(organization.getName().equals("Volunteer Organization")) && 
+                    !(organization.getName().equals("Admin")) &&
+                    !(organization.getName().equals("HelpSeeker Organization")))
+            {
+            cbOrganizationEmp.addItem(organization.toString());
+            }
+        }
+    }
+    
+    
+    private void addInputVerifiers() {
+        InputVerifier stringValidation = new ValidateStrings();
+        txtFirstName.setInputVerifier(stringValidation);
+        txtLastName.setInputVerifier(stringValidation);
+    }
+    
+    private void populateEmployeeAndPeopleTable(Organization organization){
+        DefaultTableModel model = (DefaultTableModel) tblManageOrganizationEmployee.getModel();
+        
+        model.setRowCount(0);
+        System.out.println("organization.getName() "+ organization.getName());
+        
+        switch (organization.getName()) {
+            case "HelpSeeker Organization" -> {
+                for(HelpSeeker person : organization.getPersonDirectory().getCustomerLsit()){
+                    Object[] row = new Object[2];
+                    row[0] = person.getHelpSeekerId();
+                    row[1] = person.getName();
+                    model.addRow(row);
+                }
+            }
+            case "Volunteer Organization" -> {
+                for(Volunteer person : organization.getPersonDirectory().getVolunteerList()){
+                    Object[] row = new Object[2];
+                    row[0] = person.getVolunteerId();
+                    row[1] = person.getName();
+                    model.addRow(row);
+                }
+            }
+            default -> {
+                for(Person person : organization.getPersonDirectory().getPersonList()){
+                    Object[] row = new Object[2];
+                    row[0] = person.getPersonId();
+                    row[1] = person.getName();
+                    model.addRow(row);
+                }
+            }
+        }
+       
+    }
+    
+    
+    private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
+        // TODO add your handling code here:
+        
+        if(txtFirstName.getText().trim().isEmpty() || txtLastName.getText().trim().isEmpty() 
+                || cbOrganization.getSelectedIndex()<0)
+        {
+            JOptionPane.showMessageDialog(null, "Please Enter data in all the fields");
+            return;    
+        }
+        try
+        {
+            Organization organization = getOrganization((String) cbOrganization.getSelectedItem());
+            String firstName = txtFirstName.getText();
+            String lastName = txtLastName.getText();
+
+            Person person = organization.getPersonDirectory().addPerson();    
+
+            person.setFirstName(firstName);
+            person.setLastName(lastName);
+            person.setName();
+
+            JOptionPane.showMessageDialog(null, "Employee has been created successfully", "success",JOptionPane.PLAIN_MESSAGE);
+            resetFields();
+            populateEmployeeAndPeopleTable(organization);
+        }
+        catch(Exception e)
+        {
+            JOptionPane.showMessageDialog(null, "Please Enter valid data in all the fields");
+            return;   
+        }
+    }//GEN-LAST:event_btnCreateActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        
+        EnterpriseAdminJPanel enterpriseAdminJPanel = new EnterpriseAdminJPanel(userProcessContainer, enterprise, account, business);
+        business.redirection(userProcessContainer, enterpriseAdminJPanel.getClass().getName(), enterpriseAdminJPanel);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    
+    public void resetFields()
+    {
+     txtFirstName.setText("");
+     txtLastName.setText("");
+    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnCreate;
     private javax.swing.JComboBox<String> cbOrganization;
-    private javax.swing.JComboBox<String> cbOrganization1;
+    private javax.swing.JComboBox<String> cbOrganizationEmp;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblCreateEmployee;
     private javax.swing.JLabel lblFirstName;
