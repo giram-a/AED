@@ -1,0 +1,213 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
+ */
+package ui.SystemAdmin;
+
+import Business.Business;
+import Business.Common.Meal;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import Business.WrokQueue.NeedMealWorkRequest;
+import Business.WrokQueue.WorkRequest;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.util.HashMap;
+import java.util.Map;
+import javax.swing.JPanel;
+import org.knowm.xchart.CategoryChart;
+import org.knowm.xchart.PieChart;
+import org.knowm.xchart.PieChartBuilder;
+import org.knowm.xchart.XChartPanel;
+
+/**
+ *
+ * @author aniketgiram
+ */
+public class AdminReport extends javax.swing.JPanel {
+
+    JPanel userProcessContainer;
+    UserAccount account;
+    Enterprise enterprise;
+    Organization organization;
+    Business business;
+    HashMap<String, Integer> mealCount;
+    HashMap<String, Integer> mealDineIN;
+    HashMap<String, Integer> mealDelivery;
+
+    /**
+     * Creates new form AdminReport
+     */
+    public AdminReport(JPanel userProcessContainer, UserAccount account, Enterprise enterprise, Organization organization, Business business) {
+        initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        this.setBackground(new java.awt.Color(102, 153, 255));
+        mealCount = new HashMap<>();
+        mealDineIN = new HashMap<>();
+        mealDelivery = new HashMap<>();
+        generateReport();
+    }
+
+    private void generateReport() {
+        for (Network n : this.business.getNetworkList()) {
+            for (Enterprise e : n.getEnterpriseDirectory().getEnterpriseList()) {
+                System.out.println("Meals " + e.getMeals());
+                mealCount.put(e.getName(), e.getMeals().size());
+                for (Organization o : e.getOrganizationDirectory().getOrganizationList()) {
+                    for (UserAccount u : o.getUserAccountDirectory().getUserAccountList()) {
+                        for (WorkRequest w : u.getWorkQueue().getWorkRequestList()) {
+                            if (w instanceof NeedMealWorkRequest) {
+                                NeedMealWorkRequest need = ((NeedMealWorkRequest) w);
+                                if (need != null && need.getStatus().equals("Approved")) {
+                                    mealDelivery.put("Delivery", mealDelivery.getOrDefault("Delivery", 0) + 1);
+                                } else {
+                                    mealDineIN.put("Dine IN", mealDineIN.getOrDefault("Dine IN", 0) + 1);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        pieChart();
+        pieChatForMealReq();
+    }
+
+    
+    private void pieChatForMealReq(){
+        // Create Chart
+        PieChart chart = new PieChartBuilder().width(400).height(300).title("Meal Request Count").build();
+
+        // Customize Chart
+        Color[] sliceColors = new Color[]{new Color(224, 68, 14), new Color(230, 105, 62)};
+        chart.getStyler().setSeriesColors(sliceColors);
+
+        // Series
+        for (Map.Entry<String, Integer> entry : mealDelivery.entrySet()) {
+            chart.addSeries("Delivery", entry.getValue());
+        }
+        
+        for (Map.Entry<String, Integer> entry : mealDineIN.entrySet()) {
+            chart.addSeries("Dine IN", entry.getValue());
+        }
+        
+        mealRequestPanel.setLayout(new FlowLayout());
+        mealRequestPanel.setPreferredSize(new Dimension(400, 300));
+        mealRequestPanel.add(new XChartPanel(chart));
+        mealRequestPanel.repaint();
+    }
+    
+    private void pieChart() {
+        // Create Chart
+        PieChart chart = new PieChartBuilder().width(400).height(300).title("Total Meal Donated").build();
+
+        // Customize Chart
+        Color[] sliceColors = new Color[]{new Color(224, 68, 14), new Color(230, 105, 62), new Color(236, 143, 110), new Color(243, 180, 159), new Color(246, 199, 182)};
+        chart.getStyler().setSeriesColors(sliceColors);
+
+        // Series
+        for (Map.Entry<String, Integer> entry : mealCount.entrySet()) {
+            chart.addSeries(entry.getKey(), entry.getValue());
+        }
+//        
+        mealDataPanel.setLayout(new FlowLayout());
+        mealDataPanel.setPreferredSize(new Dimension(400, 300));
+        mealDataPanel.add(new XChartPanel(chart));
+        mealDataPanel.repaint();
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        btnBack = new javax.swing.JButton();
+        mealDataPanel = new javax.swing.JPanel();
+        mealRequestPanel = new javax.swing.JPanel();
+
+        btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+
+        mealDataPanel.setPreferredSize(new java.awt.Dimension(400, 300));
+
+        javax.swing.GroupLayout mealDataPanelLayout = new javax.swing.GroupLayout(mealDataPanel);
+        mealDataPanel.setLayout(mealDataPanelLayout);
+        mealDataPanelLayout.setHorizontalGroup(
+            mealDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        mealDataPanelLayout.setVerticalGroup(
+            mealDataPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 314, Short.MAX_VALUE)
+        );
+
+        mealRequestPanel.setPreferredSize(new java.awt.Dimension(400, 300));
+
+        javax.swing.GroupLayout mealRequestPanelLayout = new javax.swing.GroupLayout(mealRequestPanel);
+        mealRequestPanel.setLayout(mealRequestPanelLayout);
+        mealRequestPanelLayout.setHorizontalGroup(
+            mealRequestPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
+        );
+        mealRequestPanelLayout.setVerticalGroup(
+            mealRequestPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        this.setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(41, Short.MAX_VALUE)
+                .addComponent(mealDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(mealRequestPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(41, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addComponent(btnBack)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(15, 15, 15)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(mealRequestPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
+                    .addComponent(mealDataPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnBack)
+                .addContainerGap(242, Short.MAX_VALUE))
+        );
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        AdminJPanel adminJPanel = new AdminJPanel(userProcessContainer, account, enterprise, organization, business);
+        this.business.redirection(userProcessContainer, adminJPanel.getClass().getName(), adminJPanel);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBack;
+    private javax.swing.JPanel mealDataPanel;
+    private javax.swing.JPanel mealRequestPanel;
+    // End of variables declaration//GEN-END:variables
+}

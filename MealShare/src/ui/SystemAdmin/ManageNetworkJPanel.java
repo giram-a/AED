@@ -38,6 +38,7 @@ public class ManageNetworkJPanel extends javax.swing.JPanel {
         this.enterprise = enterprise;
         this.organization = organization;
         populateNetworkTable();
+        this.setBackground(new java.awt.Color(102, 153, 255));
     }
 
     /**

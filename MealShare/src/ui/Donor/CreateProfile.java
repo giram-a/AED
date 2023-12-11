@@ -4,17 +4,42 @@
  */
 package ui.Donor;
 
+import Business.Business;
+import Business.Enterprise.Enterprise;
+import Business.Organization.Organization;
+import Business.Person.Person;
+import Business.UserAccount.UserAccount;
+import java.awt.HeadlessException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 /**
  *
  * @author Aishwarya Dhandore
  */
 public class CreateProfile extends javax.swing.JPanel {
 
+    JPanel userProcessContainer;
+    UserAccount account;
+    Enterprise enterprise;
+    Organization organization;
+    Business business;
+
     /**
      * Creates new form CreateUpdateProfile
      */
-    public CreateProfile() {
+    public CreateProfile(JPanel userProcessContainer, UserAccount account, Enterprise enterprise, Organization organization, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        this.setBackground(new java.awt.Color(102, 153, 255));
     }
 
     /**
@@ -65,8 +90,18 @@ public class CreateProfile extends javax.swing.JPanel {
         lblContactNo.setText("Contact number :");
 
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         btnCreateProfile.setText("Create my Profile");
+        btnCreateProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateProfileActionPerformed(evt);
+            }
+        });
 
         lblOccupation.setText("Occupation :");
 
@@ -75,44 +110,44 @@ public class CreateProfile extends javax.swing.JPanel {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(btnBack)
+                .addContainerGap(822, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(lblCreateDonorProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addComponent(btnBack))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap(277, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblCreateDonorProfile)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addComponent(lblDoB)
-                                                .addComponent(lblName)
-                                                .addComponent(lblAddress))
-                                            .addGap(54, 54, 54))
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addGap(14, 14, 14)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                                .addComponent(lblCity)
-                                                .addComponent(lblEmailID)
-                                                .addComponent(lblZipCode)
-                                                .addComponent(lblContactNo)
-                                                .addComponent(lblOccupation))
-                                            .addGap(52, 52, 52)))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(txtZipCode)
-                                        .addComponent(txtCity)
-                                        .addComponent(txtEmailId)
-                                        .addComponent(txtAddress)
-                                        .addComponent(txtDoB)
-                                        .addComponent(txtName)
-                                        .addComponent(txtContactNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnCreateProfile)
-                                    .addComponent(txtOccupation, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addContainerGap(276, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblDoB)
+                                    .addComponent(lblName)
+                                    .addComponent(lblAddress))
+                                .addGap(54, 54, 54))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(lblCity)
+                                    .addComponent(lblEmailID)
+                                    .addComponent(lblZipCode)
+                                    .addComponent(lblContactNo)
+                                    .addComponent(lblOccupation))
+                                .addGap(52, 52, 52)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtZipCode)
+                            .addComponent(txtCity)
+                            .addComponent(txtEmailId)
+                            .addComponent(txtAddress)
+                            .addComponent(txtDoB)
+                            .addComponent(txtName)
+                            .addComponent(txtContactNumber, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(btnCreateProfile)
+                        .addComponent(txtOccupation, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -159,6 +194,64 @@ public class CreateProfile extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnCreateProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateProfileActionPerformed
+        // TODO add your handling code here:
+        Person person = account.getPerson();
+        String name = txtName.getText();
+        String birth = txtDoB.getText();
+        String address = txtAddress.getText();
+        String email = txtEmailId.getText();
+        String city = txtCity.getText();
+        String zipCode = txtZipCode.getText();
+        String contactNo = txtContactNumber.getText();
+        String occupation = txtOccupation.getText();
+
+        if (name.equals("") && birth.equals("") && address.equals("") && email.equals("") && city.equals("") && zipCode.equals("") && contactNo.equals("") && occupation.equals("")) {
+            JOptionPane.showMessageDialog(null, "Please Enter data in all the fields");
+            return;
+        }
+
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            Date date = new Date();
+            Date dob = dateFormat.parse(birth);
+            if (dob.after(date) || dob.equals(date)) {
+                JOptionPane.showMessageDialog(null, "Please Enter valid Date of Birth");
+                return;
+            }
+            person.setDob(dateFormat.parse(birth));
+            person.setAddress1(address);
+            person.setTown(city);
+            person.setOccupation(occupation);
+            person.setZipCode(zipCode);
+            person.setEmailId(email);
+            person.setPhoneNumber(contactNo);
+
+            JOptionPane.showMessageDialog(null, "Your Profile has been created successfully", "success", JOptionPane.PLAIN_MESSAGE);
+            resetFields();
+        } catch (ParseException pe) {
+            JOptionPane.showMessageDialog(null, "Please Enter valid date of Birth!");
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Please Enter valid data in all the fields");
+        }
+    }//GEN-LAST:event_btnCreateProfileActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        Donor donor = new Donor(userProcessContainer, account, enterprise, organization, business);
+        business.redirection(userProcessContainer, donor.getClass().getName(), donor);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    public void resetFields() {
+        txtName.setText("");
+        txtDoB.setText("");
+        txtAddress.setText("");
+        txtEmailId.setText("");
+        txtCity.setText("");
+        txtZipCode.setText("");
+        txtContactNumber.setText("");
+        txtOccupation.setText("");
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;

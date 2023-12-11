@@ -4,17 +4,82 @@
  */
 package ui.Volunteer;
 
+import Business.Business;
+import Business.Common.Meal;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import Business.WrokQueue.NeedMealWorkRequest;
+import Business.WrokQueue.WorkRequest;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+import ui.Common.ViewProfile;
+
 /**
  *
  * @author samar
  */
 public class ViewHelpRequestsJPanel extends javax.swing.JPanel {
 
+    JPanel userProcessContainer;
+    UserAccount account;
+    Business business;
+    Enterprise enterprise;
+    Organization organization;
+
     /**
      * Creates new form ViewHelpRequestsJPanel
      */
-    public ViewHelpRequestsJPanel() {
+    public ViewHelpRequestsJPanel(JPanel userProcessContainer, UserAccount userAccount, Enterprise enterprise, Organization organization, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = userAccount;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        populateTableData();
+        this.setBackground(new java.awt.Color(102, 153, 255));
+    }
+
+    private void populateTableData() {
+        DefaultTableModel model = (DefaultTableModel) tblViewHelpRequests.getModel();
+
+        model.setRowCount(0);
+
+        for (WorkRequest w : account.getWorkQueue().getWorkRequestList()) {
+            System.out.println("w" + w);
+            Object row[] = new Object[6];
+
+            if (w instanceof NeedMealWorkRequest) {
+                System.out.println("in if" + w);
+                NeedMealWorkRequest need = (NeedMealWorkRequest) w;
+
+                Meal meal = need.getMeal();
+                System.out.println("Meal" + meal);
+                if (need == null || meal == null) {
+                } else {
+                    System.out.println("Meal " + meal);
+                    System.out.println("Meal " + account.getPerson().getPersonId());
+                    if (meal.getCarbs() != null && meal.getProtein() != null && meal.getCalories() != null && meal.getVolunteerReqSent()) {
+                        if (need.getReceiver() == null || need.getReceiver().equals(account)) {
+                            row[0] = need;
+                            row[1] = meal.getMeal();
+                            row[2] = need.getSender();
+                            row[3] = meal.getDate();
+                            row[4] = need.getStatus();
+                            row[5] = need.getReceiver();
+                            model.addRow(row);
+                        }
+                    }
+                }
+            }
+        }
+        if (!(model.getRowCount() > 0)) {
+            JOptionPane.showMessageDialog(null, "No Meal Assigned to you", "Information", JOptionPane.INFORMATION_MESSAGE);
+        }
+
     }
 
     /**
@@ -41,26 +106,64 @@ public class ViewHelpRequestsJPanel extends javax.swing.JPanel {
 
         tblViewHelpRequests.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Need Help", "Requestor", "Requested Date", "Status"
+                "ID", "Help", "Requestor", "Requested Date", "Status", "Reciever"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblViewHelpRequests);
+        if (tblViewHelpRequests.getColumnModel().getColumnCount() > 0) {
+            tblViewHelpRequests.getColumnModel().getColumn(0).setResizable(false);
+            tblViewHelpRequests.getColumnModel().getColumn(1).setResizable(false);
+            tblViewHelpRequests.getColumnModel().getColumn(2).setResizable(false);
+            tblViewHelpRequests.getColumnModel().getColumn(3).setResizable(false);
+            tblViewHelpRequests.getColumnModel().getColumn(4).setResizable(false);
+            tblViewHelpRequests.getColumnModel().getColumn(5).setResizable(false);
+        }
 
         jButton1.setText("Refresh");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         btnViewRequestorProfile.setText("View Requestor Profile");
+        btnViewRequestorProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewRequestorProfileActionPerformed(evt);
+            }
+        });
 
         btnAssigntoMe.setText("Assign to Me");
+        btnAssigntoMe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAssigntoMeActionPerformed(evt);
+            }
+        });
 
         btnProcess.setText("Process");
+        btnProcess.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProcessActionPerformed(evt);
+            }
+        });
 
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -103,6 +206,69 @@ public class ViewHelpRequestsJPanel extends javax.swing.JPanel {
                 .addContainerGap(120, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        populateTableData();
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void btnAssigntoMeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAssigntoMeActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = tblViewHelpRequests.getSelectedRow();
+
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a row", "warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        NeedMealWorkRequest need = (NeedMealWorkRequest) tblViewHelpRequests.getValueAt(selectedRow, 0);
+        need.setReceiver(account);
+        need.setStatus("In Process");
+        System.out.println("Sender " + need.getSender());
+        populateTableData();
+        JOptionPane.showMessageDialog(this, "Request Assigned to you, you can now process it", "Information", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnAssigntoMeActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        VolunteerWorkAreaJPanel volunteerWorkAreaJPanel = new VolunteerWorkAreaJPanel(userProcessContainer, account, enterprise, organization, business);
+        business.redirection(userProcessContainer, volunteerWorkAreaJPanel.getClass().getName(), volunteerWorkAreaJPanel);
+
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcessActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = tblViewHelpRequests.getSelectedRow();
+
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a row", "warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        NeedMealWorkRequest need = (NeedMealWorkRequest) tblViewHelpRequests.getValueAt(selectedRow, 0);
+
+        if (need.getReceiver() != null) {
+            ProcessWorkRequestJPanel processWorkRequestJPanel = new ProcessWorkRequestJPanel(userProcessContainer, account, enterprise, organization, business, need);
+            business.redirection(userProcessContainer, processWorkRequestJPanel.getClass().getName(), processWorkRequestJPanel);
+        } else {
+            JOptionPane.showMessageDialog(this, "Please Assign the request first", "warning", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnProcessActionPerformed
+
+    private void btnViewRequestorProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewRequestorProfileActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = tblViewHelpRequests.getSelectedRow();
+
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a row", "warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        NeedMealWorkRequest need = (NeedMealWorkRequest) tblViewHelpRequests.getValueAt(selectedRow, 0);
+        
+        ViewProfile viewProfile = new ViewProfile(userProcessContainer, account, enterprise, organization, business, need.getSender(), "Volunteer");
+        this.business.redirection(userProcessContainer, viewProfile.getClass().getName(), viewProfile);
+    }//GEN-LAST:event_btnViewRequestorProfileActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

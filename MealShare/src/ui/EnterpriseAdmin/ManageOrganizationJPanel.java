@@ -37,6 +37,7 @@ public class ManageOrganizationJPanel extends javax.swing.JPanel {
         this.business = business;
         this.account = account;
         this.directory = enterprise.getOrganizationDirectory();
+        this.setBackground(new java.awt.Color(102, 153, 255));
         populateOrganizationTable();
         populateOrganizationComboBox();
     }
@@ -50,8 +51,7 @@ public class ManageOrganizationJPanel extends javax.swing.JPanel {
             cbOrganizationType.addItem(Type.Donor.getValue());
         }
         else if(enterprise.getEnterpriseType().getValue().equals(EnterpriseType.MealShare.getValue()))
-        {
-            cbOrganizationType.addItem(Type.HelpSeeker.getValue());  
+        { 
             cbOrganizationType.addItem(Type.Supervisor.getValue()); 
         }
         else if(enterprise.getEnterpriseType().getValue().equals(EnterpriseType.Government.getValue()))
@@ -59,8 +59,7 @@ public class ManageOrganizationJPanel extends javax.swing.JPanel {
             cbOrganizationType.addItem(Type.CommunityOutreach.getValue());  
         }
         else if(enterprise.getEnterpriseType().getValue().equals(EnterpriseType.School.getValue()))
-        {
-            cbOrganizationType.addItem(Type.Volunteer.getValue());     
+        {  
             cbOrganizationType.addItem(Type.Transport.getValue());
         }
         else if(enterprise.getEnterpriseType().getValue().equals(EnterpriseType.Hospital.getValue()))

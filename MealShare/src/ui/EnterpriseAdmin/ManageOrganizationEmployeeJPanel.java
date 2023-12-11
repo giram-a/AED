@@ -40,6 +40,7 @@ public class ManageOrganizationEmployeeJPanel extends javax.swing.JPanel {
         this.business = business;
         this.account = account;
         this.enterprise = enterprise;
+        this.setBackground(new java.awt.Color(102, 153, 255));
         addInputVerifiers();
         populateOrganizationComboBox();
         populateOrganizationEmpComboBox();

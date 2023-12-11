@@ -8,7 +8,10 @@ import Business.Business;
 import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import Business.Enterprise.Enterprise;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JPanel;
+import ui.CommunityOutreach.CommunityOutReach;
 
 /**
  *
@@ -18,7 +21,11 @@ public class CommunityOutreachRole extends Role{
     @Override
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, 
             Organization organization, Enterprise enterprise, Business business) {
-//        return new DonorWorkAreaJPanel(userProcessContainer, account, enterprise,organization, business);
+        try {
+            return new CommunityOutReach(userProcessContainer, account, enterprise,organization, business);
+        } catch (Exception ex) {
+            Logger.getLogger(CommunityOutreachRole.class.getName()).log(Level.SEVERE, null, ex);
+        }
         return null;
     }
     @Override

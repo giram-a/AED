@@ -4,17 +4,62 @@
  */
 package ui.Nutritionist;
 
+import Business.Business;
+import Business.Common.ValidateEmail;
+import Business.Common.ValidateNumber;
+import Business.Common.ValidatePassword;
+import Business.Common.ValidatePhoneNumber;
+import Business.Common.ValidateStrings;
+import Business.Enterprise.Enterprise;
+import Business.Organization.Organization;
+import Business.Person.Person;
+import Business.UserAccount.UserAccount;
+import java.awt.HeadlessException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 /**
  *
  * @author Aishwarya Dhandore
  */
 public class ManageProfileJPanel extends javax.swing.JPanel {
-
+    
+    JPanel userProcessContainer;
+    UserAccount account;
+    Enterprise enterprise;
+    Organization organization;
+    Business business;
+    Person p;
+    
     /**
      * Creates new form ManageProfileJPanel
      */
-    public ManageProfileJPanel() {
+    public ManageProfileJPanel(JPanel userProcessContainer, UserAccount account, Enterprise enterprise, Organization organization, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        p = account.getPerson();
+        inputValidation();
+        setData();
+        this.setBackground(new java.awt.Color(102, 153, 255));
+    }
+    
+    private void setData() {
+        txtFirstName.setText(p.getFirstName());
+        txtLastName.setText(p.getLastName());
+        txtUsername.setText(account.getUserName());
+        pwdfieldPassword.setText(account.getPassword());
+        txtEmail.setText(p.getEmailId());
+        txtAddress.setText(p.getAddress1());
+        txtZipCode.setText(p.getZipCode());
     }
 
     /**
@@ -62,9 +107,21 @@ public class ManageProfileJPanel extends javax.swing.JPanel {
 
         lblZipCode.setText("Zip Code :");
 
+        txtUsername.setEditable(false);
+
         btnUpdate.setText("Update");
+        btnUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateActionPerformed(evt);
+            }
+        });
 
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -84,9 +141,6 @@ public class ManageProfileJPanel extends javax.swing.JPanel {
                 .addContainerGap(276, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(154, 154, 154)
-                        .addComponent(btnUpdate))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -105,16 +159,19 @@ public class ManageProfileJPanel extends javax.swing.JPanel {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(2, 2, 2)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblEmail)
                             .addComponent(lblPassword)
-                            .addComponent(lblAddress)
-                            .addComponent(lblZipCode))
+                            .addComponent(lblZipCode)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(lblEmail)
+                                .addComponent(lblAddress)))
                         .addGap(99, 99, 99)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtEmail)
-                            .addComponent(txtAddress)
-                            .addComponent(txtZipCode, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-                            .addComponent(pwdfieldPassword))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnUpdate)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtEmail)
+                                .addComponent(txtAddress)
+                                .addComponent(txtZipCode, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                                .addComponent(pwdfieldPassword)))))
                 .addContainerGap(276, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -157,6 +214,57 @@ public class ManageProfileJPanel extends javax.swing.JPanel {
                 .addGap(28, 28, 28))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+        String firstname = txtFirstName.getText();
+        String lastname = txtLastName.getText();
+        String username = txtUsername.getText();
+        String pass = String.valueOf(pwdfieldPassword.getPassword());
+        String email = txtEmail.getText();
+        String address = txtAddress.getText();
+        String zipcode = txtZipCode.getText();
+
+        if (firstname.equals("") && lastname.equals("") && address.equals("") && email.equals("") && username.equals("") && pass.equals("") && zipcode.equals("")) {
+            JOptionPane.showMessageDialog(null, "Please Enter data in all the fields");
+            return;
+        }
+
+        try {
+            p.setAddress1(address);
+            account.setPassword(pass);
+            p.setFirstName(firstname);
+            p.setLastName(lastname);
+            p.setEmailId(email);
+            p.setZipCode(zipcode);
+
+            JOptionPane.showMessageDialog(null, "Your Profile has been updated successfully", "success", JOptionPane.PLAIN_MESSAGE);
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Please Enter valid data in all the fields");
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void inputValidation(){
+        ValidateStrings validateString = new ValidateStrings();
+        txtFirstName.setInputVerifier(validateString);
+        txtLastName.setInputVerifier(validateString);
+        txtAddress.setInputVerifier(validateString);
+        
+        ValidatePassword validatePassword = new ValidatePassword();
+        pwdfieldPassword.setInputVerifier(validatePassword);
+        
+        ValidateNumber validateNumber = new ValidateNumber();
+        txtZipCode.setInputVerifier(validateNumber);
+        
+        ValidateEmail validateemail = new ValidateEmail();
+        txtEmail.setInputVerifier(validateemail);
+    }
+    
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        Nutritionist nutritionist = new Nutritionist(userProcessContainer, account, enterprise, organization, business);
+        this.business.redirection(userProcessContainer, nutritionist.getClass().getName(), nutritionist);
+    }//GEN-LAST:event_btnBackActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

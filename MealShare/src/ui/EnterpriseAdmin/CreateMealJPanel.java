@@ -4,19 +4,76 @@
  */
 package ui.EnterpriseAdmin;
 
+import Business.Business;
+import Business.Common.GenerateRandomID;
+import Business.Common.Meal;
+import Business.Common.ValidateDate;
+import Business.Common.ValidateNumber;
+import Business.Common.ValidateStrings;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.Organization;
+import Business.Organization.OrganizationDirectory;
+import Business.Roles.NutritionistRole;
+import Business.Roles.Role;
+import Business.UserAccount.UserAccount;
+import Business.WrokQueue.MealWorkRequest;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import javax.swing.InputVerifier;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 /**
  *
  * @author samar
  */
 public class CreateMealJPanel extends javax.swing.JPanel {
 
+    private OrganizationDirectory directory;
+    private JPanel userProcessContainer;
+    private Enterprise enterprise;
+    UserAccount account;
+    Business business;
+    HashMap<Integer, UserAccount> userAccountMap;
     /**
      * Creates new form CreateMealJPanel
      */
-    public CreateMealJPanel() {
+    public CreateMealJPanel(JPanel userProcessContainer, Enterprise enterprise, UserAccount account, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.enterprise = enterprise;
+        this.business = business;
+        this.account = account;
+        userAccountMap = new HashMap<>();
+        validateInputs();
+        generateNutritionistCombo();
+        this.setBackground(new java.awt.Color(102, 153, 255));
     }
 
+    private void generateNutritionistCombo(){
+        int index = 1;
+        cbNutritionist.removeAllItems();
+        cbNutritionist.addItem("Select Nutritionist");
+        System.out.println("Roles are ");
+        for (Network n : business.getNetworkList()){
+            for(Enterprise e : n.getEnterpriseDirectory().getEnterpriseList()){
+                if(e.getEnterpriseType().equals(e.getEnterpriseType().Hospital)){
+                    for(Organization o:  e.getOrganizationDirectory().getOrganizationList()){
+                        for(UserAccount u: o.getUserAccountDirectory().getUserAccountList()){
+                            if(u.getRole() instanceof NutritionistRole){
+                                cbNutritionist.addItem(u.getPerson().getName());
+                                userAccountMap.put(index++, u);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        System.out.println(userAccountMap);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,37 +85,43 @@ public class CreateMealJPanel extends javax.swing.JPanel {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel3 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
         jLabel4 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtDate = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        cbType = new javax.swing.JComboBox<>();
+        btnSubmit = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        txtMeal = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        cbNutritionist = new javax.swing.JComboBox<>();
 
         jLabel1.setFont(new java.awt.Font("Arial", 2, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Create Meals");
 
-        jLabel2.setText("Meal Content:");
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Rice Bowl", "Pizza", "Pasta", "Chicken", "Cereal", "Fruits" }));
-
-        jLabel3.setText("Quantity:");
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59", "60" }));
+        jLabel2.setText("Meal:");
 
         jLabel4.setText("Date:");
 
         jLabel5.setText("Lunch/Dinner:");
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Lunch", "Dinner" }));
+        cbType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "Lunch", "Dinner" }));
 
-        jButton1.setText("Create");
+        btnSubmit.setText("Create");
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Back");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel6.setText("Nutritionist:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -70,25 +133,25 @@ public class CreateMealJPanel extends javax.swing.JPanel {
                         .addContainerGap()
                         .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(142, 142, 142)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel2))
-                        .addGap(29, 29, 29)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jComboBox1, 0, 190, Short.MAX_VALUE)
-                                .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jTextField1)
-                                .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGap(453, 453, 453)))
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(64, 64, 64)
-                .addComponent(jButton2)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap(300, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel6))
+                                .addGap(29, 29, 29)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(txtDate)
+                                    .addComponent(cbType, 0, 190, Short.MAX_VALUE)
+                                    .addComponent(btnSubmit, javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(txtMeal)
+                                    .addComponent(cbNutritionist, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(64, 64, 64)
+                                .addComponent(jButton2)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 301, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -99,39 +162,94 @@ public class CreateMealJPanel extends javax.swing.JPanel {
                 .addGap(58, 58, 58)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(40, 40, 40)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(40, 40, 40)
+                    .addComponent(txtMeal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addGap(109, 109, 109)
+                    .addComponent(cbType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(29, 29, 29)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(cbNutritionist, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(25, 25, 25)
+                .addComponent(btnSubmit)
+                .addGap(135, 135, 135)
                 .addComponent(jButton2)
                 .addGap(73, 73, 73))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        // TODO add your handling code here:
+        String meal = txtMeal.getText();
+        String date = txtDate.getText();
+        String type = (String) cbType.getSelectedItem();
+        int nutritionist = (int) cbNutritionist.getSelectedIndex();
+        
+        
+        if(!meal.equals("") || !date.equals("")){
+            String mealID = GenerateRandomID.generateRandomId().toString();
+            Meal m = this.enterprise.addMeal();
+            m.setMeal(meal);
+            m.setType(type);
+            m.setDate(date);
+            m.setMealID(mealID);
+            m.setAssigned(Boolean.FALSE);
+            m.setVolunteerReqSent(Boolean.FALSE);
+            // Send Req to Nutritionist      
+            MealWorkRequest request = new MealWorkRequest();
+            
+            ArrayList<Meal> meals = request.getMeals();
+            meals.add(m);
+                    
+            request.setMessage(meal);
+            request.setSendDataRequestId(mealID);
+            request.setSender(account);
+            request.setStatus("Sent");
+            request.setRequestDate(new Date());
+            request.setMeals(meals);
+            
+            UserAccount reciever = userAccountMap.get(nutritionist);
+            
+            request.setReceiver(reciever);
+            reciever.getWorkQueue().getWorkRequestList().add(request);
+            account.getWorkQueue().getWorkRequestList().add(request);
+            JOptionPane.showMessageDialog(null, "Meal Created and Sent to Nutritionist Successfully", "success", JOptionPane.PLAIN_MESSAGE);
+        }else{
+            JOptionPane.showMessageDialog(null, "Please provide all details", "warning", JOptionPane.WARNING_MESSAGE);  
+            return;
+        }
+    }//GEN-LAST:event_btnSubmitActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        EnterpriseAdminJPanel enterpriseAdminJPanel = new EnterpriseAdminJPanel(userProcessContainer, enterprise, account, business);
+        business.redirection(userProcessContainer, enterpriseAdminJPanel.getClass().getName(), enterpriseAdminJPanel);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void validateInputs() {
+        InputVerifier stringValidation = new ValidateStrings();
+        txtMeal.setInputVerifier(stringValidation);
+        
+        InputVerifier dateValidation = new ValidateDate();
+        txtDate.setInputVerifier(dateValidation);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnSubmit;
+    private javax.swing.JComboBox<String> cbNutritionist;
+    private javax.swing.JComboBox<String> cbType;
     private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JTextField txtDate;
+    private javax.swing.JTextField txtMeal;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,18 +4,109 @@
  */
 package ui.EnterpriseAdmin;
 
+import Business.Business;
+import Business.Common.ValidatePassword;
+import Business.Common.ValidateStrings;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.Organization;
+import Business.Organization.OrganizationDirectory;
+import Business.Person.Person;
+import Business.Roles.Role;
+import Business.UserAccount.UserAccount;
+import javax.swing.InputVerifier;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author samar
  */
 public class ManageUserJPanel extends javax.swing.JPanel {
-
+    
+    private JPanel userProcessContainer;
+    private Enterprise enterprise;
+    UserAccount userAccount;
+    Business business;
+   
     /**
      * Creates new form ManageUserJPanel
      */
-    public ManageUserJPanel() {
+    public ManageUserJPanel(JPanel userProcessContainer, Enterprise enterprise, UserAccount account, Business business) {
         initComponents();
+        this.enterprise = enterprise;
+        this.userProcessContainer = userProcessContainer;
+        this.userAccount = account;
+        this.business = business;
+        addInputVerifiers();
+        populateOrganizationComboBox();
+        popOrganizationUserAccountTable();
+        this.setBackground(new java.awt.Color(102, 153, 255));
     }
+    
+    
+    
+    
+     private void addInputVerifiers() {
+        InputVerifier stringValidation = new ValidateStrings();
+        txtUsername.setInputVerifier(stringValidation);
+        
+        InputVerifier passwordValidation = new ValidatePassword();
+        txtPassword.setInputVerifier(passwordValidation);
+    }
+    
+    
+    final public void populateOrganizationComboBox(){
+        cbOrganization.removeAllItems();
+        
+        for(Organization organization :  enterprise.getOrganizationDirectory().getOrganizationList()){
+            if(!(organization.getName().equals("Volunteer Organization")) && 
+                    !(organization.getName().equals("Admin")) &&
+                    !(organization.getName().equals("HelpSeeker Organization")))
+            {
+            cbOrganization.addItem(organization.toString());
+            }
+        }
+    }
+     
+    public void populateEmployeeComboBox(Organization organization){
+        cbEmployee.removeAllItems();
+        
+       if(!(organization.getName().equals("Volunteer Organization")) && 
+                    !(organization.getName().equals("Admin")) &&
+                    !(organization.getName().equals("HelpSeeker Organization")))
+          {
+          for (Person employee : organization.getPersonDirectory().getPersonList()){
+            cbEmployee.addItem(employee.toString());   
+          }
+        }
+     }
+    
+    private void populateRoleComboBox(Organization organization){
+        cbRole.removeAllItems();
+        for (Role role : organization.getSupportedRole()){
+            cbRole.addItem(role.toString());
+        }
+    }
+
+    final public void popOrganizationUserAccountTable() {
+
+        DefaultTableModel model = (DefaultTableModel) tblManageOrganizationUser.getModel();
+
+        model.setRowCount(0);
+
+        for (Organization organization : enterprise.getOrganizationDirectory().getOrganizationList()) {
+            for (UserAccount ua : organization.getUserAccountDirectory().getUserAccountList()) {
+                Object row[] = new Object[2];
+                row[0] = ua;
+                row[1] = ua.getRole();
+                
+                model.addRow(row);
+            }
+        }
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -61,6 +152,11 @@ public class ManageUserJPanel extends javax.swing.JPanel {
         lblPassword.setText("Password:");
 
         cbOrganization.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Donor Organization" }));
+        cbOrganization.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbOrganizationActionPerformed(evt);
+            }
+        });
 
         txtUsername.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -69,6 +165,11 @@ public class ManageUserJPanel extends javax.swing.JPanel {
         });
 
         btnCreate.setText("Create");
+        btnCreate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateActionPerformed(evt);
+            }
+        });
 
         tblManageOrganizationUser.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -84,6 +185,11 @@ public class ManageUserJPanel extends javax.swing.JPanel {
         jScrollPane1.setViewportView(tblManageOrganizationUser);
 
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -163,6 +269,100 @@ public class ManageUserJPanel extends javax.swing.JPanel {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtUsernameActionPerformed
 
+    private Organization getOrganization(String name){
+        if(name != null){
+            for(Organization organization :  enterprise.getOrganizationDirectory().getOrganizationList()){
+                if(!(organization.getName().equals("Volunteer Organization")) && 
+                        !(organization.getName().equals("Admin")) &&
+                        !(organization.getName().equals("HelpSeeker Organization")))
+                {
+                    if(name.equals(organization.toString())){
+                        return organization;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    
+    private Person getEmployee(String name, Organization organization){
+        if(name != null){
+            if(!(organization.getName().equals("Volunteer Organization")) && 
+                    !(organization.getName().equals("Admin")) &&
+                    !(organization.getName().equals("HelpSeeker Organization")))
+              {
+              for (Person employee : organization.getPersonDirectory().getPersonList()){
+                  if(name.equals(employee.toString())){
+                      return employee;
+                  }
+              }
+            }
+        }
+        return null;
+    }
+    
+    private Role getRole(String name, Organization organization){
+        if(name != null){
+        for (Role role : organization.getSupportedRole()){
+            if(name.equals(role.toString())){
+                return role;
+            }
+        }
+        }
+        return null;
+    }
+    
+    
+    private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
+        // TODO add your handling code here:
+        try
+        {
+            String userName = txtUsername.getText();
+            String password = txtPassword.getText();
+            Organization organization = getOrganization((String) cbOrganization.getSelectedItem());
+            Person person = getEmployee((String) cbEmployee.getSelectedItem(), organization);
+            Role role = getRole((String) cbRole.getSelectedItem(), organization);
+            for(UserAccount ua : organization.getUserAccountDirectory().getUserAccountList())
+            {
+                if(userName.equalsIgnoreCase(ua.getUserName()))
+                {
+                    JOptionPane.showMessageDialog(null, "User Name already exists!!", "warning", JOptionPane.WARNING_MESSAGE);  
+                    return;
+                }
+            }
+            UserAccount account = organization.getUserAccountDirectory().addUserAccount(userName, password, person, role);
+            account.setNetwork((Network) userAccount.getNetwork());
+            account.setEnabled(true);
+            popOrganizationUserAccountTable();
+            JOptionPane.showMessageDialog(null, " User Account has been created successfully", "success",JOptionPane.PLAIN_MESSAGE);
+            resetFields();
+       }
+       catch(Exception e)
+       {
+        JOptionPane.showMessageDialog(this, "Please enter valid data", "warning",JOptionPane.WARNING_MESSAGE);    
+       }
+    }//GEN-LAST:event_btnCreateActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        EnterpriseAdminJPanel enterpriseAdminJPanel = new EnterpriseAdminJPanel(userProcessContainer, enterprise, userAccount, business);
+        business.redirection(userProcessContainer, enterpriseAdminJPanel.getClass().getName(), enterpriseAdminJPanel);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void cbOrganizationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbOrganizationActionPerformed
+        // TODO add your handling code here:
+        Organization organization = getOrganization((String) cbOrganization.getSelectedItem());
+        if (organization != null){
+            populateEmployeeComboBox(organization);
+            populateRoleComboBox(organization);
+        }
+    }//GEN-LAST:event_cbOrganizationActionPerformed
+
+    public void resetFields()
+    {
+        txtUsername.setText("");
+        txtPassword.setText("");
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;

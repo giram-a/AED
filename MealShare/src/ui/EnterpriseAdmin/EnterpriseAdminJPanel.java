@@ -6,9 +6,13 @@ package ui.EnterpriseAdmin;
 
 import Business.Business;
 import Business.Enterprise.Enterprise;
+import Business.Enterprise.MealShare;
+import Business.Enterprise.NGOEnterprise;
 import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import javax.swing.JPanel;
+import ui.Auth.LoginJPanel;
+import ui.Donor.ViewDonationHistory;
 
 /**
  *
@@ -27,11 +31,29 @@ public class EnterpriseAdminJPanel extends javax.swing.JPanel {
      */
     public EnterpriseAdminJPanel(JPanel userProcessContainer, Enterprise enterprise, UserAccount account, Business business) {
         initComponents();
+        this.setBackground(new java.awt.Color(102, 153, 255));
         this.userProcessContainer = userProcessContainer;
         this.business = business;
         this.account = account;
         this.enterprise = enterprise;
-        this.organization = organization;
+        displayName(enterprise.getName());
+        if(enterprise instanceof NGOEnterprise){
+            btnRequestDonation.setVisible(true);
+            btnViewDonationHistory.setVisible(true);
+        }else{
+            btnRequestDonation.setVisible(false);
+            btnViewDonationHistory.setVisible(false);
+        }
+        
+        if(enterprise instanceof MealShare){
+            btnCreateMeals.setVisible(false);
+            btnManageMeals.setVisible(false);
+        }
+    }
+    
+    
+    private void displayName(String name){
+        lblNonGovernmentalOrganization.setText("Enterprise: "+ name);
     }
 
     /**
@@ -49,6 +71,10 @@ public class EnterpriseAdminJPanel extends javax.swing.JPanel {
         btnManageProfile = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
+        btnRequestDonation = new javax.swing.JButton();
+        btnViewDonationHistory = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         lblNonGovernmentalOrganization.setFont(new java.awt.Font("Arial", 2, 24)); // NOI18N
         lblNonGovernmentalOrganization.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -62,6 +88,11 @@ public class EnterpriseAdminJPanel extends javax.swing.JPanel {
         });
 
         btnManageMeals.setText("Manage Meals");
+        btnManageMeals.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManageMealsActionPerformed(evt);
+            }
+        });
 
         btnManageProfile.setText("Manage Oragnization Employee");
         btnManageProfile.addActionListener(new java.awt.event.ActionListener() {
@@ -78,6 +109,35 @@ public class EnterpriseAdminJPanel extends javax.swing.JPanel {
         });
 
         jButton2.setText("Manage User");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        btnLogout.setText("Logout");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+
+        btnRequestDonation.setText("Request Donation");
+        btnRequestDonation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRequestDonationActionPerformed(evt);
+            }
+        });
+
+        btnViewDonationHistory.setText("View Donation History");
+        btnViewDonationHistory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewDonationHistoryActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/2.jpeg"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -85,40 +145,62 @@ public class EnterpriseAdminJPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(lblNonGovernmentalOrganization, javax.swing.GroupLayout.DEFAULT_SIZE, 888, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(167, 167, 167)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnManageMeals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnCreateMeals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(btnManageProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(130, 130, 130)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(btnRequestDonation, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnViewDonationHistory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnCreateMeals, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnManageMeals, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 347, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(70, 70, 70)
-                .addComponent(lblNonGovernmentalOrganization)
                 .addGap(50, 50, 50)
-                .addComponent(btnCreateMeals)
-                .addGap(40, 40, 40)
-                .addComponent(btnManageMeals)
-                .addGap(40, 40, 40)
-                .addComponent(btnManageProfile)
-                .addGap(40, 40, 40)
-                .addComponent(jButton1)
-                .addGap(40, 40, 40)
-                .addComponent(jButton2)
-                .addGap(177, 177, 177))
+                .addComponent(lblNonGovernmentalOrganization)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 244, Short.MAX_VALUE)
+                .addGap(10, 10, 10)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnManageProfile)
+                        .addGap(40, 40, 40)
+                        .addComponent(jButton1)
+                        .addGap(40, 40, 40)
+                        .addComponent(jButton2)
+                        .addGap(35, 35, 35)
+                        .addComponent(btnLogout))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnCreateMeals)
+                        .addGap(40, 40, 40)
+                        .addComponent(btnManageMeals)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRequestDonation)
+                        .addGap(40, 40, 40)
+                        .addComponent(btnViewDonationHistory)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCreateMealsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateMealsActionPerformed
         // TODO add your handling code here:
+        CreateMealJPanel createMealJPanel = new CreateMealJPanel(userProcessContainer, enterprise, account, business);
+        business.redirection(userProcessContainer, createMealJPanel.getClass().getName(), createMealJPanel);
     }//GEN-LAST:event_btnCreateMealsActionPerformed
 
     private void btnManageProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageProfileActionPerformed
@@ -133,13 +215,48 @@ public class EnterpriseAdminJPanel extends javax.swing.JPanel {
         business.redirection(userProcessContainer, manageOrganizationJPanel.getClass().getName(), manageOrganizationJPanel);
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        
+        ManageUserJPanel manageUserJPanel = new ManageUserJPanel(userProcessContainer, this.enterprise, account, business);
+        business.redirection(userProcessContainer, manageUserJPanel.getClass().getName(), manageUserJPanel);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        // TODO add your handling code here:
+        LoginJPanel loginJPanel = new LoginJPanel(userProcessContainer, business);
+        this.business.redirection(userProcessContainer, loginJPanel.getClass().getName(), loginJPanel);
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void btnRequestDonationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRequestDonationActionPerformed
+        // TODO add your handling code here:
+        RequestDonation requestDonation = new RequestDonation(userProcessContainer, enterprise, account, business);
+        this.business.redirection(userProcessContainer, requestDonation.getClass().getName(), requestDonation);
+    }//GEN-LAST:event_btnRequestDonationActionPerformed
+
+    private void btnViewDonationHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewDonationHistoryActionPerformed
+        // TODO add your handling code here:
+        ViewDonationHistoryEntr requestDonation = new ViewDonationHistoryEntr(userProcessContainer, account, enterprise, organization, business);
+        this.business.redirection(userProcessContainer, requestDonation.getClass().getName(), requestDonation);
+    }//GEN-LAST:event_btnViewDonationHistoryActionPerformed
+
+    private void btnManageMealsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageMealsActionPerformed
+        // TODO add your handling code here:
+        ManageMealsJPanel manageMealsJPanel = new ManageMealsJPanel(userProcessContainer, enterprise, account, business);
+        this.business.redirection(userProcessContainer, manageMealsJPanel.getClass().getName(), manageMealsJPanel);
+    }//GEN-LAST:event_btnManageMealsActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateMeals;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnManageMeals;
     private javax.swing.JButton btnManageProfile;
+    private javax.swing.JButton btnRequestDonation;
+    private javax.swing.JButton btnViewDonationHistory;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblNonGovernmentalOrganization;
     // End of variables declaration//GEN-END:variables
 }

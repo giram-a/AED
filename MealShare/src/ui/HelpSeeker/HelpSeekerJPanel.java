@@ -4,17 +4,36 @@
  */
 package ui.HelpSeeker;
 
+import Business.Business;
+import Business.Enterprise.Enterprise;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import javax.swing.JPanel;
+import ui.Auth.LoginJPanel;
+
 /**
  *
  * @author samar
  */
 public class HelpSeekerJPanel extends javax.swing.JPanel {
 
+    JPanel userProcessContainer;
+    UserAccount account;
+    Enterprise enterprise;
+    Organization organization;
+    Business business;
+    
     /**
      * Creates new form HelpSeekerJPanel
      */
-    public HelpSeekerJPanel() {
+    public HelpSeekerJPanel(JPanel userProcessContainer, UserAccount account, Enterprise enterprise, Organization organization, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        this.setBackground(new java.awt.Color(102, 153, 255));
     }
 
     /**
@@ -39,21 +58,46 @@ public class HelpSeekerJPanel extends javax.swing.JPanel {
 
         btnManageProfile.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         btnManageProfile.setText("Update Profile");
+        btnManageProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnManageProfileActionPerformed(evt);
+            }
+        });
 
         lblHelpSeeker.setFont(new java.awt.Font("Arial", 2, 24)); // NOI18N
         lblHelpSeeker.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblHelpSeeker.setText("Help Seeker");
 
         btnCreateRequest.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
-        btnCreateRequest.setText("Create Request");
+        btnCreateRequest.setText("Create / View Request");
+        btnCreateRequest.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateRequestActionPerformed(evt);
+            }
+        });
 
         btnProvideTestimony.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         btnProvideTestimony.setText("Provide Testimony");
+        btnProvideTestimony.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProvideTestimonyActionPerformed(evt);
+            }
+        });
 
         btnViewMeals.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
         btnViewMeals.setText("View Meals");
+        btnViewMeals.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewMealsActionPerformed(evt);
+            }
+        });
 
-        btnBack.setText("Back");
+        btnBack.setText("Logout");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Arial", 2, 12)); // NOI18N
         jLabel1.setText("Creating Meal Requests as Per Requirement of Help Seeker");
@@ -121,6 +165,36 @@ public class HelpSeekerJPanel extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCreateRequestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateRequestActionPerformed
+        // TODO add your handling code here:
+        CreateRequestJPanel createRequestJPanel = new CreateRequestJPanel(userProcessContainer, account, enterprise, organization, business);
+        this.business.redirection(userProcessContainer, createRequestJPanel.getClass().getName(), createRequestJPanel);
+    }//GEN-LAST:event_btnCreateRequestActionPerformed
+
+    private void btnViewMealsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewMealsActionPerformed
+        // TODO add your handling code here:
+        ViewMealsJPanel viewMealsJPanel = new ViewMealsJPanel(userProcessContainer, account, enterprise, organization, business);
+        this.business.redirection(userProcessContainer, viewMealsJPanel.getClass().getName(), viewMealsJPanel);
+    }//GEN-LAST:event_btnViewMealsActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        LoginJPanel loginJPanel = new LoginJPanel(userProcessContainer, business);
+        this.business.redirection(userProcessContainer, loginJPanel.getClass().getName(), loginJPanel);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnManageProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageProfileActionPerformed
+        // TODO add your handling code here:
+        ViewUpdateProfile viewUpdateProfile = new ViewUpdateProfile(userProcessContainer, account, enterprise, organization, business);
+        this.business.redirection(userProcessContainer, viewUpdateProfile.getClass().getName(), viewUpdateProfile);
+    }//GEN-LAST:event_btnManageProfileActionPerformed
+
+    private void btnProvideTestimonyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProvideTestimonyActionPerformed
+        // TODO add your handling code here:
+        TestimonyJPanel testimonyJPanel = new TestimonyJPanel(userProcessContainer, account, enterprise, organization, business);
+        this.business.redirection(userProcessContainer, testimonyJPanel.getClass().getName(), testimonyJPanel);
+    }//GEN-LAST:event_btnProvideTestimonyActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

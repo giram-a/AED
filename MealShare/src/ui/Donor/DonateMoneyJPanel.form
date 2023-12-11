@@ -104,7 +104,7 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblOrganization">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Enter Organization Name :"/>
+        <Property name="text" type="java.lang.String" value="To Account"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JLabel" name="lblEnterName">
@@ -123,6 +123,9 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtOrganizationName">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtName">
     </Component>
@@ -141,11 +144,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Make a donation!"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnDonationActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnBack">
       <Properties>
         <Property name="text" type="java.lang.String" value="Back"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBackActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

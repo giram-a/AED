@@ -4,17 +4,35 @@
  */
 package ui.Volunteer;
 
+import Business.Business;
+import Business.Enterprise.Enterprise;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import javax.swing.JPanel;
+import ui.Auth.LoginJPanel;
+
 /**
  *
  * @author samar
  */
 public class VolunteerWorkAreaJPanel extends javax.swing.JPanel {
 
+    JPanel userProcessContainer;
+    UserAccount account;
+    Enterprise enterprise;
+    Organization organization;
+    Business business;
     /**
      * Creates new form VolunteerWorkAreaJPanel
      */
-    public VolunteerWorkAreaJPanel() {
+    public VolunteerWorkAreaJPanel(JPanel userProcessContainer, UserAccount account, Enterprise enterprise, Organization organization, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        this.setBackground(new java.awt.Color(102, 153, 255));
     }
 
     /**
@@ -30,52 +48,115 @@ public class VolunteerWorkAreaJPanel extends javax.swing.JPanel {
         btnViewHelpRequests = new javax.swing.JButton();
         lblViewTestimonials = new javax.swing.JButton();
         btnUpdateProfile = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
 
         lblVolunteer.setFont(new java.awt.Font("Arial", 2, 24)); // NOI18N
         lblVolunteer.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblVolunteer.setText("Volunteer Work Area");
 
         btnViewHelpRequests.setText("View Help Requests");
+        btnViewHelpRequests.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewHelpRequestsActionPerformed(evt);
+            }
+        });
 
         lblViewTestimonials.setText("View Testimonials");
+        lblViewTestimonials.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lblViewTestimonialsActionPerformed(evt);
+            }
+        });
 
         btnUpdateProfile.setText("Update Profile");
+        btnUpdateProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateProfileActionPerformed(evt);
+            }
+        });
+
+        btnLogout.setText("Logout");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/3.jpg"))); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblVolunteer, javax.swing.GroupLayout.PREFERRED_SIZE, 951, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(249, 249, 249)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnViewHelpRequests, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(lblViewTestimonials, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnUpdateProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblVolunteer, javax.swing.GroupLayout.PREFERRED_SIZE, 951, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblViewTestimonials, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnUpdateProfile, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnLogout, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnViewHelpRequests, javax.swing.GroupLayout.Alignment.TRAILING))
+                        .addGap(69, 69, 69)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(56, 56, 56)
                 .addComponent(lblVolunteer)
-                .addGap(57, 57, 57)
-                .addComponent(btnViewHelpRequests)
-                .addGap(40, 40, 40)
-                .addComponent(lblViewTestimonials)
-                .addGap(40, 40, 40)
-                .addComponent(btnUpdateProfile)
-                .addContainerGap(310, Short.MAX_VALUE))
+                .addGap(56, 56, 56)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnViewHelpRequests)
+                        .addGap(33, 33, 33)
+                        .addComponent(lblViewTestimonials)
+                        .addGap(39, 39, 39)
+                        .addComponent(btnUpdateProfile)
+                        .addGap(32, 32, 32)
+                        .addComponent(btnLogout))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(248, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        // TODO add your handling code here:
+        LoginJPanel loginJPanel = new LoginJPanel(userProcessContainer, business);
+        this.business.redirection(userProcessContainer, loginJPanel.getClass().getName(), loginJPanel);
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void btnViewHelpRequestsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewHelpRequestsActionPerformed
+        // TODO add your handling code here:
+        ViewHelpRequestsJPanel viewHelpRequestsJPanel = new ViewHelpRequestsJPanel(userProcessContainer, account, enterprise, organization, business);
+        business.redirection(userProcessContainer, viewHelpRequestsJPanel.getClass().getName(), viewHelpRequestsJPanel);
+    }//GEN-LAST:event_btnViewHelpRequestsActionPerformed
+
+    private void btnUpdateProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateProfileActionPerformed
+        // TODO add your handling code here:
+        ViewUpdateProfile viewUpdateProfile = new ViewUpdateProfile(userProcessContainer, account, enterprise, organization, business);
+        this.business.redirection(userProcessContainer, viewUpdateProfile.getClass().getName(), viewUpdateProfile);
+    }//GEN-LAST:event_btnUpdateProfileActionPerformed
+
+    private void lblViewTestimonialsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lblViewTestimonialsActionPerformed
+        // TODO add your handling code here:
+        ViewTestimonialsJPanel viewTestimonialsJPanel = new ViewTestimonialsJPanel(userProcessContainer, account, enterprise, organization, business);
+        this.business.redirection(userProcessContainer, viewTestimonialsJPanel.getClass().getName(), viewTestimonialsJPanel);
+    }//GEN-LAST:event_lblViewTestimonialsActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnUpdateProfile;
     private javax.swing.JButton btnViewHelpRequests;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JButton lblViewTestimonials;
     private javax.swing.JLabel lblVolunteer;
     // End of variables declaration//GEN-END:variables

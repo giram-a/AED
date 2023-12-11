@@ -4,17 +4,56 @@
  */
 package ui.Donor;
 
+import Business.Business;
+import Business.Enterprise.Enterprise;
+import Business.Organization.Organization;
+import Business.Person.Person;
+import Business.UserAccount.UserAccount;
+import java.awt.HeadlessException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 /**
  *
  * @author Aishwarya Dhandore
  */
 public class ViewUpdateProfile extends javax.swing.JPanel {
 
+    JPanel userProcessContainer;
+    UserAccount account;
+    Enterprise enterprise;
+    Organization organization;
+    Business business;
+    Person p;
+
     /**
      * Creates new form ViewUpdateProfile
      */
-    public ViewUpdateProfile() {
+    public ViewUpdateProfile(JPanel userProcessContainer, UserAccount account, Enterprise enterprise, Organization organization, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        p = account.getPerson();
+        setData();
+        this.setBackground(new java.awt.Color(102, 153, 255));
+    }
+
+    private void setData() {
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        txtName.setText(p.getName());
+        txtDoB.setText(p.getDob() != null ? dateFormat.format(p.getDob()) : "");
+        txtAddress.setText(p.getAddress1() + " " + p.getAddress2());
+        txtEmailId.setText(p.getEmailId());
+        txtCity.setText(p.getTown());
+        txtZipCode.setText(p.getZipCode());
+        txtContactNumber.setText(p.getPhoneNumber());
     }
 
     /**
@@ -59,12 +98,22 @@ public class ViewUpdateProfile extends javax.swing.JPanel {
         lblCity.setText("City :");
 
         btnUpdateProfile.setText("Update my Profile");
+        btnUpdateProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUpdateProfileActionPerformed(evt);
+            }
+        });
 
         lblZipCode.setText("Zip Code :");
 
         lblContactNo.setText("Contact number :");
 
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -165,6 +214,61 @@ public class ViewUpdateProfile extends javax.swing.JPanel {
                 .addGap(41, 41, 41))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnUpdateProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateProfileActionPerformed
+        // TODO add your handling code here:
+        String name = txtName.getText();
+        String birth = txtDoB.getText();
+        String address = txtAddress.getText();
+        String email = txtEmailId.getText();
+        String city = txtCity.getText();
+        String zipCode = txtZipCode.getText();
+        String contactNo = txtContactNumber.getText();
+
+        if (name.equals("") && birth.equals("") && address.equals("") && email.equals("") && city.equals("") && zipCode.equals("") && contactNo.equals("")) {
+            JOptionPane.showMessageDialog(null, "Please Enter data in all the fields");
+            return;
+        }
+
+        try {
+            DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+            Date date = new Date();
+            Date dob = dateFormat.parse(birth);
+            if (dob.after(date) || dob.equals(date)) {
+                JOptionPane.showMessageDialog(null, "Please Enter valid Date of Birth");
+                return;
+            }
+            p.setDob(dateFormat.parse(birth));
+            p.setAddress1(address);
+            p.setTown(city);
+            p.setZipCode(zipCode);
+            p.setEmailId(email);
+            p.setPhoneNumber(contactNo);
+
+            JOptionPane.showMessageDialog(null, "Your Profile has been created successfully", "success", JOptionPane.PLAIN_MESSAGE);
+            resetFields();
+        } catch (ParseException pe) {
+            JOptionPane.showMessageDialog(null, "Please Enter valid date of Birth!");
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Please Enter valid data in all the fields");
+        }
+    }//GEN-LAST:event_btnUpdateProfileActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        Donor donor = new Donor(userProcessContainer, account, enterprise, organization, business);
+        business.redirection(userProcessContainer, donor.getClass().getName(), donor);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    public void resetFields() {
+        txtName.setText("");
+        txtDoB.setText("");
+        txtAddress.setText("");
+        txtEmailId.setText("");
+        txtCity.setText("");
+        txtZipCode.setText("");
+        txtContactNumber.setText("");
+    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

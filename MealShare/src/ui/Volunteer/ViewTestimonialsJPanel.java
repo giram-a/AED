@@ -4,17 +4,72 @@
  */
 package ui.Volunteer;
 
+import Business.Business;
+import Business.Common.Meal;
+import Business.Enterprise.Enterprise;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import Business.WrokQueue.NeedMealWorkRequest;
+import Business.WrokQueue.WorkRequest;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author samar
  */
 public class ViewTestimonialsJPanel extends javax.swing.JPanel {
 
+    JPanel userProcessContainer;
+    UserAccount account;
+    Business business;
+    Enterprise enterprise;
+    Organization organization;
+
     /**
      * Creates new form ViewTestimonialsJPanel
      */
-    public ViewTestimonialsJPanel() {
+    public ViewTestimonialsJPanel(JPanel userProcessContainer, UserAccount userAccount, Enterprise enterprise, Organization organization, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = userAccount;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        populateTableData();
+        this.setBackground(new java.awt.Color(102, 153, 255));
+
+    }
+
+    private void populateTableData() {
+        DefaultTableModel model = (DefaultTableModel) tblViewMeals.getModel();
+        model.setRowCount(0);
+        for (WorkRequest w : account.getWorkQueue().getWorkRequestList()) {
+            Object row[] = new Object[4];
+            if (w instanceof NeedMealWorkRequest) {
+                NeedMealWorkRequest need = (NeedMealWorkRequest) w;
+                Meal meal = need.getMeal();
+                if (need == null || meal == null) {
+                } else {
+                    if (meal.getCarbs() != null && meal.getProtein() != null && meal.getCalories() != null && meal.getVolunteerReqSent()) {
+                        if (need.getReceiver() == null || need.getReceiver().equals(account)) {
+                            if (need.getStatus().equals("Approved")) {
+                                row[0] = meal.getMeal();
+                                row[1] = meal.getDate();
+                                row[2] = need.getStatus();
+                                row[3] = meal.getMealFeedback();
+                                model.addRow(row);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (!(model.getRowCount() > 0)) {
+            JOptionPane.showMessageDialog(null, "No Meal Assigned to you", "Information", JOptionPane.INFORMATION_MESSAGE);
+        }
+
     }
 
     /**
@@ -27,31 +82,38 @@ public class ViewTestimonialsJPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         lblViewTestimonials = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        tblViewTestimonials = new javax.swing.JTable();
-        btnViewTestimonials = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblViewMeals = new javax.swing.JTable();
 
         lblViewTestimonials.setFont(new java.awt.Font("Arial", 2, 24)); // NOI18N
         lblViewTestimonials.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblViewTestimonials.setText("View Testimonials");
 
-        tblViewTestimonials.setModel(new javax.swing.table.DefaultTableModel(
+        btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+
+        tblViewMeals.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
-                "Testimonial ID", "Written By"
+                "Meal Content", "Date", "Status", "Feedback"
             }
-        ));
-        jScrollPane1.setViewportView(tblViewTestimonials);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
 
-        btnViewTestimonials.setText("View Testimonials");
-
-        btnBack.setText("Back");
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblViewMeals);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -59,36 +121,39 @@ public class ViewTestimonialsJPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 888, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnBack)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnViewTestimonials))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 847, Short.MAX_VALUE)
-                    .addComponent(lblViewTestimonials, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(47, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblViewTestimonials, javax.swing.GroupLayout.PREFERRED_SIZE, 847, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBack))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(53, 53, 53)
                 .addComponent(lblViewTestimonials)
+                .addGap(30, 30, 30)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnViewTestimonials)
-                    .addComponent(btnBack))
-                .addContainerGap(141, Short.MAX_VALUE))
+                .addComponent(btnBack)
+                .addContainerGap(166, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        VolunteerWorkAreaJPanel volunteerWorkAreaJPanel = new VolunteerWorkAreaJPanel(userProcessContainer, account, enterprise, organization, business);
+        this.business.redirection(userProcessContainer, volunteerWorkAreaJPanel.getClass().getName(), volunteerWorkAreaJPanel);
+    }//GEN-LAST:event_btnBackActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnViewTestimonials;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblViewTestimonials;
-    private javax.swing.JTable tblViewTestimonials;
+    private javax.swing.JTable tblViewMeals;
     // End of variables declaration//GEN-END:variables
 }

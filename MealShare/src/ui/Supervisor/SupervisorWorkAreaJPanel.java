@@ -4,17 +4,80 @@
  */
 package ui.Supervisor;
 
+import Business.Business;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import Business.WrokQueue.NeedMealWorkRequest;
+import Business.WrokQueue.SupervisorWorkRequest;
+import Business.WrokQueue.WorkRequest;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+import ui.Auth.LoginJPanel;
+import ui.Common.ViewProfile;
+
 /**
  *
  * @author samar
  */
 public class SupervisorWorkAreaJPanel extends javax.swing.JPanel {
 
+    JPanel userProcessContainer;
+    UserAccount account;
+    Enterprise enterprise;
+    Organization organization;
+    Business business;
+
     /**
      * Creates new form SupervisorWorkAreaJPanel
      */
-    public SupervisorWorkAreaJPanel() {
+    public SupervisorWorkAreaJPanel(JPanel userProcessContainer, UserAccount account, Enterprise enterprise, Organization organization, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        populateTable();
+        this.setBackground(new java.awt.Color(102, 153, 255));
+    }
+
+    private void populateTable() {
+        DefaultTableModel model = (DefaultTableModel) tblWorkRequests.getModel();
+        model.setRowCount(0);
+        
+        
+        
+        for (Network n : business.getNetworkList()) {
+            for (Enterprise e : n.getEnterpriseDirectory().getEnterpriseList()) {
+                for (Organization o : e.getOrganizationDirectory().getOrganizationList()) {
+                    for (UserAccount u : o.getUserAccountDirectory().getUserAccountList()) {
+                        for (WorkRequest w : u.getWorkQueue().getWorkRequestList()) {
+                            if (w instanceof SupervisorWorkRequest) {
+                                Object row[] = new Object[6];
+                                SupervisorWorkRequest req = (SupervisorWorkRequest) w;
+                                row[0] = req;
+                                row[1] = req.getMessage();
+                                row[2] = req.getSender();
+                                row[3] = req.getReceiver();
+                                row[4] = req.getStatus();
+                                row[5] = req.getSender().getRole();
+                                model.addRow(row);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
+        
+
+        if (!(model.getRowCount() > 0)) {
+            JOptionPane.showMessageDialog(null, "No User Assigned to you", "Information", JOptionPane.INFORMATION_MESSAGE);
+        }
+
     }
 
     /**
@@ -31,12 +94,12 @@ public class SupervisorWorkAreaJPanel extends javax.swing.JPanel {
         tblWorkRequests = new javax.swing.JTable();
         lblWorkRequests = new javax.swing.JLabel();
         btnRefrersh = new javax.swing.JButton();
-        btnViewRequestToBeProcessed = new javax.swing.JButton();
         btnAssigntoMe = new javax.swing.JButton();
         btnViewRequestProfile = new javax.swing.JButton();
         btnProcess = new javax.swing.JButton();
         btnViewMyProfile = new javax.swing.JButton();
         btnCreateMyProfile = new javax.swing.JButton();
+        btnLogout = new javax.swing.JButton();
 
         lblSupervisorWorkArea.setFont(new java.awt.Font("Arial", 2, 24)); // NOI18N
         lblSupervisorWorkArea.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -44,33 +107,76 @@ public class SupervisorWorkAreaJPanel extends javax.swing.JPanel {
 
         tblWorkRequests.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+
             },
             new String [] {
-                "Message", "Sender", "Receiver", "Status", "Role"
+                "ID", "Message", "Sender", "Receiver", "Status", "Role"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblWorkRequests);
+        if (tblWorkRequests.getColumnModel().getColumnCount() > 0) {
+            tblWorkRequests.getColumnModel().getColumn(1).setResizable(false);
+        }
 
         lblWorkRequests.setFont(new java.awt.Font("Arial", 2, 18)); // NOI18N
         lblWorkRequests.setText("Work Requests:");
 
         btnRefrersh.setText("Refresh");
-
-        btnViewRequestToBeProcessed.setText("View Request to be Processed");
+        btnRefrersh.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRefrershActionPerformed(evt);
+            }
+        });
 
         btnAssigntoMe.setText("Assign to Me");
+        btnAssigntoMe.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAssigntoMeActionPerformed(evt);
+            }
+        });
 
-        btnViewRequestProfile.setText("View Requerst Profile");
+        btnViewRequestProfile.setText("View Requester Profile");
+        btnViewRequestProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewRequestProfileActionPerformed(evt);
+            }
+        });
 
         btnProcess.setText("Process");
+        btnProcess.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProcessActionPerformed(evt);
+            }
+        });
 
         btnViewMyProfile.setText("View My Profile");
+        btnViewMyProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewMyProfileActionPerformed(evt);
+            }
+        });
 
         btnCreateMyProfile.setText("Create My Profile");
+        btnCreateMyProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateMyProfileActionPerformed(evt);
+            }
+        });
+
+        btnLogout.setText("Logout");
+        btnLogout.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLogoutActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -79,66 +185,138 @@ public class SupervisorWorkAreaJPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblSupervisorWorkArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 892, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblSupervisorWorkArea, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblWorkRequests)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnViewRequestToBeProcessed, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnViewRequestProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(31, 31, 31)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnAssigntoMe, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(btnProcess, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(165, 165, 165)
-                        .addComponent(btnViewMyProfile)
+                        .addComponent(lblWorkRequests)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnRefrersh)
-                                .addGap(184, 184, 184))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(btnCreateMyProfile)
-                                .addGap(55, 55, 55))))))
+                        .addComponent(btnCreateMyProfile)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnViewMyProfile))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnViewRequestProfile, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnAssigntoMe)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnProcess, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnRefrersh))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnLogout)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(70, 70, 70)
                 .addComponent(lblSupervisorWorkArea)
-                .addGap(25, 25, 25)
-                .addComponent(lblWorkRequests)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addComponent(lblWorkRequests))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnViewMyProfile)
+                            .addComponent(btnCreateMyProfile))))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 271, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnRefrersh)
-                    .addComponent(btnViewRequestToBeProcessed)
-                    .addComponent(btnAssigntoMe))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnViewRequestProfile)
+                    .addComponent(btnAssigntoMe)
                     .addComponent(btnProcess)
-                    .addComponent(btnViewMyProfile)
-                    .addComponent(btnCreateMyProfile))
+                    .addComponent(btnViewRequestProfile))
+                .addGap(18, 18, 18)
+                .addComponent(btnLogout)
                 .addContainerGap(84, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
+        // TODO add your handling code here:
+        LoginJPanel loginJPanel = new LoginJPanel(userProcessContainer, business);
+        this.business.redirection(userProcessContainer, loginJPanel.getClass().getName(), loginJPanel);
+    }//GEN-LAST:event_btnLogoutActionPerformed
+
+    private void btnAssigntoMeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAssigntoMeActionPerformed
+        // TODO add your handling code here:
+
+        int selectedRow = tblWorkRequests.getSelectedRow();
+
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a row", "warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        SupervisorWorkRequest req = (SupervisorWorkRequest) tblWorkRequests.getValueAt(selectedRow, 0);
+        req.setReceiver(account);
+        req.setStatus(SupervisorWorkRequest.REQUEST_INPROGRESS);
+        populateTable();
+        JOptionPane.showMessageDialog(this, "Request Assigned to you, you can now process it", "Information", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnAssigntoMeActionPerformed
+
+    private void btnProcessActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcessActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = tblWorkRequests.getSelectedRow();
+
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a row", "warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        SupervisorWorkRequest req = (SupervisorWorkRequest) tblWorkRequests.getValueAt(selectedRow, 0);
+
+        if (req.getReceiver() != null) {
+            ProcessWorkRequestJPanel processWorkRequestJPanel = new ProcessWorkRequestJPanel(userProcessContainer, account, enterprise, organization, business, req);
+            business.redirection(userProcessContainer, processWorkRequestJPanel.getClass().getName(), processWorkRequestJPanel);
+        } else {
+            JOptionPane.showMessageDialog(this, "Please Assign the request first", "warning", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_btnProcessActionPerformed
+
+    private void btnViewMyProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewMyProfileActionPerformed
+        // TODO add your handling code here:
+        ViewUpdateProfile viewUpdateProfile = new ViewUpdateProfile(userProcessContainer, account, enterprise, organization, business);
+        this.business.redirection(userProcessContainer, viewUpdateProfile.getClass().getName(), viewUpdateProfile);
+    }//GEN-LAST:event_btnViewMyProfileActionPerformed
+
+    private void btnCreateMyProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateMyProfileActionPerformed
+        // TODO add your handling code here:
+        CreateProfile createProfile = new CreateProfile(userProcessContainer, account, enterprise, organization, business);
+        this.business.redirection(userProcessContainer, createProfile.getClass().getName(), createProfile);
+    }//GEN-LAST:event_btnCreateMyProfileActionPerformed
+
+    private void btnViewRequestProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewRequestProfileActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = tblWorkRequests.getSelectedRow();
+
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a row", "warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        SupervisorWorkRequest req = (SupervisorWorkRequest) tblWorkRequests.getValueAt(selectedRow, 0);
+        
+        ViewProfile viewProfile = new ViewProfile(userProcessContainer, account, enterprise, organization, business, req.getSender(), "Supervisor");
+        this.business.redirection(userProcessContainer, viewProfile.getClass().getName(), viewProfile);
+    }//GEN-LAST:event_btnViewRequestProfileActionPerformed
+
+    private void btnRefrershActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefrershActionPerformed
+        // TODO add your handling code here:
+        populateTable();
+    }//GEN-LAST:event_btnRefrershActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAssigntoMe;
     private javax.swing.JButton btnCreateMyProfile;
+    private javax.swing.JButton btnLogout;
     private javax.swing.JButton btnProcess;
     private javax.swing.JButton btnRefrersh;
     private javax.swing.JButton btnViewMyProfile;
     private javax.swing.JButton btnViewRequestProfile;
-    private javax.swing.JButton btnViewRequestToBeProcessed;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblSupervisorWorkArea;
     private javax.swing.JLabel lblWorkRequests;

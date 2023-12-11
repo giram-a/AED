@@ -9,6 +9,7 @@ import Business.Organization.Organization;
 import Business.UserAccount.UserAccount;
 import Business.Enterprise.Enterprise;
 import javax.swing.JPanel;
+import ui.Volunteer.VolunteerWorkAreaJPanel;
 
 /**
  *
@@ -19,8 +20,7 @@ public class VolunteerRole extends Role{
     @Override
     public JPanel createWorkArea(JPanel userProcessContainer, UserAccount account, 
             Organization organization, Enterprise enterprise, Business business) {
-//        return new DonorWorkAreaJPanel(userProcessContainer, account, enterprise,organization, business);
-return null;
+        return new VolunteerWorkAreaJPanel(userProcessContainer, account, enterprise,organization, business);
     }
     
     @Override

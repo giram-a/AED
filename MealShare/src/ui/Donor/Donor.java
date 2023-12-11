@@ -4,17 +4,35 @@
  */
 package ui.Donor;
 
+import Business.Business;
+import Business.Enterprise.Enterprise;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import javax.swing.JPanel;
+import ui.Auth.LoginJPanel;
+
 /**
  *
  * @author Aishwarya Dhandore
  */
 public class Donor extends javax.swing.JPanel {
 
+    JPanel userProcessContainer;
+    UserAccount account;
+    Enterprise enterprise;
+    Organization organization;
+    Business business;
     /**
      * Creates new form Donor
      */
-    public Donor() {
+    public Donor(JPanel userProcessContainer, UserAccount account, Enterprise enterprise, Organization organization, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        this.setBackground(new java.awt.Color(102, 153, 255));
     }
 
     /**
@@ -27,47 +45,71 @@ public class Donor extends javax.swing.JPanel {
     private void initComponents() {
 
         lblDonor = new javax.swing.JLabel();
-        btnDonateMoney = new javax.swing.JButton();
         btnDonationHistory = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
         btnCreateProfile = new javax.swing.JButton();
         btnViewUpdateProfile = new javax.swing.JButton();
+        btnProcessDonation = new javax.swing.JButton();
 
         lblDonor.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
         lblDonor.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblDonor.setText("Be a Donor! Wipe out hunger!");
 
-        btnDonateMoney.setText("Donate for a meal");
-
         btnDonationHistory.setText("View Donation History");
+        btnDonationHistory.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDonationHistoryActionPerformed(evt);
+            }
+        });
 
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         btnCreateProfile.setText("Create Profile");
+        btnCreateProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCreateProfileActionPerformed(evt);
+            }
+        });
 
         btnViewUpdateProfile.setText("View/Update Profile");
+        btnViewUpdateProfile.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewUpdateProfileActionPerformed(evt);
+            }
+        });
+
+        btnProcessDonation.setText("Process Donation Request");
+        btnProcessDonation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnProcessDonationActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblDonor, javax.swing.GroupLayout.PREFERRED_SIZE, 430, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addContainerGap(300, Short.MAX_VALUE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(btnDonateMoney, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnDonationHistory, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE))
-                            .addGap(142, 142, 142)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(btnCreateProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnViewUpdateProfile)))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(62, 62, 62)
-                            .addComponent(btnBack))))
-                .addContainerGap(300, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(62, 62, 62)
+                        .addComponent(btnBack))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap(218, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnDonationHistory, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnCreateProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(122, 122, 122)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btnProcessDonation, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(btnViewUpdateProfile, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                .addContainerGap(217, Short.MAX_VALUE))
+            .addComponent(lblDonor, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -76,8 +118,8 @@ public class Donor extends javax.swing.JPanel {
                 .addComponent(lblDonor, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnDonateMoney)
-                    .addComponent(btnCreateProfile))
+                    .addComponent(btnCreateProfile)
+                    .addComponent(btnProcessDonation))
                 .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDonationHistory)
@@ -88,12 +130,42 @@ public class Donor extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        LoginJPanel loginJPanel = new LoginJPanel(userProcessContainer, business);
+        this.business.redirection(userProcessContainer, loginJPanel.getClass().getName(), loginJPanel);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnDonationHistoryActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDonationHistoryActionPerformed
+        // TODO add your handling code here:
+        ViewDonationHistory viewDonationHistory = new ViewDonationHistory(userProcessContainer, account, enterprise, organization, business);
+        this.business.redirection(userProcessContainer, viewDonationHistory.getClass().getName(), viewDonationHistory);
+    }//GEN-LAST:event_btnDonationHistoryActionPerformed
+
+    private void btnCreateProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateProfileActionPerformed
+        // TODO add your handling code here:
+        CreateProfile createProfile = new CreateProfile(userProcessContainer, account, enterprise, organization, business);
+        this.business.redirection(userProcessContainer, createProfile.getClass().getName(), createProfile);
+    }//GEN-LAST:event_btnCreateProfileActionPerformed
+
+    private void btnViewUpdateProfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewUpdateProfileActionPerformed
+        // TODO add your handling code here:
+        ViewUpdateProfile viewUpdateProfile = new ViewUpdateProfile(userProcessContainer, account, enterprise, organization, business);
+        this.business.redirection(userProcessContainer, viewUpdateProfile.getClass().getName(), viewUpdateProfile);
+    }//GEN-LAST:event_btnViewUpdateProfileActionPerformed
+
+    private void btnProcessDonationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProcessDonationActionPerformed
+        // TODO add your handling code here:
+        ProcessDonation processDonation = new ProcessDonation(userProcessContainer, account, enterprise, organization, business);
+        this.business.redirection(userProcessContainer, processDonation.getClass().getName(), processDonation);
+    }//GEN-LAST:event_btnProcessDonationActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnCreateProfile;
-    private javax.swing.JButton btnDonateMoney;
     private javax.swing.JButton btnDonationHistory;
+    private javax.swing.JButton btnProcessDonation;
     private javax.swing.JButton btnViewUpdateProfile;
     private javax.swing.JLabel lblDonor;
     // End of variables declaration//GEN-END:variables

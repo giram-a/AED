@@ -4,17 +4,49 @@
  */
 package ui.Supervisor;
 
+import Business.Business;
+import Business.Common.ValidateStrings;
+import Business.Enterprise.Enterprise;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import Business.WrokQueue.SupervisorWorkRequest;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 /**
  *
  * @author samar
  */
 public class ProcessWorkRequestJPanel extends javax.swing.JPanel {
 
+    JPanel userProcessContainer;
+    UserAccount account;
+    Business business;
+    Enterprise enterprise;
+    Organization organization;
+    SupervisorWorkRequest request;
     /**
      * Creates new form ProcessWorkRequestJPanel
      */
-    public ProcessWorkRequestJPanel() {
+    public ProcessWorkRequestJPanel(JPanel userProcessContainer, UserAccount userAccount, Enterprise enterprise, Organization organization, Business business, SupervisorWorkRequest request) {
         initComponents();
+        this.setBackground(new java.awt.Color(102, 153, 255));
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = userAccount;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        this.request = request;
+        populateCombo();
+        
+        ValidateStrings val = new ValidateStrings();
+        txtAddComments.setInputVerifier(val);
+    }
+    
+    private void populateCombo(){
+        cbStatus.removeAllItems();
+        cbStatus.addItem(SupervisorWorkRequest.REQUEST_ACCEPT);
+        cbStatus.addItem(SupervisorWorkRequest.REQUEST_REJECT);
     }
 
     /**
@@ -29,30 +61,32 @@ public class ProcessWorkRequestJPanel extends javax.swing.JPanel {
         btnBack = new javax.swing.JButton();
         btnSubmit = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        lblRequestResult = new javax.swing.JLabel();
-        cbRequestResult = new javax.swing.JComboBox<>();
         lblAddComments = new javax.swing.JLabel();
         lblAssignLocation = new javax.swing.JLabel();
         txtAddComments = new javax.swing.JTextField();
-        cbAssignLocation = new javax.swing.JComboBox<>();
+        cbStatus = new javax.swing.JComboBox<>();
 
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         btnSubmit.setText("Submit");
+        btnSubmit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSubmitActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Arial", 2, 24)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Process Work Request");
 
-        lblRequestResult.setText("Request Result:");
-
-        cbRequestResult.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         lblAddComments.setText("Add Comments:");
 
-        lblAssignLocation.setText("Assign Location:");
-
-        cbAssignLocation.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        lblAssignLocation.setText("Request");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -63,38 +97,32 @@ public class ProcessWorkRequestJPanel extends javax.swing.JPanel {
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(layout.createSequentialGroup()
-                .addGap(102, 102, 102)
+                .addContainerGap(285, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblRequestResult)
                     .addComponent(lblAddComments)
                     .addComponent(lblAssignLocation)
                     .addComponent(btnBack))
                 .addGap(45, 45, 45)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(cbRequestResult, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(txtAddComments)
-                        .addComponent(cbAssignLocation, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(btnSubmit))
-                .addContainerGap(467, Short.MAX_VALUE))
+                .addContainerGap(285, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(50, 50, 50)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblRequestResult)
-                    .addComponent(cbRequestResult, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(41, 41, 41)
+                .addGap(82, 82, 82)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblAddComments)
                     .addComponent(txtAddComments, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblAssignLocation)
-                    .addComponent(cbAssignLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(40, 40, 40)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnBack)
@@ -103,16 +131,38 @@ public class ProcessWorkRequestJPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        SupervisorWorkAreaJPanel supervisorWorkAreaJPanel = new SupervisorWorkAreaJPanel(userProcessContainer, account, enterprise, organization, business);
+        this.business.redirection(userProcessContainer, supervisorWorkAreaJPanel.getClass().getName(), supervisorWorkAreaJPanel);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnSubmitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSubmitActionPerformed
+        // TODO add your handling code here:
+        String comment = txtAddComments.getText();
+        
+        if(comment.equals("")){
+            JOptionPane.showMessageDialog(null, "Please provide Comments", "Information", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        request.setStatus(cbStatus.getSelectedItem().toString());
+        if(SupervisorWorkRequest.REQUEST_ACCEPT.equals(cbStatus.getSelectedItem())){
+            request.getSender().setEnabled(Boolean.TRUE);
+            JOptionPane.showMessageDialog(null, "Approved Successfully", "Information", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+        txtAddComments.setText("");
+    }//GEN-LAST:event_btnSubmitActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnSubmit;
-    private javax.swing.JComboBox<String> cbAssignLocation;
-    private javax.swing.JComboBox<String> cbRequestResult;
+    private javax.swing.JComboBox<String> cbStatus;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblAddComments;
     private javax.swing.JLabel lblAssignLocation;
-    private javax.swing.JLabel lblRequestResult;
     private javax.swing.JTextField txtAddComments;
     // End of variables declaration//GEN-END:variables
 }

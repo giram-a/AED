@@ -16,29 +16,29 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jLabel1" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-          </Group>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="102" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="lblRequestResult" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblAddComments" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblAssignLocation" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="btnBack" alignment="0" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
-                      <Component id="cbRequestResult" alignment="0" max="32767" attributes="0"/>
-                      <Component id="txtAddComments" alignment="0" max="32767" attributes="0"/>
-                      <Component id="cbAssignLocation" alignment="0" min="-2" pref="190" max="-2" attributes="0"/>
+                  <Component id="jLabel1" alignment="0" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="0" pref="279" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="lblAddComments" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblAssignLocation" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="btnBack" alignment="0" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" attributes="0">
+                          <Group type="103" alignment="1" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="txtAddComments" alignment="0" max="32767" attributes="0"/>
+                              <Component id="cbStatus" alignment="0" min="-2" pref="190" max="-2" attributes="0"/>
+                          </Group>
+                          <Component id="btnSubmit" alignment="1" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="0" pref="279" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="btnSubmit" alignment="1" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="467" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -47,12 +47,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblRequestResult" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="cbRequestResult" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="82" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblAddComments" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="txtAddComments" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -60,7 +55,7 @@
               <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblAssignLocation" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="cbAssignLocation" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cbStatus" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="40" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -77,11 +72,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Back"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBackActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnSubmit">
       <Properties>
         <Property name="text" type="java.lang.String" value="Submit"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSubmitActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel1">
       <Properties>
@@ -92,26 +93,6 @@
         <Property name="text" type="java.lang.String" value="Process Work Request"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="lblRequestResult">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Request Result:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JComboBox" name="cbRequestResult">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
-          </StringArray>
-        </Property>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-      </AuxValues>
-    </Component>
     <Component class="javax.swing.JLabel" name="lblAddComments">
       <Properties>
         <Property name="text" type="java.lang.String" value="Add Comments:"/>
@@ -119,20 +100,15 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblAssignLocation">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Assign Location:"/>
+        <Property name="text" type="java.lang.String" value="Request"/>
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtAddComments">
     </Component>
-    <Component class="javax.swing.JComboBox" name="cbAssignLocation">
+    <Component class="javax.swing.JComboBox" name="cbStatus">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
-          </StringArray>
+          <StringArray count="0"/>
         </Property>
       </Properties>
       <AuxValues>

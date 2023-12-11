@@ -4,19 +4,76 @@
  */
 package ui.HelpSeeker;
 
+import Business.Business;
+import Business.Common.Meal;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import Business.WrokQueue.MealWorkRequest;
+import Business.WrokQueue.WorkRequest;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author samar
  */
 public class ViewMealsJPanel extends javax.swing.JPanel {
-
+    
+    JPanel userProcessContainer;
+    UserAccount account;
+    Enterprise enterprise;
+    Organization organization;
+    Business business;
+    
     /**
      * Creates new form ViewMealsJPanel
      */
-    public ViewMealsJPanel() {
+    public ViewMealsJPanel(JPanel userProcessContainer, UserAccount account, Enterprise enterprise, Organization organization, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        populateTable();
+        this.setBackground(new java.awt.Color(102, 153, 255));
     }
 
+    
+    @SuppressWarnings("empty-statement")
+    private void populateTable(){
+        DefaultTableModel model = (DefaultTableModel) tblViewMeals.getModel();
+
+        model.setRowCount(0);
+        
+        for(Network n : business.getNetworkList()){
+            for(Enterprise e : n.getEnterpriseDirectory().getEnterpriseList()){
+                for(UserAccount u: e.getUserAccountDirectory().getUserAccountList()){
+                    for(WorkRequest w : u.getWorkQueue().getWorkRequestList()){
+                        MealWorkRequest m = (MealWorkRequest) w;
+                        System.out.println("w" + w);
+                        Object row[] = new Object[8];
+                        Meal meal = m.getMealByID(m.getSendDataRequestId()) != null ? m.getMealByID(m.getSendDataRequestId()) : null;
+                        System.out.println("meal" + meal);
+                        if(meal.getCarbs() != null && meal.getProtein() != null && meal.getCalories() != null && !meal.getAssigned()){
+                            row[0] = m;
+                            row[1] = m.getSender().getUserName();
+                            row[2] = m.getMessage();
+                            row[3] = m.getMealByID(m.getSendDataRequestId()).getProtein();
+                            row[4] = m.getMealByID(m.getSendDataRequestId()).getCarbs();
+                            row[5] = m.getMealByID(m.getSendDataRequestId()).getCalories(); 
+                            row[6] = meal.getType();
+                            row[7] = meal.getDate();
+                            model.addRow(row);
+                        };
+                    }
+                }
+            }
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -44,14 +101,42 @@ public class ViewMealsJPanel extends javax.swing.JPanel {
                 {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Organization", "Meal Content", "Protein", "Carbs", "Calories", "Lunch/Dinner", "Date", "Quantity"
+                "ID", "Organization", "Meal Content", "Protein", "Carbs", "Calories", "Lunch/Dinner", "Date"
             }
-        ));
-        jScrollPane1.setViewportView(tblViewMeals);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
 
-        btnGetThisMeal.setText("Get This Meal !");
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblViewMeals);
+        if (tblViewMeals.getColumnModel().getColumnCount() > 0) {
+            tblViewMeals.getColumnModel().getColumn(0).setResizable(false);
+            tblViewMeals.getColumnModel().getColumn(1).setResizable(false);
+            tblViewMeals.getColumnModel().getColumn(2).setResizable(false);
+            tblViewMeals.getColumnModel().getColumn(3).setResizable(false);
+            tblViewMeals.getColumnModel().getColumn(4).setResizable(false);
+            tblViewMeals.getColumnModel().getColumn(5).setResizable(false);
+            tblViewMeals.getColumnModel().getColumn(6).setResizable(false);
+            tblViewMeals.getColumnModel().getColumn(7).setResizable(false);
+        }
+
+        btnGetThisMeal.setText("Claim this Meal");
+        btnGetThisMeal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGetThisMealActionPerformed(evt);
+            }
+        });
 
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -84,6 +169,29 @@ public class ViewMealsJPanel extends javax.swing.JPanel {
                 .addGap(157, 157, 157))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        HelpSeekerJPanel helpSeekerJPanel = new HelpSeekerJPanel(userProcessContainer, account, enterprise, organization, business);
+        business.redirection(userProcessContainer, helpSeekerJPanel.getClass().getName(), helpSeekerJPanel);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnGetThisMealActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGetThisMealActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = tblViewMeals.getSelectedRow();
+
+        if (selectedRow < 0){
+            JOptionPane.showMessageDialog(this, "Please select a row", "warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        MealWorkRequest meal = (MealWorkRequest) tblViewMeals.getValueAt(selectedRow, 0);
+        Meal m = meal.getMealByID(meal.getSendDataRequestId());
+        m.setAssigned(Boolean.TRUE);
+        m.setMealAssignedTo(account.getPerson().getPersonId());
+        m.setMealAssignedUser(account);
+        JOptionPane.showMessageDialog(this, "Meal Claimed Successfully", "Information", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnGetThisMealActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

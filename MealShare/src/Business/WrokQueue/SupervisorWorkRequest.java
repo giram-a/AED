@@ -9,14 +9,11 @@ package Business.WrokQueue;
  * @author aniketgiram
  */
 public class SupervisorWorkRequest extends WorkRequest{
-    
-    public static String REQUEST_APPROVED = "Approved";
-    public static String REQUEST_PENDING = "Pending";
-    public static String REQUEST_REJECT = "Declined";
-    public static String REQUEST_COMPLETED = "Completed";
+    public static String REQUEST_INPROGRESS = "In Process";
     public static String REQUEST_APPROVAL = "Request for Approval";
     public static String REQUEST_SENT = "Sent";
-    public static String REQUEST_ACCEPT = "Accepted";
+    public static String REQUEST_ACCEPT = "Accept";
+    public static String REQUEST_REJECT = "Reject";
     private String testResult;
     private String comments;
     

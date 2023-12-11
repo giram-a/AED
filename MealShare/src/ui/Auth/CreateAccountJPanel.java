@@ -62,7 +62,7 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
         validateInputs();
         this.mainCardLayout = MainCardLayout;
         this.business = business;
-        
+        this.setBackground(new java.awt.Color(102, 153, 255));
         populateNetworkComboBox();
     }
 
@@ -198,7 +198,7 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(69, 69, 69))
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(63, Short.MAX_VALUE)
+                .addContainerGap(90, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -246,11 +246,11 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
                         .addComponent(btnBack)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnCreate)))
-                .addContainerGap(118, Short.MAX_VALUE))
+                .addContainerGap(91, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(384, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(txtRole, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(346, Short.MAX_VALUE))
+                .addGap(349, 349, 349))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -567,13 +567,14 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
                     Network drNetwork =  getNetwork((String) cbCity.getSelectedItem());
                     
                     getEnterprise(drNetwork);
-                    
+                    System.out.println("enter  -> "  + enterprise);
                     if(enterprise==null)
                     {
                         JOptionPane.showMessageDialog(null, "Enterprise does not exist for the network! " +drNetwork.getName(),"warning", JOptionPane.WARNING_MESSAGE);
                         return;      
                     }
                     getOrganization("Nutritionist",enterprise);
+                    System.out.println("Org  -> "  + organization);
                     if(organization==null)
                     {
                         JOptionPane.showMessageDialog(null, "Doctor Organization does not exist for the enterprise! "+enterprise.getName(),"warning", JOptionPane.WARNING_MESSAGE);

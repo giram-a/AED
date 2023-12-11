@@ -4,17 +4,84 @@
  */
 package ui.HelpSeeker;
 
+import Business.Business;
+import Business.Common.Meal;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import Business.WrokQueue.MealWorkRequest;
+import Business.WrokQueue.NeedMealWorkRequest;
+import Business.WrokQueue.WorkRequest;
+import java.util.HashMap;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author samar
  */
 public class TestimonyJPanel extends javax.swing.JPanel {
 
+    JPanel userProcessContainer;
+    UserAccount account;
+    Enterprise enterprise;
+    Organization organization;
+    Business business;
+
     /**
      * Creates new form TestimonyJPanel
      */
-    public TestimonyJPanel() {
+    public TestimonyJPanel(JPanel userProcessContainer, UserAccount account, Enterprise enterprise, Organization organization, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        populateMealDeatils();
+        this.setBackground(new java.awt.Color(102, 153, 255));
+    }
+
+    @SuppressWarnings({"null", "empty-statement"})
+    private void populateMealDeatils() {
+        DefaultTableModel model = (DefaultTableModel) tblViewMeals.getModel();
+
+        model.setRowCount(0);
+
+        for (Network n : business.getNetworkList()) {
+            for (Enterprise e : n.getEnterpriseDirectory().getEnterpriseList()) {
+                for (UserAccount u : e.getUserAccountDirectory().getUserAccountList()) {
+                    for (WorkRequest w : u.getWorkQueue().getWorkRequestList()) {
+                        Object row[] = new Object[6];
+
+                        MealWorkRequest m = (MealWorkRequest) w;
+                        Meal meal = m.getMealByID(m.getSendDataRequestId()) != null ? m.getMealByID(m.getSendDataRequestId()) : null;
+
+                        NeedMealWorkRequest need = meal.getVolunteerNeedRequest();
+                        if (meal == null || meal.getMealAssignedTo() == null) {
+                        } else {
+                            if (meal != null && meal.getMealAssignedTo().equals(account.getPerson().getPersonId()) && meal.getCarbs() != null && meal.getProtein() != null && meal.getCalories() != null && meal.getAssigned()) {
+                                if (need.getStatus().equals(("Approved"))) {
+                                    row[0] = m;
+                                    row[1] = m.getSender().getUserName();
+                                    row[2] = meal.getMeal();
+                                    row[3] = meal.getDate();
+                                    row[4] = need != null ? need.getStatus() : "";
+                                    row[5] = meal.getMealFeedback();
+                                    model.addRow(row);
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        if ((model.getRowCount() == 0)) {
+            JOptionPane.showMessageDialog(null, "No Meal Assigned to you", "Information", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     /**
@@ -27,87 +94,70 @@ public class TestimonyJPanel extends javax.swing.JPanel {
     private void initComponents() {
 
         lblProvideTestimony = new javax.swing.JLabel();
-        lblLocation = new javax.swing.JLabel();
-        cbLocation = new javax.swing.JComboBox<>();
-        lblMode = new javax.swing.JLabel();
-        cbMode = new javax.swing.JComboBox<>();
-        lblDate = new javax.swing.JLabel();
-        txtDate = new javax.swing.JTextField();
         lblQuality = new javax.swing.JLabel();
-        cbExcellent = new javax.swing.JCheckBox();
-        cbGood = new javax.swing.JCheckBox();
-        cbAverage = new javax.swing.JCheckBox();
-        cbDissatisfied = new javax.swing.JCheckBox();
         btnSend = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
+        cbQuality = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblViewMeals = new javax.swing.JTable();
 
         lblProvideTestimony.setFont(new java.awt.Font("Arial", 2, 24)); // NOI18N
         lblProvideTestimony.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblProvideTestimony.setText("Provide Testimony");
+        lblProvideTestimony.setText("Provide Feedback");
 
-        lblLocation.setText("Location:");
+        lblQuality.setText("Service Quality");
 
-        cbLocation.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NGO", "School", "Hospital", "Government" }));
-
-        lblMode.setText("Mode:");
-
-        cbMode.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Delivery", "Dine-In" }));
-
-        lblDate.setText("Date:");
-
-        lblQuality.setText("Quality:");
-
-        cbExcellent.setText("Excellent");
-
-        cbGood.setText("Good");
-
-        cbAverage.setText("Average");
-
-        cbDissatisfied.setText("Dissatisfied");
-        cbDissatisfied.addActionListener(new java.awt.event.ActionListener() {
+        btnSend.setText("Send Feedback");
+        btnSend.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbDissatisfiedActionPerformed(evt);
+                btnSendActionPerformed(evt);
             }
         });
 
-        btnSend.setText("Send");
-
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+
+        cbQuality.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Excellent", "Good", "Average", "Dissatified" }));
+
+        tblViewMeals.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Organization", "Meal Content", "Date", "Status", "Feedback"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblViewMeals);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(lblProvideTestimony, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(164, 164, 164)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblLocation)
-                            .addComponent(lblMode)
-                            .addComponent(lblDate)
-                            .addComponent(lblQuality))
+                    .addComponent(lblProvideTestimony, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(btnBack)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblQuality)
                         .addGap(32, 32, 32)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(cbDissatisfied)
-                                .addGap(50, 50, 50)
-                                .addComponent(btnSend))
-                            .addComponent(cbAverage)
-                            .addComponent(cbGood)
-                            .addComponent(cbExcellent)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtDate)
-                                .addComponent(cbMode, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(cbLocation, 0, 190, Short.MAX_VALUE)))
-                        .addGap(431, 431, 431)))
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(58, 58, 58)
-                .addComponent(btnBack)
+                        .addComponent(cbQuality, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSend))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 888, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -115,55 +165,49 @@ public class TestimonyJPanel extends javax.swing.JPanel {
             .addGroup(layout.createSequentialGroup()
                 .addGap(70, 70, 70)
                 .addComponent(lblProvideTestimony)
-                .addGap(38, 38, 38)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblLocation)
-                    .addComponent(cbLocation, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(22, 22, 22)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblMode)
-                    .addComponent(cbMode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblDate)
-                    .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(25, 25, 25)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblQuality)
-                    .addComponent(cbExcellent))
-                .addGap(18, 18, 18)
-                .addComponent(cbGood)
-                .addGap(18, 18, 18)
-                .addComponent(cbAverage)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbDissatisfied)
-                    .addComponent(btnSend))
-                .addGap(18, 18, 18)
-                .addComponent(btnBack)
-                .addContainerGap(153, Short.MAX_VALUE))
+                    .addComponent(cbQuality, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSend)
+                    .addComponent(btnBack))
+                .addContainerGap(305, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void cbDissatisfiedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbDissatisfiedActionPerformed
+    private void btnSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSendActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_cbDissatisfiedActionPerformed
+        int selectedRow = tblViewMeals.getSelectedRow();
+
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a row", "warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        String feedback = (String) cbQuality.getSelectedItem();
+        MealWorkRequest meal = (MealWorkRequest) tblViewMeals.getValueAt(selectedRow, 0);
+        Meal m = meal.getMealByID(meal.getSendDataRequestId());
+        m.setMealFeedback(feedback);
+        populateMealDeatils();
+        JOptionPane.showMessageDialog(this, "Feedback Sent Successfully", "Information", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnSendActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        HelpSeekerJPanel helpSeekerJPanel = new HelpSeekerJPanel(userProcessContainer, account, enterprise, organization, business);
+        this.business.redirection(userProcessContainer, helpSeekerJPanel.getClass().getName(), helpSeekerJPanel);
+    }//GEN-LAST:event_btnBackActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnSend;
-    private javax.swing.JCheckBox cbAverage;
-    private javax.swing.JCheckBox cbDissatisfied;
-    private javax.swing.JCheckBox cbExcellent;
-    private javax.swing.JCheckBox cbGood;
-    private javax.swing.JComboBox<String> cbLocation;
-    private javax.swing.JComboBox<String> cbMode;
-    private javax.swing.JLabel lblDate;
-    private javax.swing.JLabel lblLocation;
-    private javax.swing.JLabel lblMode;
+    private javax.swing.JComboBox<String> cbQuality;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblProvideTestimony;
     private javax.swing.JLabel lblQuality;
-    private javax.swing.JTextField txtDate;
+    private javax.swing.JTable tblViewMeals;
     // End of variables declaration//GEN-END:variables
 }

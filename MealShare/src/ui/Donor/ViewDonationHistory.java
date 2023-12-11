@@ -4,17 +4,66 @@
  */
 package ui.Donor;
 
+import Business.Business;
+import Business.Enterprise.Enterprise;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import Business.WrokQueue.DonationRequest;
+import Business.WrokQueue.WorkRequest;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Aishwarya Dhandore
  */
 public class ViewDonationHistory extends javax.swing.JPanel {
 
+    JPanel userProcessContainer;
+    UserAccount account;
+    Enterprise enterprise;
+    Organization organization;
+    Business business;
+
     /**
      * Creates new form ViewDonationHistory
      */
-    public ViewDonationHistory() {
+    public ViewDonationHistory(JPanel userProcessContainer, UserAccount account, Enterprise enterprise, Organization organization, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        populateDonationHistoryTable();
+        this.setBackground(new java.awt.Color(102, 153, 255));
+    }
+
+    final public void populateDonationHistoryTable() {
+        DefaultTableModel model = (DefaultTableModel) tblDonationHistory.getModel();
+        model.setRowCount(0);
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        for (WorkRequest request : account.getWorkQueue().getWorkRequestList()) {
+            if(request instanceof DonationRequest){
+                DonationRequest req = (DonationRequest) request;
+                if(req.getStatus().equals("Approved")){
+                    Object[] rowData = new Object[5];
+                    rowData[0] = req.getDonation().getAmount();
+                    rowData[1] = req.getSender().getPerson().getName();
+                    rowData[2] = dateFormat.format(req.getRequestDate());
+                    rowData[3] = req.getResolveDate() == null ? null : dateFormat.format(req.getResolveDate());
+                    rowData[4] = req.getStatus();
+                    model.addRow(rowData);
+                }
+            }
+        }
+        
+        if ((model.getRowCount() == 0)) {
+            JOptionPane.showMessageDialog(null, "No Donation found", "Information", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     /**
@@ -40,12 +89,25 @@ public class ViewDonationHistory extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Organization Donated", "Date of Donation", "Amount Donated", "Date of Request"
+                "Donation Money", "Donate To", "Requested Date", "Donated Date", "Status"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblDonationHistory);
 
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -78,6 +140,12 @@ public class ViewDonationHistory extends javax.swing.JPanel {
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        Donor donor = new Donor(userProcessContainer, account, enterprise, organization, business);
+        business.redirection(userProcessContainer, donor.getClass().getName(), donor);
+    }//GEN-LAST:event_btnBackActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

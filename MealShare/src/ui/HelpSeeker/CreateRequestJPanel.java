@@ -4,17 +4,95 @@
  */
 package ui.HelpSeeker;
 
+import Business.Business;
+import Business.Common.GenerateRandomID;
+import Business.Common.Meal;
+import Business.Common.ValidateDate;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.Organization;
+import Business.Person.Person;
+import Business.Roles.NutritionistRole;
+import Business.Roles.Role.RoleType;
+import Business.Roles.VolunteerRole;
+import Business.UserAccount.UserAccount;
+import Business.WrokQueue.MealWorkRequest;
+import Business.WrokQueue.NeedMealWorkRequest;
+import Business.WrokQueue.WorkRequest;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author samar
  */
 public class CreateRequestJPanel extends javax.swing.JPanel {
 
+    JPanel userProcessContainer;
+    UserAccount account;
+    Enterprise enterprise;
+    Organization organization;
+    Business business;
+    HashMap<Integer, String> mealPref;
+
     /**
      * Creates new form CreateRequestJPanel
      */
-    public CreateRequestJPanel() {
+    public CreateRequestJPanel(JPanel userProcessContainer, UserAccount account, Enterprise enterprise, Organization organization, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        mealPref = new HashMap<>();
+        this.setBackground(new java.awt.Color(102, 153, 255));
+        inputVerification();
+        populateMealDeatils();
+    }
+
+    @SuppressWarnings({"null", "empty-statement"})
+    private void populateMealDeatils() {
+        DefaultTableModel model = (DefaultTableModel) tblViewMeals.getModel();
+
+        model.setRowCount(0);
+
+        for (Network n : business.getNetworkList()) {
+            for (Enterprise e : n.getEnterpriseDirectory().getEnterpriseList()) {
+                for (UserAccount u : e.getUserAccountDirectory().getUserAccountList()) {
+                    for (WorkRequest w : u.getWorkQueue().getWorkRequestList()) {
+                        Object row[] = new Object[6];
+
+                        MealWorkRequest m = (MealWorkRequest) w;
+                        Meal meal = m.getMealByID(m.getSendDataRequestId()) != null ? m.getMealByID(m.getSendDataRequestId()) : null;
+
+                        NeedMealWorkRequest need = meal.getVolunteerNeedRequest();
+                        if (meal == null || meal.getMealAssignedTo() == null) {} else {
+                            System.out.println("Meal " + meal);
+                            System.out.println("Meal " + meal.getMealAssignedTo());
+                            System.out.println("Meal " + account.getPerson().getPersonId());
+                            if (meal != null && meal.getMealAssignedTo().equals(account.getPerson().getPersonId()) && meal.getCarbs() != null && meal.getProtein() != null && meal.getCalories() != null && meal.getAssigned()) {
+                                row[0] = m;
+                                row[1] = m.getSender().getUserName();
+                                row[2] = meal.getMeal();
+                                row[3] = meal.getDate();
+                                row[4] = need != null ? need.getStatus() : "";
+                                row[5] = need != null ? need.getComments() : "";
+                                model.addRow(row);
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        if ((model.getRowCount() == 0)) {
+            JOptionPane.showMessageDialog(null, "No Meal Assigned to you", "Information", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     /**
@@ -29,25 +107,26 @@ public class CreateRequestJPanel extends javax.swing.JPanel {
         lblCreateRequest = new javax.swing.JLabel();
         lblTime = new javax.swing.JLabel();
         cbTime = new javax.swing.JComboBox<>();
-        cbDelivery = new javax.swing.JCheckBox();
-        cbDinein = new javax.swing.JCheckBox();
+        delivery = new javax.swing.JCheckBox();
         lblDate = new javax.swing.JLabel();
         txtDate = new javax.swing.JTextField();
         btnCreate = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblViewMeals = new javax.swing.JTable();
 
         lblCreateRequest.setFont(new java.awt.Font("Arial", 2, 24)); // NOI18N
         lblCreateRequest.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblCreateRequest.setText("Create Request");
+        lblCreateRequest.setText("Create / View Request");
 
         lblTime.setText("Time:");
 
         cbTime.setFont(new java.awt.Font("Arial", 0, 13)); // NOI18N
-        cbTime.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "12.30 - 3.00 Pm", "7.30 - 10.00 Pm" }));
+        cbTime.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "12.30 - 3.00 PM", "7.30 - 10.00 PM" }));
 
-        cbDelivery.setText("Delivery");
-
-        cbDinein.setText("Dine-In");
+        delivery.setSelected(true);
+        delivery.setText("Delivery");
+        delivery.setEnabled(false);
 
         lblDate.setText("Date:");
 
@@ -59,6 +138,37 @@ public class CreateRequestJPanel extends javax.swing.JPanel {
         });
 
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
+
+        tblViewMeals.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Organization", "Meal Content", "Date", "Status", "Comments"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(tblViewMeals);
+        if (tblViewMeals.getColumnModel().getColumnCount() > 0) {
+            tblViewMeals.getColumnModel().getColumn(0).setPreferredWidth(5);
+            tblViewMeals.getColumnModel().getColumn(1).setPreferredWidth(20);
+            tblViewMeals.getColumnModel().getColumn(2).setPreferredWidth(15);
+            tblViewMeals.getColumnModel().getColumn(3).setPreferredWidth(10);
+            tblViewMeals.getColumnModel().getColumn(4).setPreferredWidth(10);
+            tblViewMeals.getColumnModel().getColumn(5).setPreferredWidth(100);
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -66,40 +176,36 @@ public class CreateRequestJPanel extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(lblCreateRequest, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(291, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblCreateRequest, javax.swing.GroupLayout.DEFAULT_SIZE, 840, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(lblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(lblTime, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(cbDelivery, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(btnBack))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(btnCreate)
-                            .addComponent(cbTime, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cbDinein, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(244, 244, 244))))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addComponent(lblDate, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(lblTime, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnBack))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(delivery, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCreate)
+                    .addComponent(cbTime, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtDate, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(291, Short.MAX_VALUE))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 889, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(70, 70, 70)
                 .addComponent(lblCreateRequest)
-                .addGap(54, 54, 54)
+                .addGap(226, 226, 226)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblTime)
                     .addComponent(cbTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cbDelivery)
-                    .addComponent(cbDinein))
+                .addComponent(delivery)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblDate)
@@ -108,27 +214,91 @@ public class CreateRequestJPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnCreate)
                     .addComponent(btnBack))
-                .addContainerGap(305, Short.MAX_VALUE))
+                .addGap(101, 101, 101))
+            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createSequentialGroup()
+                    .addGap(157, 157, 157)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addContainerGap(277, Short.MAX_VALUE)))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         // TODO add your handling code here:
+
         String time = (String) cbTime.getSelectedItem();
         String date = txtDate.getText();
-        
+
+        int selectedRow = tblViewMeals.getSelectedRow();
+
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a row", "warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        MealWorkRequest meal = (MealWorkRequest) tblViewMeals.getValueAt(selectedRow, 0);
+
+        Meal m = meal.getMealByID(meal.getSendDataRequestId()) != null ? meal.getMealByID(meal.getSendDataRequestId()) : null;
+
+        if (m != null && m.getMealAssignedTo().equals(account.getPerson().getPersonId()) && m.getVolunteerReqSent()) {
+            JOptionPane.showMessageDialog(this, "Request Already Sent for this meal", "warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (m != null && m.getMealAssignedTo().equals(account.getPerson().getPersonId()) && m.getCarbs() != null && m.getProtein() != null && m.getCalories() != null && m.getAssigned()) {
+            NeedMealWorkRequest needMealWorkRequest = new NeedMealWorkRequest();
+            String reqID = GenerateRandomID.generateRandomId().toString();
+            needMealWorkRequest.setrId(reqID);
+            needMealWorkRequest.setMessage("Need Meal Delivered");
+            needMealWorkRequest.setSender(account);
+            needMealWorkRequest.setStatus("Sent");
+            needMealWorkRequest.setComments("Could you please deliver this meal");
+            needMealWorkRequest.setRequestDate(new Date());
+            needMealWorkRequest.setMeal(m);
+
+            for (Network n : business.getNetworkList()) {
+                for (Enterprise e : n.getEnterpriseDirectory().getEnterpriseList()) {
+                    if (e.getEnterpriseType().equals(e.getEnterpriseType().School)) {
+                        for (Organization o : e.getOrganizationDirectory().getOrganizationList()) {
+                            for (UserAccount u : o.getUserAccountDirectory().getUserAccountList()) {
+                                if (u.getRole() instanceof VolunteerRole) {
+                                    System.out.println("In if assigning req to volunteer");
+                                    u.getWorkQueue().getWorkRequestList().add(needMealWorkRequest);
+                                    m.setVolunteerNeedRequest(needMealWorkRequest);
+                                    m.setVolunteerReqSent(Boolean.TRUE);
+                                    m.setVolunterNeedReqID(reqID);
+                                    populateMealDeatils();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            JOptionPane.showMessageDialog(null, "Request Sent to volunteers", "Information", JOptionPane.INFORMATION_MESSAGE);
+        }
     }//GEN-LAST:event_btnCreateActionPerformed
+
+    private void inputVerification() {
+        ValidateDate dateVerification = new ValidateDate();
+        txtDate.setInputVerifier(dateVerification);
+    }
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        HelpSeekerJPanel helpSeekerJPanel = new HelpSeekerJPanel(userProcessContainer, account, enterprise, organization, business);
+        business.redirection(userProcessContainer, helpSeekerJPanel.getClass().getName(), helpSeekerJPanel);
+    }//GEN-LAST:event_btnBackActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnCreate;
-    private javax.swing.JCheckBox cbDelivery;
-    private javax.swing.JCheckBox cbDinein;
     private javax.swing.JComboBox<String> cbTime;
+    private javax.swing.JCheckBox delivery;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblCreateRequest;
     private javax.swing.JLabel lblDate;
     private javax.swing.JLabel lblTime;
+    private javax.swing.JTable tblViewMeals;
     private javax.swing.JTextField txtDate;
     // End of variables declaration//GEN-END:variables
 }

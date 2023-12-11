@@ -4,17 +4,70 @@
  */
 package ui.Donor;
 
+import Business.Business;
+import Business.Common.Donation;
+import Business.Common.ValidateNumber;
+import Business.Common.ValidatePhoneNumber;
+import Business.Common.ValidateStrings;
+import Business.Common.Validation;
+import Business.Enterprise.Enterprise;
+import Business.Organization.Organization;
+import Business.Organization.SupervisorOrganization;
+import Business.UserAccount.UserAccount;
+import Business.WrokQueue.DonationRequest;
+import java.awt.HeadlessException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import javax.swing.InputVerifier;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
 /**
  *
  * @author Aishwarya Dhandore
  */
 public class DonateMoneyJPanel extends javax.swing.JPanel {
 
+    JPanel userProcessContainer;
+    UserAccount account;
+    Enterprise enterprise;
+    Organization organization;
+    Business business;
+    DonationRequest donationReq;
+
     /**
      * Creates new form DonateMoneyJPanel
      */
-    public DonateMoneyJPanel() {
+    public DonateMoneyJPanel(JPanel userProcessContainer, UserAccount account, Enterprise enterprise, Organization organization, Business business, DonationRequest donationRequest) {
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        this.donationReq = donationRequest;
+        
+        this.setBackground(new java.awt.Color(102, 153, 255));
+        
+        if (this.donationReq == null) {
+            JOptionPane.showMessageDialog(null, "No donation request found", "warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
         initComponents();
+        addInputVerifiers();
+        txtOrganizationName.setText(Donation.toAcNo);
+    }
+
+    private void addInputVerifiers() {
+        InputVerifier noValidation = new ValidateNumber();
+        txtAmountDonated.setInputVerifier(noValidation);
+
+        InputVerifier phnumberValidation = new ValidatePhoneNumber();
+        txtCardDetails.setInputVerifier(phnumberValidation);
+
+        InputVerifier stringValidation = new ValidateStrings();
+        txtName.setInputVerifier(stringValidation);
     }
 
     /**
@@ -44,7 +97,7 @@ public class DonateMoneyJPanel extends javax.swing.JPanel {
         lblDonateForAMeal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblDonateForAMeal.setText("Donate for a Meal");
 
-        lblOrganization.setText("Enter Organization Name :");
+        lblOrganization.setText("To Account");
 
         lblEnterName.setText("Enter Name :");
 
@@ -52,11 +105,23 @@ public class DonateMoneyJPanel extends javax.swing.JPanel {
 
         lblExpiryDate.setText("Enter Expiry Date (MM/YYYY) :");
 
+        txtOrganizationName.setEditable(false);
+
         lblEnterAmount.setText("Enter Amount to Donate :");
 
         btnDonation.setText("Make a donation!");
+        btnDonation.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDonationActionPerformed(evt);
+            }
+        });
 
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -123,6 +188,51 @@ public class DonateMoneyJPanel extends javax.swing.JPanel {
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnDonationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDonationActionPerformed
+        // TODO add your handling code here:
+        String name = txtName.getText();
+        String cardNo = txtCardDetails.getText();
+        String expiry = txtExpiryDate.getText();
+        String amount = txtAmountDonated.getText();
+
+        DateFormat df = new SimpleDateFormat("EEE, MMM d, YYYY hh:mm aaa");
+        Calendar cal = Calendar.getInstance();
+        String timestamp = df.format(cal.getTime());
+
+        Donation donation = account.getPerson().addDonation();
+
+        donation.setAmount(amount);
+        donation.setDonationDate(timestamp);
+        donation.setAccntName(name);
+        donation.setAccntNumber(cardNo);
+
+        try {
+            DonationRequest donationRequest = donationReq;
+            donationRequest.setDonation(donation);
+            donationRequest.setDonatedBy(account.getUserName());
+            donationRequest.setMessage("Donated Money");
+            donationRequest.setStatus("Approved");
+            donationRequest.setResolveDate(new Date());
+            JOptionPane.showMessageDialog(null, "Donation has been made successfully, Thank You", "success", JOptionPane.PLAIN_MESSAGE);
+            resetFields();
+        } catch (HeadlessException e) {
+            JOptionPane.showMessageDialog(null, "Donation failed, Something went wrong", "warning", JOptionPane.WARNING_MESSAGE);
+        }
+
+    }//GEN-LAST:event_btnDonationActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        Donor donor = new Donor(userProcessContainer, account, enterprise, organization, business);
+        business.redirection(userProcessContainer, donor.getClass().getName(), donor);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    public void resetFields() {
+        txtExpiryDate.setText("");
+        txtCardDetails.setText("");
+        txtAmountDonated.setText("");
+        txtName.setText("");
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;

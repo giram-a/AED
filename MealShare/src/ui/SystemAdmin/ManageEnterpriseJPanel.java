@@ -27,6 +27,7 @@ public class ManageEnterpriseJPanel extends javax.swing.JPanel {
     Enterprise enterprise;
     Organization organization;
     Business business;
+
     /**
      * Creates new form ManageEnterpriseJPanel
      */
@@ -40,6 +41,7 @@ public class ManageEnterpriseJPanel extends javax.swing.JPanel {
         addInputVerifiers();
         populateEnterpriseTable();
         populateComboBox();
+        this.setBackground(new java.awt.Color(102, 153, 255));
     }
 
     /**
@@ -185,50 +187,46 @@ public class ManageEnterpriseJPanel extends javax.swing.JPanel {
 
     private void btnCreateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCreateActionPerformed
         // TODO add your handling code here:
-        if(txtEnterpriseName.getText().trim().isEmpty())
-        {
-           JOptionPane.showMessageDialog(null, "Please enter valid name !");
-            return;  
+        if (txtEnterpriseName.getText().trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Please enter valid name !");
+            return;
         }
-        
+
         Network network = null;
         String _network = (String) cbNetwork.getSelectedItem();
         for (Network n : business.getNetworkList()) {
-            if(_network.equals(n.toString())){
+            if (_network.equals(n.toString())) {
                 network = n;
                 break;
             }
         }
-         
+
         Enterprise.EnterpriseType type = null;
         String _type = (String) cbEnterpriseType.getSelectedItem();
-        
+
         for (Enterprise.EnterpriseType t : Enterprise.EnterpriseType.values()) {
-            if(_type.equals(t.toString())){
+            if (_type.equals(t.toString())) {
                 type = t;
                 break;
             }
-                
+
         }
-        
-        
+
         if (network == null || type == null) {
             JOptionPane.showMessageDialog(null, "Invalid Input!");
             return;
         }
-        
+
         String name = txtEnterpriseName.getText();
-        for(Enterprise e : network.getEnterpriseDirectory().getEnterpriseList())
-        {
-            if(name.equalsIgnoreCase(e.getName()) || type.equals(e.getEnterpriseType()))
-            {
-                JOptionPane.showMessageDialog(null, "Enterprise already exits!", "warning",JOptionPane.WARNING_MESSAGE);
-                return;                 
+        for (Enterprise e : network.getEnterpriseDirectory().getEnterpriseList()) {
+            if (name.equalsIgnoreCase(e.getName()) || type.equals(e.getEnterpriseType())) {
+                JOptionPane.showMessageDialog(null, "Enterprise already exits!", "warning", JOptionPane.WARNING_MESSAGE);
+                return;
             }
         }
-      
+
         Enterprise enterprise = network.getEnterpriseDirectory().addEnterprise(name, type);
-        JOptionPane.showMessageDialog(null, "Enterprise has been added successfully", "success",JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Enterprise has been added successfully", "success", JOptionPane.PLAIN_MESSAGE);
         populateEnterpriseTable();
         resetFields();
     }//GEN-LAST:event_btnCreateActionPerformed
@@ -236,7 +234,7 @@ public class ManageEnterpriseJPanel extends javax.swing.JPanel {
     private void populateComboBox() {
         cbNetwork.removeAllItems();
         cbEnterpriseType.removeAllItems();
-        
+
         for (Network network : business.getNetworkList()) {
             cbNetwork.addItem(network.toString());
         }
@@ -246,17 +244,16 @@ public class ManageEnterpriseJPanel extends javax.swing.JPanel {
         }
 
     }
-    
+
     private void addInputVerifiers() {
         InputVerifier stringValidation = new ValidateStrings();
         txtEnterpriseName.setInputVerifier(stringValidation);
     }
-    
-    public void resetFields()
-    {
+
+    public void resetFields() {
         txtEnterpriseName.setText("");
     }
-    
+
     private void populateEnterpriseTable() {
         DefaultTableModel model = (DefaultTableModel) tblManageEnterprise.getModel();
 
@@ -272,7 +269,7 @@ public class ManageEnterpriseJPanel extends javax.swing.JPanel {
             }
         }
     }
-    
+
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
         AdminJPanel adminJPanel = new AdminJPanel(userProcessContainer, account, enterprise, organization, business);
@@ -281,41 +278,32 @@ public class ManageEnterpriseJPanel extends javax.swing.JPanel {
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
-        
+
         Enterprise entToBeDeleted = null;
         int selectedRow = tblManageEnterprise.getSelectedRow();
-        if(selectedRow >= 0)
-        {
+        if (selectedRow >= 0) {
             int dialogButton = JOptionPane.YES_NO_OPTION;
-            int dialogResult = JOptionPane.showConfirmDialog(this, "Would you like to delete the row ", "warning",dialogButton);
-            if(dialogResult == JOptionPane.YES_OPTION)
-            {
+            int dialogResult = JOptionPane.showConfirmDialog(this, "Would you like to delete the row ", "warning", dialogButton);
+            if (dialogResult == JOptionPane.YES_OPTION) {
                 Enterprise enterprise = (Enterprise) tblManageEnterprise.getValueAt(selectedRow, 0);
-                for (Network network : business.getNetworkList()) 
-                {
-                    for (Enterprise e : network.getEnterpriseDirectory().getEnterpriseList())
-                    {
-                       if(e.getEnterpriseType().getValue().equals(enterprise.getEnterpriseType().getValue()))
-                        {
-                           if(enterprise.getName().equals(e.getName()))  
-                           {
-                             entToBeDeleted = e;
-                           }
+                for (Network network : business.getNetworkList()) {
+                    for (Enterprise e : network.getEnterpriseDirectory().getEnterpriseList()) {
+                        if (e.getEnterpriseType().getValue().equals(enterprise.getEnterpriseType().getValue())) {
+                            if (enterprise.getName().equals(e.getName())) {
+                                entToBeDeleted = e;
+                            }
                         }
                     }
-                    
-                if(entToBeDeleted!=null)
-                {
-                    network.getEnterpriseDirectory().deleteEnterprise(entToBeDeleted);
+
+                    if (entToBeDeleted != null) {
+                        network.getEnterpriseDirectory().deleteEnterprise(entToBeDeleted);
+                    }
                 }
+                JOptionPane.showMessageDialog(this, "Enterprise has been deleted successfully", "success", JOptionPane.PLAIN_MESSAGE);
+                populateEnterpriseTable();
             }
-            JOptionPane.showMessageDialog(this, "Enterprise has been deleted successfully", "success",JOptionPane.PLAIN_MESSAGE);
-            populateEnterpriseTable();
-            }
-        }
-        else
-        {
-            JOptionPane.showMessageDialog(this, "Please select a row", "warning",JOptionPane.PLAIN_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this, "Please select a row", "warning", JOptionPane.PLAIN_MESSAGE);
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 

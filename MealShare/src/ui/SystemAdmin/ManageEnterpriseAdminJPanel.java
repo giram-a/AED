@@ -43,6 +43,7 @@ public class ManageEnterpriseAdminJPanel extends javax.swing.JPanel {
         addInputVerifiers();
         populateEnterpriseUserTable();
         populateNetworkComboBox();
+        this.setBackground(new java.awt.Color(102, 153, 255));
     }
 
     /**

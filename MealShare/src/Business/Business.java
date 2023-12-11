@@ -4,6 +4,7 @@
  */
 package Business;
 
+import Business.CommunityOutreach.CommunityOutreach;
 import Business.Network.Network;
 import Business.Organization.Organization;
 import Business.Organization.OrganizationDirectory;
@@ -20,17 +21,19 @@ import javax.swing.JPanel;
 public class Business extends Organization{
     private static Business business;
 
-    static Business getInstance() {
+    public static Business getInstance() {
         if (business == null) {
             business = new Business();
         }
         return business;
     }
     final private ArrayList<Network> networkList;
+    private ArrayList<CommunityOutreach> communityOutreachList;
 
     public Business() {
         super(null);
         networkList = new ArrayList<>();
+        communityOutreachList = new ArrayList<>();
     }
 
     public ArrayList<Network> getNetworkList() {
@@ -53,6 +56,16 @@ public class Business extends Organization{
         MainCardLayout.add(panelName, panel);
         CardLayout layout = (CardLayout) MainCardLayout.getLayout();
         layout.next(MainCardLayout);
+    }
+    
+    public CommunityOutreach addDatatoCommunityOutreach(){
+        CommunityOutreach co = new CommunityOutreach();
+        communityOutreachList.add(co);
+        return co;
+    }
+    
+    public ArrayList<CommunityOutreach> getCoomunityOutreachData(){
+        return communityOutreachList;
     }
 
     @Override

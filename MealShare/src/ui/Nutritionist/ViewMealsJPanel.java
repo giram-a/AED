@@ -4,17 +4,70 @@
  */
 package ui.Nutritionist;
 
+import Business.Business;
+import Business.Common.Meal;
+import Business.Enterprise.Enterprise;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import Business.WrokQueue.MealWorkRequest;
+import Business.WrokQueue.WorkQueue;
+import Business.WrokQueue.WorkRequest;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author Aishwarya Dhandore
  */
 public class ViewMealsJPanel extends javax.swing.JPanel {
 
+    JPanel userProcessContainer;
+    UserAccount account;
+    Enterprise enterprise;
+    Business business;
+    Organization organization;
     /**
      * Creates new form ViewMealsJPanel
      */
-    public ViewMealsJPanel() {
+    public ViewMealsJPanel(JPanel userProcessContainer, Enterprise enterprise, UserAccount account, Organization organization, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        checkForWorkRequest();
+        populateTable();
+        this.setBackground(new java.awt.Color(102, 153, 255));
+    }
+    
+    private void checkForWorkRequest(){
+     if(account.getWorkQueue().getWorkRequestList().isEmpty()){
+         JOptionPane.showMessageDialog(this, "No Meals Assigned", "warning", JOptionPane.WARNING_MESSAGE);
+     }
+    }
+    
+    private void populateTable(){
+        DefaultTableModel model = (DefaultTableModel) tblViewMeals.getModel();
+
+        model.setRowCount(0);
+        
+        for(WorkRequest w: account.getWorkQueue().getWorkRequestList()){
+            if(w instanceof MealWorkRequest){
+                MealWorkRequest m = (MealWorkRequest) w;
+                Object row[] = new Object[6];
+                Meal meal = m.getMealByID(m.getSendDataRequestId()) != null ? m.getMealByID(m.getSendDataRequestId()) : null;
+                row[0] = m;
+                row[1] = m.getSender().getUserName();
+                row[2] = m.getMessage();
+                row[3] = meal != null ? m.getMealByID(m.getSendDataRequestId()).getProtein() : "";
+                row[4] = meal != null ? m.getMealByID(m.getSendDataRequestId()).getCarbs() : "";
+                row[5] = meal != null ? m.getMealByID(m.getSendDataRequestId()).getCalories(): ""; 
+                model.addRow(row);
+            } 
+        }
+        
     }
 
     /**
@@ -37,7 +90,6 @@ public class ViewMealsJPanel extends javax.swing.JPanel {
         lblCalories = new javax.swing.JLabel();
         btnAdd = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
-        btnSend = new javax.swing.JButton();
 
         lblViewMeals.setFont(new java.awt.Font("Segoe UI", 2, 24)); // NOI18N
         lblViewMeals.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -48,10 +100,26 @@ public class ViewMealsJPanel extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Organization", "Meal content", "Protein", "Carbs", "Calories"
+                "ID", "Organization", "Meal content", "Protein", "Carbs", "Calories"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblViewMeals);
+        if (tblViewMeals.getColumnModel().getColumnCount() > 0) {
+            tblViewMeals.getColumnModel().getColumn(0).setResizable(false);
+            tblViewMeals.getColumnModel().getColumn(1).setResizable(false);
+            tblViewMeals.getColumnModel().getColumn(2).setResizable(false);
+            tblViewMeals.getColumnModel().getColumn(3).setResizable(false);
+            tblViewMeals.getColumnModel().getColumn(4).setResizable(false);
+            tblViewMeals.getColumnModel().getColumn(5).setResizable(false);
+        }
 
         lblProtien.setText("Protein:");
 
@@ -59,11 +127,19 @@ public class ViewMealsJPanel extends javax.swing.JPanel {
 
         lblCalories.setText("Calories:");
 
-        btnAdd.setText("Add");
+        btnAdd.setText("Add Meal Nutrition");
+        btnAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAddActionPerformed(evt);
+            }
+        });
 
         btnBack.setText("Back");
-
-        btnSend.setText("Send");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -82,21 +158,17 @@ public class ViewMealsJPanel extends javax.swing.JPanel {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 620, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(299, 299, 299)
-                        .addComponent(btnAdd)
-                        .addGap(28, 28, 28)
-                        .addComponent(btnSend))
-                    .addGroup(layout.createSequentialGroup()
                         .addGap(152, 152, 152)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblCarbs, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblProtien, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblCalories, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(72, 72, 72)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtProtien, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCarbs, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtCalories, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtProtien, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                            .addComponent(txtCarbs, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                            .addComponent(txtCalories, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                            .addComponent(btnAdd, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap(140, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -119,20 +191,51 @@ public class ViewMealsJPanel extends javax.swing.JPanel {
                     .addComponent(txtCalories, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblCalories))
                 .addGap(30, 30, 30)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAdd)
-                    .addComponent(btnSend))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                .addComponent(btnAdd)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
                 .addComponent(btnBack)
                 .addGap(15, 15, 15))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        Nutritionist nutritionist = new Nutritionist(userProcessContainer, account, enterprise, organization, business);
+        business.redirection(userProcessContainer, nutritionist.getClass().getName(), nutritionist);
+    }//GEN-LAST:event_btnBackActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = tblViewMeals.getSelectedRow();
+
+        if (selectedRow < 0){
+            JOptionPane.showMessageDialog(this, "Please select a row", "warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        String protein = txtProtien.getText();
+        String carbs = txtCarbs.getText();
+        String calories = txtCalories.getText();
+        
+        if(protein.equals("") || carbs.equals("") || calories.equals("")){
+            JOptionPane.showMessageDialog(this, "Please provide valid inputs", "warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        MealWorkRequest meal = (MealWorkRequest) tblViewMeals.getValueAt(selectedRow, 0);
+        Meal m = meal.getMealByID(meal.getSendDataRequestId());
+        m.setProtein(protein);
+        m.setCarbs(carbs);
+        m.setCalories(calories);
+        meal.setStatus("Nutrition Values Added");
+        populateTable();
+        
+        JOptionPane.showMessageDialog(this, "Nutrition Value added successfully", "Information", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnAddActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnSend;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblCalories;
     private javax.swing.JLabel lblCarbs;

@@ -39,11 +39,11 @@ public class LoginJPanel extends javax.swing.JPanel {
      */
     public LoginJPanel(JPanel MainCardLayout, Business business) {
         initComponents();
+        this.setBackground(new java.awt.Color(102, 153, 255));
         inputVerifier();
         this.business = business;
         this.mainCardLayout = MainCardLayout;
-//        Faker faker = new Faker();
-//        System.out.println("Name "+ faker.name().username());
+        
 //        testChart();
     }
 
@@ -65,6 +65,9 @@ public class LoginJPanel extends javax.swing.JPanel {
         btnCreateAccount = new javax.swing.JButton();
         testPanel = new javax.swing.JPanel();
         btnLogin = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+
+        setBackground(new java.awt.Color(255, 255, 255));
 
         lblLogin.setFont(new java.awt.Font("Arial", 2, 18)); // NOI18N
         lblLogin.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -102,34 +105,41 @@ public class LoginJPanel extends javax.swing.JPanel {
             }
         });
 
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Images/1.jpeg"))); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblLogin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(328, 328, 328)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(lblUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblDont, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnCreateAccount)
-                    .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(258, Short.MAX_VALUE))
+                    .addComponent(lblLogin, javax.swing.GroupLayout.DEFAULT_SIZE, 888, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblUsername, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblPassword, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblDont, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnCreateAccount)
+                                    .addComponent(btnLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(62, 62, 62)
                 .addComponent(lblLogin)
-                .addGap(84, 84, 84)
+                .addGap(26, 26, 26)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblUsername)
                     .addComponent(txtUsername, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -143,7 +153,9 @@ public class LoginJPanel extends javax.swing.JPanel {
                 .addComponent(lblDont)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnCreateAccount)
-                .addContainerGap(268, Short.MAX_VALUE))
+                .addGap(66, 66, 66)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(65, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -196,8 +208,12 @@ public class LoginJPanel extends javax.swing.JPanel {
                     JOptionPane.showMessageDialog(null, "Invalid Credentails!");
                 } 
                 else {
-                    JPanel panel = userAccount.getRole().createWorkArea(mainCardLayout, userAccount, inOrganization, inEnterprise, business);
-                    business.redirection(mainCardLayout, panel.getClass().getName(), panel);
+                    if(userAccount.isEnabled()){
+                        JPanel panel = userAccount.getRole().createWorkArea(mainCardLayout, userAccount, inOrganization, inEnterprise, business);
+                        business.redirection(mainCardLayout, panel.getClass().getName(), panel);
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Account not verified, contact supervisor");
+                    } 
                 }
         
             }
@@ -214,6 +230,7 @@ public class LoginJPanel extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCreateAccount;
     private javax.swing.JButton btnLogin;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel lblDont;
     private javax.swing.JLabel lblLogin;
     private javax.swing.JLabel lblPassword;
@@ -233,26 +250,5 @@ public class LoginJPanel extends javax.swing.JPanel {
     
     private boolean isNullOrEmpty(String str) {
         return str == null || str.trim().isEmpty();
-    }
-
-    private void testChart() {
-        // Create Chart
-        PieChart chart = new PieChartBuilder().width(400).height(400).title("Aniket").build();
-
-        // Customize Chart
-        Color[] sliceColors = new Color[] { new Color(224, 68, 14), new Color(230, 105, 62), new Color(236, 143, 110), new Color(243, 180, 159), new Color(246, 199, 182) };
-        chart.getStyler().setSeriesColors(sliceColors);
-
-        // Series
-        chart.addSeries("Gold", 24);
-        chart.addSeries("Silver", 21);
-        chart.addSeries("Platinum", 39);
-        chart.addSeries("Copper", 17);
-        chart.addSeries("Zinc", 40);
-        
-        testPanel.setLayout(new FlowLayout()); 
-        testPanel.setPreferredSize(new Dimension(400, 400));
-        testPanel.add(new XChartPanel(chart));
-//        testPanel.repaint();
     }
 }

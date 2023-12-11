@@ -4,17 +4,77 @@
  */
 package ui.Logistics;
 
+import Business.Business;
+import Business.Common.Meal;
+import Business.Enterprise.Enterprise;
+import Business.Network.Network;
+import Business.Organization.Organization;
+import Business.Person.Person;
+import Business.UserAccount.UserAccount;
+import Business.WrokQueue.NeedMealWorkRequest;
+import Business.WrokQueue.TransportWorkRequest;
+import Business.WrokQueue.WorkRequest;
+import java.util.Optional;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+import ui.Auth.LoginJPanel;
+
 /**
  *
  * @author Aishwarya Dhandore
  */
 public class Logistics extends javax.swing.JPanel {
 
+    JPanel userProcessContainer;
+    UserAccount account;
+    Enterprise enterprise;
+    Organization organization;
+    Business business;
+
     /**
      * Creates new form Logistics
      */
-    public Logistics() {
+    public Logistics(JPanel userProcessContainer, UserAccount account, Enterprise enterprise, Organization organization, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        this.organization = organization;
+        populateTable();
+        this.setBackground(new java.awt.Color(102, 153, 255));
+    }
+
+    private void populateTable() {
+        DefaultTableModel model = (DefaultTableModel) tblSeekerDetails.getModel();
+
+        model.setRowCount(0);
+
+        for (WorkRequest w : account.getWorkQueue().getWorkRequestList()) {
+            Object row[] = new Object[4];
+
+            if (w instanceof TransportWorkRequest) {
+                TransportWorkRequest transport = (TransportWorkRequest) w;
+
+                Meal meal = transport.getMeal();
+                System.out.println("Meal" + meal);
+                if (transport == null || meal == null) {
+                } else {
+                    if (transport.getReceiver() == null || transport.getReceiver().equals(account)) {
+                        Person p = meal.getMealAssignedUser().getPerson();
+                        row[0] = meal;
+                        row[1] = meal.getMeal();
+                        row[2] = p.getAddress1() + " " + p.getAddress2();
+                        row[3] = transport.getTransReqResult();
+                        model.addRow(row);
+                    }
+                }
+            }
+        }
+        if (!(model.getRowCount() > 0)) {
+            JOptionPane.showMessageDialog(null, "No Request Assigned to you", "Information", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     /**
@@ -41,14 +101,32 @@ public class Logistics extends javax.swing.JPanel {
 
             },
             new String [] {
-                "Name", "Age", "Address", "Unique ID", "Organization"
+                "ID", "Meal", "Address", "Status"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblSeekerDetails);
 
-        btnBack.setText("Back");
+        btnBack.setText("Logout");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         btnConfirm.setText("Confirm");
+        btnConfirm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConfirmActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -56,18 +134,14 @@ public class Logistics extends javax.swing.JPanel {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lblLogistics, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnBack)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnConfirm))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 888, Short.MAX_VALUE)
+                    .addComponent(lblLogistics, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(46, 46, 46)
-                .addComponent(btnBack)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(125, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(btnConfirm)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 651, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(124, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -77,12 +151,37 @@ public class Logistics extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 176, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41)
-                .addComponent(btnConfirm)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 160, Short.MAX_VALUE)
-                .addComponent(btnBack)
-                .addGap(21, 21, 21))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnConfirm)
+                    .addComponent(btnBack))
+                .addContainerGap(202, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnConfirmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmActionPerformed
+        // TODO add your handling code here:
+        int selectedRow = tblSeekerDetails.getSelectedRow();
+
+        if (selectedRow < 0) {
+            JOptionPane.showMessageDialog(this, "Please select a row", "warning", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Meal m = (Meal) tblSeekerDetails.getValueAt(selectedRow, 0);
+        TransportWorkRequest transport = m.getTransportWorkRequest();
+        m.getVolunteerNeedRequest().setStatus("Approved");
+        m.getVolunteerNeedRequest().setComments("Driver will deliver on selected time");
+        transport.setStatus("Approved");
+        transport.setTransReqResult("Approved");
+        populateTable();
+        JOptionPane.showMessageDialog(this, "Request Approved Successfully", "Information", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnConfirmActionPerformed
+
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        LoginJPanel loginJPanel = new LoginJPanel(userProcessContainer, business);
+        this.business.redirection(userProcessContainer, loginJPanel.getClass().getName(), loginJPanel);
+    }//GEN-LAST:event_btnBackActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -36,9 +36,9 @@
                               <EmptySpace pref="174" max="32767" attributes="0"/>
                               <Component id="btnSubmitResult" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="txtComments" max="32767" attributes="0"/>
-                          <Component id="cbHelpRequest" max="32767" attributes="0"/>
-                          <Component id="cbNeedTransport" max="32767" attributes="0"/>
+                          <Component id="cbAssignDriver" max="32767" attributes="0"/>
+                          <Component id="needWorkRequestFor" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -54,24 +54,24 @@
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblHelpRequest" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="cbHelpRequest" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="needWorkRequestFor" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="84" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="txtComments" min="-2" pref="185" max="-2" attributes="0"/>
                   <Component id="lblComments" min="-2" max="-2" attributes="0"/>
+                  <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="81" max="32767" attributes="0"/>
+              <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="lblNeedTransport" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="cbNeedTransport" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="cbAssignDriver" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="27" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnBack" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnSubmitResult" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="80" max="-2" attributes="0"/>
+              <EmptySpace pref="217" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -98,35 +98,13 @@
     </Component>
     <Component class="javax.swing.JLabel" name="lblNeedTransport">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Need Transport:"/>
+        <Property name="text" type="java.lang.String" value="Assign Driver"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JComboBox" name="cbHelpRequest">
+    <Component class="javax.swing.JComboBox" name="cbAssignDriver">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
-          </StringArray>
-        </Property>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JTextField" name="txtComments">
-    </Component>
-    <Component class="javax.swing.JComboBox" name="cbNeedTransport">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
-          </StringArray>
+          <StringArray count="0"/>
         </Property>
       </Properties>
       <AuxValues>
@@ -137,11 +115,37 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Back"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnBackActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnSubmitResult">
       <Properties>
         <Property name="text" type="java.lang.String" value="Submit Result"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnSubmitResultActionPerformed"/>
+      </Events>
     </Component>
+    <Component class="javax.swing.JTextField" name="needWorkRequestFor">
+      <Properties>
+        <Property name="editable" type="boolean" value="false"/>
+      </Properties>
+    </Component>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JTextArea" name="txtComments">
+          <Properties>
+            <Property name="columns" type="int" value="20"/>
+            <Property name="rows" type="int" value="5"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
   </SubComponents>
 </Form>

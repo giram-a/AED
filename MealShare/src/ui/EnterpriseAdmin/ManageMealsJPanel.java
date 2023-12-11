@@ -4,17 +4,63 @@
  */
 package ui.EnterpriseAdmin;
 
+import Business.Business;
+import Business.Enterprise.Enterprise;
+import Business.Organization.Organization;
+import Business.UserAccount.UserAccount;
+import Business.WrokQueue.DonationRequest;
+import Business.WrokQueue.MealWorkRequest;
+import Business.WrokQueue.WorkRequest;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author samar
  */
 public class ManageMealsJPanel extends javax.swing.JPanel {
 
+    JPanel userProcessContainer;
+    UserAccount account;
+    Enterprise enterprise;
+    Organization organization;
+    Business business;
+    
     /**
      * Creates new form ManageMealsJPanel
      */
-    public ManageMealsJPanel() {
+    public ManageMealsJPanel(JPanel userProcessContainer, Enterprise enterprise, UserAccount account, Business business) {
         initComponents();
+        this.userProcessContainer = userProcessContainer;
+        this.business = business;
+        this.account = account;
+        this.enterprise = enterprise;
+        populateData();
+        this.setBackground(new java.awt.Color(102, 153, 255));
+    }
+    
+    private void populateData(){
+        DefaultTableModel model = (DefaultTableModel) tblManageMeals.getModel();
+        model.setRowCount(0);
+        DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        for(WorkRequest request : account.getWorkQueue().getWorkRequestList()){
+            if (request instanceof MealWorkRequest) {
+                MealWorkRequest m = (MealWorkRequest) request;
+                Object[] rowData = new Object[4];
+                rowData[0] = m;
+                rowData[1] = m.getMealByID(m.getSendDataRequestId()).getMeal();
+                rowData[2] = dateFormat.format(m.getRequestDate());
+                rowData[3] = m.getMealByID(m.getSendDataRequestId()).getType();
+                model.addRow(rowData);
+            }
+        }
+        
+        if ((model.getRowCount() == 0)) {
+            JOptionPane.showMessageDialog(null, "No Meal found", "Information", JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     /**
@@ -30,7 +76,6 @@ public class ManageMealsJPanel extends javax.swing.JPanel {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblManageMeals = new javax.swing.JTable();
         btnDelete = new javax.swing.JButton();
-        btnSend = new javax.swing.JButton();
         btnBack = new javax.swing.JButton();
 
         lblManageMeals.setFont(new java.awt.Font("Arial", 2, 24)); // NOI18N
@@ -39,22 +84,30 @@ public class ManageMealsJPanel extends javax.swing.JPanel {
 
         tblManageMeals.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Meal Content", "Quantity", "Date", "Lunch/Dinner"
+                "ID", "Meal Content", "Date", "Lunch/Dinner"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(tblManageMeals);
 
         btnDelete.setText("Delete");
 
-        btnSend.setText("Send");
-
         btnBack.setText("Back");
+        btnBack.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBackActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -72,11 +125,9 @@ public class ManageMealsJPanel extends javax.swing.JPanel {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnBack)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnDelete)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnSend))
+                                .addComponent(btnDelete))
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 856, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18))))
+                        .addContainerGap(18, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -88,17 +139,21 @@ public class ManageMealsJPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnDelete)
-                    .addComponent(btnSend)
                     .addComponent(btnBack))
                 .addContainerGap(186, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
+        // TODO add your handling code here:
+        EnterpriseAdminJPanel enterpriseAdminJPanel = new EnterpriseAdminJPanel(userProcessContainer, enterprise, account, business);
+        business.redirection(userProcessContainer, enterpriseAdminJPanel.getClass().getName(), enterpriseAdminJPanel);
+    }//GEN-LAST:event_btnBackActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBack;
     private javax.swing.JButton btnDelete;
-    private javax.swing.JButton btnSend;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel lblManageMeals;
     private javax.swing.JTable tblManageMeals;
