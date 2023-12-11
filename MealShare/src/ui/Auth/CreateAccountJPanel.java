@@ -27,6 +27,8 @@ import Business.Person.HelpSeeker;
 import Business.Person.Person;
 import Business.Person.PersonDirectory;
 import Business.Roles.HelpSeekerRole;
+import Business.Roles.NutritionistRole;
+import Business.Roles.VolunteerRole;
 import Business.UserAccount.UserAccount;
 import Business.WrokQueue.SupervisorWorkRequest;
 import java.awt.HeadlessException;
@@ -196,7 +198,7 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGap(69, 69, 69))
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(63, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -244,11 +246,11 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
                         .addComponent(btnBack)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnCreate)))
-                .addContainerGap())
+                .addContainerGap(118, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(385, Short.MAX_VALUE)
+                .addContainerGap(384, Short.MAX_VALUE)
                 .addComponent(txtRole, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(345, Short.MAX_VALUE))
+                .addContainerGap(346, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -323,6 +325,8 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
 
     private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBackActionPerformed
         // TODO add your handling code here:
+        LoginJPanel loginJPanel = new LoginJPanel(mainCardLayout, business);
+        this.business.redirection(mainCardLayout, loginJPanel.getClass().getName(), loginJPanel);
     }//GEN-LAST:event_btnBackActionPerformed
 
     private void populateNetworkComboBox()
@@ -464,7 +468,7 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
                     UserAccount userAccount = organization.getUserAccountDirectory().addUserAccount(username, password, person, new HelpSeekerRole());
                     userAccount.setPerson(person);
                     userAccount.setNetwork((Network)helpSeekerNw);  
-                    System.out.println("here3");
+                    
                     // Send Req to Supervisor for approval       
                     SupervisorWorkRequest request = new SupervisorWorkRequest();
                     request.setMessage(SupervisorWorkRequest.REQUEST_APPROVAL);
@@ -492,6 +496,156 @@ public class CreateAccountJPanel extends javax.swing.JPanel {
                         userAccount.getWorkQueue().getWorkRequestList().add(request);
                         userAccount.setEnabled(false);
                     }
+                }
+          
+                if(txtRole.getSelectedItem() == "Volunteer"){
+                    if(cbCity.getSelectedIndex()<1)
+                    {
+                        JOptionPane.showMessageDialog(null, "Please choose a closest city","warning", JOptionPane.WARNING_MESSAGE);
+                        return;     
+                    }
+                    
+                    Network volNetwork =  getNetwork((String) cbCity.getSelectedItem());
+                    
+                    getEnterprise(volNetwork);
+                    
+                    if(enterprise==null)
+                    {
+                        JOptionPane.showMessageDialog(null, "Enterprise does not exist for the network! " +volNetwork.getName(),"warning", JOptionPane.WARNING_MESSAGE);
+                        return;      
+                    }
+                    getOrganization("Volunteer",enterprise);
+                    if(organization==null)
+                    {
+                        JOptionPane.showMessageDialog(null, "Volunteer Organization does not exist for the enterprise! " +enterprise.getName(),"warning", JOptionPane.WARNING_MESSAGE);
+                        return;      
+                    }
+                  
+                    person = organization.getPersonDirectory().addVolunteer();
+                    person.setVolunteer(true);
+               
+                    UserAccount userAccount = organization.getUserAccountDirectory().addUserAccount(username, password , person, new VolunteerRole());
+                    userAccount.setPerson(person);
+                    userAccount.setNetwork(volNetwork);
+                    
+                    SupervisorWorkRequest request = new SupervisorWorkRequest();
+                    request.setMessage(SupervisorWorkRequest.REQUEST_APPROVAL);
+                    request.setSender(userAccount);
+                    request.setStatus(SupervisorWorkRequest.REQUEST_SENT);
+                    request.setRequestDate(new Date());
+                    
+                    // For Supervisor  
+                    for(Enterprise e : volNetwork.getEnterpriseDirectory().getEnterpriseList())
+                    {
+                        if(e instanceof MealShare)
+                        {
+                            for(Organization organization : e.getOrganizationDirectory().getOrganizationList())
+                            {
+                                if (organization instanceof SupervisorOrganization ){
+                                    this.organization = organization;
+                                    this.personDirectory = organization.getPersonDirectory();
+                                }
+                            }
+                        }
+                    }
+                  
+                    if (organization!=null){
+                        organization.getworkQ().getWorkRequestList().add(request);
+                        userAccount.getWorkQueue().getWorkRequestList().add(request);
+                        userAccount.setEnabled(false);
+                    }
+                    
+                }
+                
+                if(txtRole.getSelectedItem() == "Nutritionist"){
+                    if(cbCity.getSelectedIndex()<1)
+                    {
+                        JOptionPane.showMessageDialog(null, "Please choose a closest city","warning", JOptionPane.WARNING_MESSAGE);
+                        return;     
+                    }
+                    
+                    Network drNetwork =  getNetwork((String) cbCity.getSelectedItem());
+                    
+                    getEnterprise(drNetwork);
+                    
+                    if(enterprise==null)
+                    {
+                        JOptionPane.showMessageDialog(null, "Enterprise does not exist for the network! " +drNetwork.getName(),"warning", JOptionPane.WARNING_MESSAGE);
+                        return;      
+                    }
+                    getOrganization("Nutritionist",enterprise);
+                    if(organization==null)
+                    {
+                        JOptionPane.showMessageDialog(null, "Doctor Organization does not exist for the enterprise! "+enterprise.getName(),"warning", JOptionPane.WARNING_MESSAGE);
+                        return;      
+                    }
+                    
+                    
+                    person = organization.getPersonDirectory().addPerson();
+                   
+                    for(Enterprise e : drNetwork.getEnterpriseDirectory().getEnterpriseList())
+                    {
+                     for(UserAccount ua : e.getUserAccountDirectory().getUserAccountList())
+                    {
+                        if(ua.getUserName().equals(username))
+                        {
+                         JOptionPane.showMessageDialog(null, "User Name already exists!, Please Enter valid user name","warning", JOptionPane.WARNING_MESSAGE);
+                         return;  
+                        }
+                        else
+                        {
+                        for(Organization o : e.getOrganizationDirectory().getOrganizationList())
+                        {  
+                         for(UserAccount ua1 : o.getUserAccountDirectory().getUserAccountList())
+                            {  
+                            if(ua1.getUserName().equals(username))
+                            {
+                             JOptionPane.showMessageDialog(null, "User Name already exists!, Please Enter valid user name","warning", JOptionPane.WARNING_MESSAGE);
+                             return;  
+                            }   
+                            } 
+                        }
+                        }
+                    }
+                    }
+                    if(!organization.getUserAccountDirectory().checkIfUsernameIsUnique(username))
+                    {
+                        JOptionPane.showMessageDialog(null, "User Name already exists!, Please Enter valid user name","warning", JOptionPane.WARNING_MESSAGE);
+                        organization.getPersonDirectory().getPersonList().remove(person);
+                        return;
+                    }
+                    // To get Doctor org
+                    
+                    UserAccount userAccount = organization.getUserAccountDirectory().addUserAccount(username, password, person, new NutritionistRole());
+                    userAccount.setPerson(person);
+                    userAccount.setNetwork(drNetwork);
+                  
+                // Request to Supervisor       
+                    SupervisorWorkRequest request = new SupervisorWorkRequest();
+                    request.setMessage(SupervisorWorkRequest.REQUEST_APPROVAL);
+                    request.setSender(userAccount);
+                    request.setStatus(SupervisorWorkRequest.REQUEST_SENT);
+                    request.setRequestDate(new Date());
+                    
+                     // For Supervisor  
+                  for(Enterprise e : drNetwork.getEnterpriseDirectory().getEnterpriseList())
+                  {
+                      if(e instanceof MealShare)
+                      {
+                        for(Organization organization : e.getOrganizationDirectory().getOrganizationList())
+                        {
+                            if (organization instanceof SupervisorOrganization ){
+                                this.organization = organization;
+                                this.personDirectory = organization.getPersonDirectory();
+                            }
+                        }
+                      }
+                    }
+                    if (organization!=null){
+                       organization.getworkQ().getWorkRequestList().add(request);
+                       userAccount.getWorkQueue().getWorkRequestList().add(request);
+                      userAccount.setEnabled(false);
+                   }
                 }
                 
                 person.setFirstName(firstName);

@@ -44,7 +44,7 @@ public class ConfigureABusiness {
         person.setFirstName("SchoolFirstName");
         person.setLastName("SchoolLastName");
         person.setName();
-        UserAccount account = business.getUserAccountDirectory().addUserAccount("bsc", "bsc", person, new AdminRole());
+        UserAccount account = business.getUserAccountDirectory().addUserAccount("bsc", "bsc1#", person, new AdminRole());
         account.setEnabled(true);
         account.setNetwork(network);
         
@@ -55,7 +55,7 @@ public class ConfigureABusiness {
         person.setFirstName("Driver");
         person.setLastName("Transpport");
         person.setName();
-        account = organization.getUserAccountDirectory().addUserAccount("dr1", "dr1", person, new DriverRole());
+        account = organization.getUserAccountDirectory().addUserAccount("dr1", "dr1#", person, new DriverRole());
         account.setNetwork(network);
         account.setEnabled(true);
         
@@ -85,7 +85,7 @@ public class ConfigureABusiness {
         person = enterprise.getPersonDirectory().addPerson();
         person.setLastName("non proft Admin");
         person.setName();
-        account = enterprise.getUserAccountDirectory().addUserAccount("bno", "bno", person, new AdminRole());
+        account = enterprise.getUserAccountDirectory().addUserAccount("bno", "bno1#", person, new AdminRole());
         account.setEnabled(true);
         account.setNetwork(network);
         organization = enterprise.getOrganizationDirectory().addOrganization(Organization.Type.Donor);
